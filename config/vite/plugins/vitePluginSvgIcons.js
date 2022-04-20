@@ -1,9 +1,9 @@
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import path from 'path';
 
-const resolve = (dir: string) => path.resolve(__dirname, dir);
+const resolve = dir => path.resolve(__dirname, dir);
 
-export const configSvgIconsPlugin = (isBuild: boolean) =>
+export const configSvgIconsPlugin = isBuild =>
     createSvgIconsPlugin({
         // 指定需要缓存的图标文件夹
         iconDirs: [resolve('src/assets/svg')],

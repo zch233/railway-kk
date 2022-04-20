@@ -1,8 +1,7 @@
-import { PluginOption } from 'vite';
 import viteCompression from 'vite-plugin-compression';
 
-export const configPluginCompression = ({ VITE_BUILD_COMPRESS, VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE }: ViteEnv) => {
-    const plugins: PluginOption[] = [];
+export const configPluginCompression = ({ VITE_BUILD_COMPRESS, VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE }) => {
+    const plugins = [];
     const compressList = VITE_BUILD_COMPRESS.split(',');
     const deleteOriginFile = VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE;
     if (compressList.includes('gzip')) {

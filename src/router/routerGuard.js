@@ -1,4 +1,4 @@
-import { router } from '@src/router/index';
+import { router } from '@src/router';
 import { isNavigationFailure } from 'vue-router';
 
 router.beforeEach(to => {

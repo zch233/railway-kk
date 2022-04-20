@@ -1,4 +1,4 @@
-export const getImageUrl = (path: string) => new URL(`../assets/${path}`, import.meta.url).href;
+export const getImageUrl = path => new URL(`../assets/${path}`, import.meta.url).href;
 
 export const getBrowser = () => {
     return {
@@ -27,8 +27,8 @@ export const getBrowser = () => {
     };
 };
 
-export const getEnv = (): string => import.meta.env.MODE;
+export const getEnv = () => import.meta.env.MODE;
 
-export const isDevMode = (): boolean => import.meta.env.DEV;
+export const isDevMode = () => import.meta.env.DEV;
 
-export const isProdMode = (): boolean => import.meta.env.PROD;
+export const isProdMode = () => import.meta.env.PROD;

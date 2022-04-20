@@ -11,8 +11,8 @@ export const store = createPinia().use(
         storage: isDevMode()
             ? undefined
             : {
-                  getItem: (key: string) => ls.get(key),
-                  setItem: (key: string, value: any) => ls.set(key, value),
+                  getItem: key => ls.get(key),
+                  setItem: (key, value) => ls.set(key, value),
               },
     })
 );

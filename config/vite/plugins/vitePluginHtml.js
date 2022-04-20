@@ -1,6 +1,6 @@
 import { createHtmlPlugin } from 'vite-plugin-html';
 
-export const configPluginHtml = (isBuild: boolean, { VITE_APP_TITLE }: ViteEnv) =>
+export const configPluginHtml = (isBuild, { VITE_APP_TITLE }) =>
     createHtmlPlugin({
         minify: isBuild,
         inject: {

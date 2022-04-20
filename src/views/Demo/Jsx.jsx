@@ -7,7 +7,7 @@ import { storeToRefs } from 'pinia';
 
 export default defineComponent({
     name: 'Tsx',
-    setup(props) {
+    setup() {
         const user = useUser();
         const { fullName } = storeToRefs(user);
         return () => (

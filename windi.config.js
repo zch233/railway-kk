@@ -34,7 +34,7 @@ export default defineConfig({
  * @param maxOutput The larger the maxOutput output, the larger the generated css volume
  */
 function createEnterPlugin(maxOutput = 6) {
-    const createCss = (index: number, d = 'x') => {
+    const createCss = (index, d = 'x') => {
         const upd = d.toUpperCase();
         return {
             [`*> .enter-${d}:nth-child(${index})`]: {
@@ -52,7 +52,7 @@ function createEnterPlugin(maxOutput = 6) {
             },
         };
     };
-    const handler = ({ addBase }: any) => {
+    const handler = ({ addBase }) => {
         const addRawCss = {};
         for (let index = 1; index < maxOutput; index++) {
             Object.assign(addRawCss, {

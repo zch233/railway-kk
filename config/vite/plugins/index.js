@@ -1,6 +1,5 @@
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
-import { ConfigEnv } from 'vite';
 import { configPluginHtml } from './vitePluginHtml';
 import { configSvgIconsPlugin } from './vitePluginSvgIcons';
 import { configPluginLegacy } from './vitePluginLegacy';
@@ -11,7 +10,7 @@ import { configPluginWindicss } from './vitePluginWindicss';
 import { configPluginCertificate } from './vitePluginMkcert';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
 
-export const createVitePlugins = ({ mode, command }: ConfigEnv, viteEnv: ViteEnv) => {
+export const createVitePlugins = ({ command }, viteEnv) => {
     const isBuild = command === 'build';
     const { VITE_WINDICSS, VITE_SEE_VISUALIZER, VITE_LEGACY, VITE_USE_IMAGEMIN, VITE_LISTEN_HTTPS } = viteEnv;
     // https://github.com/vitejs/awesome-vite#plugins

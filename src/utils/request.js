@@ -1,32 +1,21 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosPromise } from 'axios';
+import axios from 'axios';
 import { router } from '@src/router';
 import { useUser } from '@src/store/modules/user';
 
-interface CustomAxiosRequestConfig extends AxiosRequestConfig {
-    // 是否可以进行多次请求
-    multiple?: boolean;
-}
-
-interface CustomAxiosInstance extends AxiosInstance {
-    (config: CustomAxiosRequestConfig): AxiosPromise;
-    (url: string, config?: CustomAxiosRequestConfig): AxiosPromise;
-}
-
-export const request: CustomAxiosInstance = axios.create({
+export const request = axios.create({
     baseURL: import.meta.env.VITE_APP_API_URL,
     timeout: 120 * 1000,
 });
 
-export const delayRequest = (axiosRequestConfig: CustomAxiosRequestConfig) => ({
+export const delayRequest = axiosRequestConfig => ({
     start: () => request({ ...axiosRequestConfig, ...{ isDelayRequest: true } }),
     cancel: () => removePending(axiosRequestConfig),
 });
 
 export const pending = new Map();
-export const generateURL = (config: CustomAxiosRequestConfig) =>
-    [config.method, config.url?.replace(import.meta.env.VITE_APP_API_URL, '')].filter(Boolean).join('&');
+export const generateURL = config => [config.method, config.url?.replace(import.meta.env.VITE_APP_API_URL, '')].filter(Boolean).join('&');
 
-const addPending = (config: CustomAxiosRequestConfig) => {
+const addPending = config => {
     const url = generateURL(config);
     config.cancelToken =
         config.cancelToken ||
@@ -41,7 +30,7 @@ const addPending = (config: CustomAxiosRequestConfig) => {
  * 移除请求
  * @param {Object} config
  */
-const removePending = (config: CustomAxiosRequestConfig) => {
+const removePending = config => {
     const url = generateURL(config);
     if (pending.has(url)) {
         // 如果在 pending 中存在当前请求标识，且没有禁用，需要取消当前请求，并且移除
@@ -58,11 +47,11 @@ export const clearPending = () => {
 };
 
 request.interceptors.request.use(
-    (config: CustomAxiosRequestConfig) => {
+    config => {
         const user = useUser();
         const token = user.name;
         if (token) {
-            (config.headers?.common as any)['Authorization'] = token;
+            config.headers.common['Authorization'] = token;
         }
         if (!config.multiple) removePending(config); // 在请求开始前，对之前的请求做检查取消操作
         addPending(config); // 将当前请求添加到 pending 中
@@ -77,7 +66,7 @@ request.interceptors.request.use(
 
 // Add a response interceptor
 request.interceptors.response.use(
-    (response: AxiosResponse) => {
+    response => {
         // Do something with response data
         removePending(response.config); // 在请求结束后，移除本次请求
         const data = response.data;

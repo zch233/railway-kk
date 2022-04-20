@@ -1,5 +1,5 @@
-export const wrapperEnv = (envConf: Recordable): ViteEnv => {
-    const ret: any = {};
+export const wrapperEnv = envConf => {
+    const ret = {};
 
     for (const envName of Object.keys(envConf)) {
         let realName = envConf[envName].replace(/\\n/g, '\n');

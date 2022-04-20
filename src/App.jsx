@@ -3,7 +3,7 @@ import { RouterLink, RouterView } from 'vue-router';
 
 export default defineComponent({
     name: 'App',
-    setup(props) {
+    setup() {
         return () => (
             <div>
                 <p>

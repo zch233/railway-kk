@@ -1,15 +1,15 @@
-import { UserConfig, ConfigEnv, loadEnv } from 'vite';
+import { loadEnv, defineConfig } from 'vite';
 import path from 'path';
 import { wrapperEnv } from './config/utils';
 import { createVitePlugins } from './config/vite/plugins';
 
-const resolve = (dir: string) => path.resolve(__dirname, dir);
+const resolve = dir => path.resolve(__dirname, dir);
 
 // https://vitejs.dev/config/
-export default (configEnv: ConfigEnv): UserConfig => {
+export default configEnv => {
     const viteEnv = wrapperEnv(loadEnv(configEnv.mode, process.cwd()));
     const { VITE_PORT, VITE_PUBLIC_PATH, VITE_DROP_CONSOLE, VITE_DROP_DEBUG, VITE_LISTEN_HTTPS } = viteEnv;
-    return {
+    return defineConfig({
         base: VITE_PUBLIC_PATH,
         root: process.cwd(),
         plugins: createVitePlugins(configEnv, viteEnv),
@@ -19,7 +19,7 @@ export default (configEnv: ConfigEnv): UserConfig => {
             },
         },
         esbuild: {
-            pure: [VITE_DROP_CONSOLE && 'console.log', VITE_DROP_DEBUG && 'debugger'].filter(Boolean) as string[],
+            pure: [VITE_DROP_CONSOLE && 'console.log', VITE_DROP_DEBUG && 'debugger'].filter(Boolean),
         },
         build: {
             target: 'es2015',
@@ -50,5 +50,5 @@ export default (configEnv: ConfigEnv): UserConfig => {
             port: VITE_PORT,
             host: true,
         },
-    };
+    });
 };

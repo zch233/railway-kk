@@ -1,4 +1,4 @@
-<script lang="tsx">
+<script lang="jsx">
 import { defineComponent } from 'vue';
 import HelloWorld from '@src/views/Demo/components/HelloWorld.vue';
 
