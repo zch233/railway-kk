@@ -34,6 +34,11 @@ const count = ref(0);
 </template>
 
 <style scoped>
+p,
+h1 {
+    margin: 8px;
+}
+
 a {
     color: #42b983;
 }
