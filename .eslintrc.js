@@ -1,7 +1,4 @@
-/* eslint-disable */
-const { defineConfig } = require('eslint-define-config');
-
-module.exports = defineConfig({
+module.exports = {
     root: true,
     env: {
         browser: true,
@@ -9,9 +6,8 @@ module.exports = defineConfig({
         es6: true,
     },
     parser: 'vue-eslint-parser',
-    extends: ['plugin:vue/vue3-recommended', 'plugin:@typescript-eslint/recommended', 'prettier', 'plugin:prettier/recommended'],
+    extends: ['plugin:vue/vue3-essential', 'eslint:recommended', 'plugin:prettier/recommended'],
     parserOptions: {
-        parser: '@typescript-eslint/parser',
         ecmaVersion: 2020,
         sourceType: 'module',
         jsxPragma: 'React',
@@ -51,4 +47,4 @@ module.exports = defineConfig({
         defineEmits: true,
         defineExpose: true,
     },
-});
+};
