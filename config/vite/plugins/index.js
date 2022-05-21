@@ -1,5 +1,5 @@
-import vue from '@vitejs/plugin-vue';
-import vueJsx from '@vitejs/plugin-vue-jsx';
+import { configPluginVue } from './pluginVue';
+import { configPluginVueJsx } from './pluginVueJsx';
 import { configPluginHtml } from './vitePluginHtml';
 import { configSvgIconsPlugin } from './vitePluginSvgIcons';
 import { configPluginLegacy } from './vitePluginLegacy';
@@ -8,9 +8,9 @@ import { configPluginVisualizer } from './rollupPluginVisualizer';
 import { configPluginCompression } from './vitePluginCompression';
 import { configPluginWindicss } from './vitePluginWindicss';
 import { configPluginCertificate } from './vitePluginMkcert';
-import vueSetupExtend from 'vite-plugin-vue-setup-extend';
 import { configPluginUnpluginComponents } from './unpluginVueComponents';
 import { configPluginUnpluginImport } from './unpluginAutoImport';
+import { configPluginVueSetupExtend } from './vitePluginVueSetupExtend';
 
 export const createVitePlugins = ({ command }, viteEnv) => {
     const isBuild = command === 'build';
@@ -18,12 +18,10 @@ export const createVitePlugins = ({ command }, viteEnv) => {
         viteEnv;
     // https://github.com/vitejs/awesome-vite#plugins
     // vite-plugin-pages // 自动根据目录生成路由
-    // unplugin-vue-components // 组件自动按需导入
-    // unplugin-auto-import // 依赖按需自动导入
     const plugins = [
-        vue(),
-        vueJsx(),
-        vueSetupExtend(), // 支持在 setup 上使用组件 name
+        configPluginVue(),
+        configPluginVueJsx(),
+        configPluginVueSetupExtend(), // 支持在 setup 上使用组件 name
         configPluginHtml(isBuild, viteEnv),
         configSvgIconsPlugin(isBuild),
     ];
