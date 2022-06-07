@@ -1,25 +1,3 @@
-const path = require('path');
-const fs = require('fs');
-
-function parseAutoImportsDts(contents) {
-    const matchResults = contents.matchAll(/^\s+const (\w+): typeof import/gm);
-    return Array.from(matchResults, ([, word]) => word);
-}
-
-function uiPackageAutoImportGlobals() {
-    const autoImportsPath = path.resolve(__dirname, './auto-imports.d.ts');
-    const envPath = path.resolve(__dirname, './.env');
-    const contents = fs.readFileSync(autoImportsPath, { encoding: 'utf-8' });
-    const envs = fs.readFileSync(envPath, { encoding: 'utf-8' });
-    const parsed = parseAutoImportsDts(contents);
-    return envs.match(/(?<=VITE_UNPLUGINS_IMPORTS=).*/)[0] === 'true'
-        ? parsed.reduce((acc, word) => {
-              acc[word] = 'readonly';
-              return acc;
-          }, {})
-        : {};
-}
-
 module.exports = {
     root: true,
     env: {
@@ -28,7 +6,7 @@ module.exports = {
         es6: true,
     },
     parser: 'vue-eslint-parser',
-    extends: ['plugin:vue/vue3-essential', 'eslint:recommended', 'plugin:prettier/recommended'],
+    extends: ['plugin:vue/vue3-essential', 'eslint:recommended', 'plugin:prettier/recommended', './.eslintrc-auto-import.json'],
     parserOptions: {
         ecmaVersion: 2020,
         sourceType: 'module',
@@ -68,6 +46,5 @@ module.exports = {
         defineProps: true,
         defineEmits: true,
         defineExpose: true,
-        ...uiPackageAutoImportGlobals(),
     },
 };
