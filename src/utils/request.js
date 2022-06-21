@@ -7,13 +7,22 @@ export const request = axios.create({
     timeout: 120 * 1000,
 });
 
-export const delayRequest = axiosRequestConfig => ({
-    start: () => request({ ...axiosRequestConfig, ...{ isDelayRequest: true } }),
-    cancel: () => removePending(axiosRequestConfig),
-});
+const generateCustomRequestKey = () => '' + Date.now() + Math.random();
+
+export const delayRequest = axiosRequestConfig => {
+    const customRequestKey = generateCustomRequestKey();
+    const config = { ...axiosRequestConfig, isDelayRequest: true };
+    if (config.multiple) config.customRequestKey = customRequestKey;
+    return {
+        customRequestKey,
+        start: () => request(config),
+        cancel: () => removePending(config),
+    };
+};
 
 export const pending = new Map();
-export const generateURL = config => [config.method, config.url?.replace(import.meta.env.VITE_APP_API_URL, '')].filter(Boolean).join('&');
+export const generateURL = config =>
+    [config.method, config.url?.replace(import.meta.env.VITE_APP_API_URL, ''), config.customRequestKey].filter(Boolean).join('&');
 
 const addPending = config => {
     const url = generateURL(config);
@@ -34,7 +43,8 @@ const removePending = config => {
     const url = generateURL(config);
     if (pending.has(url)) {
         // 如果在 pending 中存在当前请求标识，且没有禁用，需要取消当前请求，并且移除
-        pending.get(url)();
+        const cancel = pending.get(url);
+        cancel();
         pending.delete(url);
     }
 };
@@ -53,7 +63,11 @@ request.interceptors.request.use(
         if (token) {
             config.headers.common['Authorization'] = token;
         }
-        if (!config.multiple) removePending(config); // 在请求开始前，对之前的请求做检查取消操作
+        if (config.multiple) {
+            config.customRequestKey = config.customRequestKey || generateCustomRequestKey();
+        } else {
+            removePending(config); // 在请求开始前，对之前的请求做检查取消操作，除了配置了 multiple 的请求
+        }
         addPending(config); // 将当前请求添加到 pending 中
         return config;
     },
@@ -84,6 +98,7 @@ request.interceptors.response.use(
         if (axios.isCancel(err)) {
             throw '💩💩💩请求已取消';
         }
+        removePending(err.config); // 在请求结束后，移除本次请求
         alert('服务器开小差了，请刷新重试');
         throw err;
     }
