@@ -1,44 +1,41 @@
 import { defineStore } from 'pinia';
-import { computed, ref } from 'vue';
+// import { getUserDetail } from '@src/api/auth/index';
 
-// export const useUser = defineStore({
-//   // id: 必须的，在所有 Store 中唯一
-//   id: "user",
-//   state: ()=> ({
-//     name: 'from pinia userName',
-//     nickname: 'from pinia nickname',
-//   }),
-//   getters: {
-//     fullName: state => state.name + state.nickname
-//     fullName: () => this.name + this.nickname
-//   },
-//   actions: {
-//     changeName() {
-//       this.name = 'changeName userName'
-//     },
-//   },
-// });
-
-// 第二种写法
-export const useUser = defineStore(
-    'user',
-    () => {
-        const name = ref('from pinia userName');
-        const nickname = ref('from pinia nickname');
-        const fullName = computed(() => name.value + nickname.value);
-        const changeName = () => {
-            name.value = 'changeName userName';
-        };
+const userStore = defineStore({
+    id: 'user',
+    state: () => {
         return {
-            name,
-            nickname,
-            fullName,
-            changeName,
+            token: '',
+            systemCode: '',
+            userInfo: {},
         };
     },
-    {
-        persist: {
-            // paths: ['token'] // 需要持久化的数据
+    actions: {
+        setToken(value) {
+            this.token = value;
         },
-    }
-);
+        setSystemCode(value) {
+            this.systemCode = value;
+        },
+        setUserInfo(value) {
+            this.userInfo = value;
+        },
+        async initUser() {
+            // 设置用户信息
+            // const { data } = await getUserDetail();
+            // this.setUserInfo(data);
+        },
+        logout() {
+            this.token = '';
+            this.systemCode = '';
+            this.userInfo = {};
+            window.location.href = import.meta.env.VITE_LOGIN_URL;
+        },
+    },
+    getters: {},
+    persist: true,
+});
+
+export default function useUserStore() {
+    return userStore();
+}

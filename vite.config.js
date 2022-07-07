@@ -27,22 +27,23 @@ export default configEnv => {
             // 关掉 brotliSize 可略微减少打包时间
             // brotliSize: false,
             chunkSizeWarningLimit: 2000,
-            // minify: 'terser',
-            // 当 minify=“minify:'terser'” 解开注释
-            // terserOptions: {
-            //   compress: {
-            //     keep_infinity: true,
-            //     drop_debugger: VITE_DROP_DEBUG,
-            //     drop_console: VITE_DROP_CONSOLE,
-            //   },
-            // },
+            minify: 'terser',
+            terserOptions: {
+                compress: {
+                    keep_infinity: true,
+                    drop_debugger: VITE_DROP_DEBUG,
+                    drop_console: VITE_DROP_CONSOLE,
+                },
+            },
             rollupOptions: {
-                // 确保外部化处理那些你不想打包进库的依赖
+                /**
+                 * 确保外部化处理那些你不想打包进库的依赖
+                 * https://rollupjs.org/guide/en/#big-list-of-options
+                 */
                 external: [],
                 output: {
                     manualChunks: {},
                 },
-                // https://rollupjs.org/guide/en/#big-list-of-options
             },
         },
         server: {

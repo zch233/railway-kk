@@ -1,10 +1,12 @@
 import axios from 'axios';
-import { router } from '@src/router';
-import { useUser } from '@src/store/modules/user';
+import useUserStore from '@src/store/modules/user';
 
 export const request = axios.create({
     baseURL: import.meta.env.VITE_APP_API_URL,
     timeout: 120 * 1000,
+    headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+    },
 });
 
 const generateCustomRequestKey = () => '' + Date.now() + Math.random();
@@ -24,6 +26,9 @@ export const pending = new Map();
 export const generateURL = config =>
     [config.method, config.url?.replace(import.meta.env.VITE_APP_API_URL, ''), config.customRequestKey].filter(Boolean).join('&');
 
+/**
+ * 添加请求
+ */
 const addPending = config => {
     const url = generateURL(config);
     config.cancelToken =
@@ -35,9 +40,9 @@ const addPending = config => {
             }
         });
 };
+
 /**
  * 移除请求
- * @param {Object} config
  */
 const removePending = config => {
     const url = generateURL(config);
@@ -48,6 +53,7 @@ const removePending = config => {
         pending.delete(url);
     }
 };
+
 /**
  * 清空 pending 中的请求（在路由跳转时调用）
  */
@@ -58,10 +64,10 @@ export const clearPending = () => {
 
 request.interceptors.request.use(
     config => {
-        const user = useUser();
-        const token = user.name;
+        const userStore = useUserStore();
+        const token = userStore.token;
         if (token) {
-            config.headers.common['Authorization'] = token;
+            config.headers.common['Authorization'] = 'Bearer ' + token;
         }
         if (config.multiple) {
             config.customRequestKey = config.customRequestKey || generateCustomRequestKey();
@@ -72,22 +78,20 @@ request.interceptors.request.use(
         return config;
     },
     err => {
-        // Do something with index error
         alert('客户端网络错误');
         throw err;
     }
 );
 
-// Add a response interceptor
 request.interceptors.response.use(
     response => {
-        // Do something with response data
         removePending(response.config); // 在请求结束后，移除本次请求
         const data = response.data;
         if (data.code === 200) {
             return data;
-        } else if (data.code === 403) {
-            router.replace('/login');
+        } else if (data.code === 401) {
+            const userStore = useUserStore();
+            userStore.logout();
         } else {
             console.error('😭😭😭', response);
             alert(data.message || '出错了');

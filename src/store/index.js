@@ -6,7 +6,7 @@ import { isDevMode } from '@src/utils';
 // https://github.com/softvar/secure-ls
 const ls = new SecureLS({ isCompression: false }); // 默认使用 Base64 编码
 
-export const store = createPinia().use(
+const store = createPinia().use(
     createPersistedState({
         storage: isDevMode()
             ? undefined
@@ -16,3 +16,5 @@ export const store = createPinia().use(
               },
     })
 );
+
+export default store;
