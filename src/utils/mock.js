@@ -21,7 +21,7 @@ export default {
             path: '/TableSearch',
             meta: {
                 icon: 'table',
-                title: '标准清单',
+                title: '列表',
             },
             children: [
                 {

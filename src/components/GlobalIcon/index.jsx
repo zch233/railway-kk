@@ -2,9 +2,9 @@ import { defineComponent } from 'vue';
 import './style.less';
 
 export default defineComponent({
-    name: 'Icon',
+    name: 'GlobalIcon',
     props: {
-        icon: {
+        name: {
             type: String,
             required: true,
         },
@@ -12,7 +12,7 @@ export default defineComponent({
     setup(props) {
         return () => (
             <svg class='gupoIcon' aria-hidden='true'>
-                <use xlinkHref={`#icon-${props.icon}`} />
+                <use xlinkHref={`#icon-${props.name}`} />
             </svg>
         );
     },
