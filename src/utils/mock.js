@@ -44,5 +44,13 @@ export default {
         },
     ],
     button: [],
-    otherPage: [],
+    otherPage: [
+        {
+            path: '/Table/Details',
+            meta: {
+                activeMenu: '/Table',
+                title: '表格详情',
+            },
+        },
+    ],
 };

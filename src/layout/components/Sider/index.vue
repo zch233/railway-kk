@@ -15,11 +15,12 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
+import { uniq } from 'lodash';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 import usePermissionStore from '@src/store/modules/permission';
 import Menu from './Menu';
-const router = useRouter();
+const route = useRoute();
 
 /**
  * data
@@ -31,15 +32,56 @@ const siderList = computed(() => {
     const permissionStore = usePermissionStore();
     return permissionStore.menuList;
 });
-selectedKeys.value = [siderList.value?.[0]?.path];
+
+/**
+ * methods
+ */
+const findPatentValue = (array, value, valueName = 'path', childrenName = 'children') => {
+    if (!value || !Array.isArray(array)) return [];
+    const result = [];
+    let valid = false;
+    const seek = (array, value) => {
+        let parentValue = '';
+        const up = (array, value, lastValue) => {
+            array.forEach(v => {
+                const val = v[valueName];
+                const child = v[childrenName];
+                if (val === value) {
+                    valid = true;
+                    parentValue = lastValue;
+                    return;
+                }
+                if (child && child.length) up(child, value, val);
+            });
+        };
+        up(array, value);
+        if (parentValue) {
+            result.unshift(parentValue);
+            seek(array, parentValue);
+        }
+    };
+    seek(array, value);
+    return valid ? result : [];
+};
 
 /**
  * watch
  */
 watch(
-    () => selectedKeys.value,
-    path => {
-        router.push(path[0]);
+    () => route,
+    route => {
+        const { meta, path } = route;
+        if (meta.activeMenu) {
+            selectedKeys.value = [meta.activeMenu];
+            openKeys.value = uniq([...openKeys.value, ...findPatentValue(siderList.value, meta.activeMenu)]);
+            return;
+        }
+        selectedKeys.value = [path];
+        openKeys.value = uniq([...openKeys.value, ...findPatentValue(siderList.value, path)]);
+    },
+    {
+        deep: true,
+        immediate: true,
     }
 );
 </script>

@@ -1,6 +1,5 @@
 {
   "globals": {
-    "AConfigProvider": true,
     "computed": true,
     "createApp": true,
     "customRef": true,

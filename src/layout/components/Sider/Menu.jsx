@@ -1,4 +1,5 @@
 import { defineComponent } from 'vue';
+import { useRouter } from 'vue-router';
 import { SubMenu as ASubMenu, MenuItem as AMenuItem } from 'ant-design-vue';
 import MenuItem from './MenuItem.jsx';
 
@@ -11,6 +12,7 @@ export default defineComponent({
         },
     },
     setup(props) {
+        const router = useRouter();
         return () =>
             props.data.children?.length ? (
                 <ASubMenu key={props.data.path} title={<MenuItem data={props.data?.meta} />}>
@@ -19,7 +21,7 @@ export default defineComponent({
                     ))}
                 </ASubMenu>
             ) : (
-                <AMenuItem key={props.data.path}>
+                <AMenuItem key={props.data.path} onClick={() => router.push(props.data.path)}>
                     <MenuItem data={props.data?.meta} />
                 </AMenuItem>
             );
