@@ -57,7 +57,6 @@ const logout = () => {
         icon: createVNode(ExclamationCircleOutlined),
         okText: '确定',
         cancelText: '取消',
-        okType: 'danger',
         onOk() {
             userStore.logout();
         },

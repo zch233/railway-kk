@@ -46,6 +46,14 @@ export default configEnv => {
                 },
             },
         },
+        css: {
+            preprocessorOptions: {
+                less: {
+                    javascriptEnabled: true,
+                    additionalData: `@import "${path.resolve(__dirname, 'src/styles/variables.less')}";`,
+                },
+            },
+        },
         server: {
             https: VITE_LISTEN_HTTPS,
             port: VITE_PORT,

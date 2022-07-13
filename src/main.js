@@ -6,7 +6,7 @@ import '@src/router/routerGuard';
 import store from '@src/store';
 import '@src/styles/reset.css';
 import '@src/styles/global.less';
-import '@src/styles/common.less';
+import '@src/styles/transition.less';
 import 'ant-design-vue/dist/antd.variable.min.css';
 
 export const app = createApp(App);

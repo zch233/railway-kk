@@ -1,0 +1,33 @@
+// global transition css
+
+/* page transition */
+.fade-transform-leave-active,
+.fade-transform-enter-active {
+    transition: all 0.4s ease;
+}
+
+.fade-transform-enter-from,
+.fade-transform-leave-to {
+    opacity: 0;
+    transform: translateX(-30px);
+}
+
+.fade-transform-leave-to {
+    transform: translateX(30px);
+}
+
+/* breadcrumb transition */
+.breadcrumb-enter-active,
+.breadcrumb-leave-active {
+    transition: all 0.5s ease;
+}
+
+.breadcrumb-leave-active {
+    position: absolute;
+}
+
+.breadcrumb-enter-from,
+.breadcrumb-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+}
