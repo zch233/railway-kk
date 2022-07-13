@@ -49,6 +49,7 @@ export default {
             path: '/Table/Details',
             meta: {
                 activeMenu: '/Table',
+                showGoBack: true,
                 title: '表格详情',
             },
         },

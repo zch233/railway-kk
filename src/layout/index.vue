@@ -5,6 +5,7 @@
             <Sider />
             <a-layout>
                 <Breadcrumb />
+                <GoBack />
                 <a-layout-content class="content">
                     <router-view v-slot="{ Component }">
                         <transition name="fade-transform" mode="out-in">
@@ -25,6 +26,7 @@ import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
+import GoBack from './components/GoBack.vue';
 import Breadcrumb from './components/Breadcrumb.vue';
 import Sider from './components/Sider/index.vue';
 const route = useRoute();
@@ -38,10 +40,12 @@ const routeKey = computed(() => {
 .layout {
     width: 100%;
     height: 100vh;
+
     .content {
         padding: @space24;
         overflow-x: hidden;
         overflow-y: auto;
+
         > div:not(.footer) {
             width: 100%;
             min-height: 400px;

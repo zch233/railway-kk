@@ -90,48 +90,62 @@ watch(
 .ant-layout-sider.layout-sider {
     padding-top: 10px;
     padding-bottom: 55px;
+
+    .ant-menu-inline,
+    .ant-menu-vertical,
+    .ant-menu-vertical-left {
+        border-right: none;
+    }
+
     .ant-layout-sider-children {
         .ant-menu-item,
         .ant-menu-submenu-title {
-            margin: 0;
             height: 52px;
-            line-height: 52px;
             padding: 0 18px !important;
+            margin: 0;
+            line-height: 52px;
             user-select: none;
         }
+
         .ant-menu-sub .ant-menu-item {
             padding-left: 48px !important;
         }
+
         .anticon {
             font-size: 22px !important;
         }
     }
+
     .ant-layout-sider-trigger {
         height: 55px;
-        line-height: 1;
         padding: 0 18px;
-        text-align: left;
         overflow: hidden;
+        line-height: 1;
+        text-align: left;
+
         .trigger {
+            display: flex;
             width: 100%;
             height: 100%;
-            border-top: 1px solid #ebeef5;
             color: #999;
-            display: flex;
+            border-top: 1px solid #ebeef5;
             align-items: center;
+
             .anticon {
                 font-size: 18px;
                 color: var(--ant-primary-color);
             }
+
             span:last-child {
                 margin-left: 10px;
+                white-space: nowrap;
                 opacity: 1;
                 transition: opacity 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), margin 0.3s, color 0.3s;
-                white-space: nowrap;
                 user-select: none;
             }
         }
     }
+
     &.ant-layout-sider-collapsed {
         .ant-layout-sider-children {
             .ant-menu-item,
@@ -139,8 +153,10 @@ watch(
                 padding: 0 calc(50% - 11px) !important;
             }
         }
+
         .ant-layout-sider-trigger {
             padding: 0 32px;
+
             .trigger {
                 span:last-child {
                     opacity: 0;
@@ -149,6 +165,7 @@ watch(
         }
     }
 }
+
 .ant-tooltip-inner .menu-item .anticon {
     display: none;
 }
