@@ -22,7 +22,7 @@
     },
     "dependencies": {
         "axios": "0.26.1",
-        "pinia": "2.0.12",
+        "pinia": "^2.0.16",
         "pinia-plugin-persistedstate": "1.5.1",
         "secure-ls": "1.2.6",
         "vue": "3.2.33",
