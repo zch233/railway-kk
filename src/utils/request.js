@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { router } from '@src/router';
 import { useUser } from '@src/store/modules/user';
+import { downloadFile } from '@src/utils/index';
 
 export const request = axios.create({
     baseURL: import.meta.env.VITE_APP_API_URL,
@@ -84,14 +85,18 @@ request.interceptors.response.use(
         // Do something with response data
         removePending(response.config); // 在请求结束后，移除本次请求
         const data = response.data;
-        if (data.code === 200) {
-            return data;
-        } else if (data.code === 403) {
-            router.replace('/login');
+        if (data instanceof Blob) {
+            return downloadFile(response);
         } else {
-            console.error('😭😭😭', response);
-            alert(data.message || '出错了');
-            throw data;
+            if (data.code === 200) {
+                return data;
+            } else if (data.code === 403) {
+                router.replace('/login');
+            } else {
+                console.error('😭😭😭', response);
+                alert(data.message || '出错了');
+                throw data;
+            }
         }
     },
     err => {
