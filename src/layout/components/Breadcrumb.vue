@@ -1,7 +1,7 @@
 <template>
     <transition-group name="breadcrumb" tag="div" class="ant-breadcrumb breadcrumb box-shadow">
-        <span>当前位置：</span>
         <a-breadcrumb-item v-for="(item, index) in levelList.data" :key="item.name">
+            <span v-if="index === 0">当前位置：</span>
             <span
                 v-if="item.redirect === 'noRedirect' || index === levelList.data.length - 1 || !item.path || !item.component"
                 :class="{ 'last-item': index === levelList.data.length - 1 }"
@@ -77,8 +77,8 @@ getBreadcrumb();
 .breadcrumb {
     width: 100%;
     height: 45px;
-    line-height: 45px;
     padding: 0 @space24;
+    line-height: 45px;
     background: #fff;
 
     .no-redirect {
