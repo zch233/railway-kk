@@ -32,3 +32,31 @@ export const getEnv = () => import.meta.env.MODE;
 export const isDevMode = () => import.meta.env.DEV;
 
 export const isProdMode = () => import.meta.env.PROD;
+
+// 注意：需要配置 axios config 的 responseType: 'blob'
+export const downloadFile = response => {
+    return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.onload = function () {
+            try {
+                const jsonData = JSON.parse(this.result); // 成功 说明是普通对象数据
+                console.error('非文件流响应');
+                reject(jsonData);
+            } catch (err) {
+                // 解析成对象失败，说明是正常的文件流
+                const blob = new Blob([response.data]);
+                // 本地保存文件
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                // TODO：注意这里的 headers 用于获取文件名称，确保后台已经返回正确字段
+                const filename = response?.headers?.['content-disposition']?.split('filename*=')?.[1]?.substr(7);
+                link.setAttribute('download', decodeURI(filename));
+                document.body.appendChild(link);
+                link.click();
+                resolve(response.data);
+            }
+        };
+        fileReader.readAsText(response.data);
+    });
+};
