@@ -88,7 +88,6 @@ watch(
 
 <style lang="less">
 .ant-layout-sider.layout-sider {
-    padding-top: 10px;
     padding-bottom: 55px;
 
     .ant-menu-inline,
@@ -97,7 +96,32 @@ watch(
         border-right: none;
     }
 
+    .ant-menu-inline .ant-menu-item,
+    .ant-menu-inline .ant-menu-submenu-title {
+        width: 100%;
+    }
+
     .ant-layout-sider-children {
+        padding: 10px 0;
+        overflow-x: auto;
+
+        &::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: hsla(0, 0%, 100%, 0.2);
+            border-radius: 3px;
+            box-shadow: inset 0 0 5px hsl(0deg 0% 100% / 5%);
+        }
+
+        &::-webkit-scrollbar-track {
+            background: hsla(0, 0%, 100%, 0.15);
+            border-radius: 3px;
+            box-shadow: inset 0 0 5px rgb(37 37 37 / 5%);
+        }
+
         .ant-menu-item,
         .ant-menu-submenu-title {
             height: 52px;
@@ -163,6 +187,20 @@ watch(
                 }
             }
         }
+    }
+}
+
+.ant-layout-sider.layout-sider.ant-layout-sider-light .ant-layout-sider-children {
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.12);
+        border-radius: 3px;
+        box-shadow: inset 0 0 5px rgb(0 21 41 / 5%);
+    }
+
+    &::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.06);
+        border-radius: 3px;
+        box-shadow: inset 0 0 5px rgb(0 21 41 / 5%);
     }
 }
 
