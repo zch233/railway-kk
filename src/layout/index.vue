@@ -7,14 +7,16 @@
                 <Breadcrumb />
                 <GoBack />
                 <a-layout-content class="content">
-                    <router-view v-slot="{ Component }">
-                        <transition name="fade-transform" mode="out-in">
-                            <keep-alive :key="routeKey">
-                                <component :is="Component" />
-                            </keep-alive>
-                        </transition>
-                    </router-view>
-                    <Footer />
+                    <div class="main">
+                        <router-view v-slot="{ Component }">
+                            <transition name="fade-transform" mode="out-in">
+                                <keep-alive :key="routeKey">
+                                    <component :is="Component" />
+                                </keep-alive>
+                            </transition>
+                        </router-view>
+                        <Footer />
+                    </div>
                 </a-layout-content>
             </a-layout>
         </a-layout>
@@ -42,15 +44,21 @@ const routeKey = computed(() => {
     height: 100vh;
 
     .content {
-        padding: @space24;
+        padding: @space24 @space24 0;
         overflow-x: hidden;
         overflow-y: auto;
 
-        > div:not(.footer) {
-            width: 100%;
-            min-height: 400px;
-            background: #fff;
-            box-shadow: 0 0 5px rgba(148, 161, 196, 0.3);
+        .main {
+            position: relative;
+            min-height: 100%;
+            padding-bottom: 72px;
+
+            > div:not(.footer) {
+                width: 100%;
+                min-height: 400px;
+                background: #fff;
+                box-shadow: 0 0 5px rgba(148, 161, 196, 0.3);
+            }
         }
     }
 }

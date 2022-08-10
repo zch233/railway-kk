@@ -33,7 +33,6 @@ module.exports = {
         'selector-class-pattern': null,
         'alpha-value-notation': null,
         'color-function-notation': null,
-        'keyframe-block-no-duplicate-selectors': false,
         'rule-empty-line-before': [
             'always',
             {

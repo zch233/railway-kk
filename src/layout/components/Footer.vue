@@ -14,15 +14,22 @@
 
 <style lang="less" scoped>
 .footer {
-    color: @FontColor2;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: @space16 0 0;
+    padding-bottom: 10px;
     font-size: 12px;
     line-height: 18px;
-    padding: @space16 0 0;
+    color: @FontColor2;
     text-align: center;
+
     img {
         width: 15px;
         margin-right: 4px;
     }
+
     div:first-child {
         margin-bottom: @space8;
     }

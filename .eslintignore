@@ -20,3 +20,4 @@ yarn-error.log
 .history
 assets
 **/*.min.js
+.nvmrc
