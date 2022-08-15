@@ -66,26 +66,30 @@ const logout = () => {
 
 <style lang="less" scoped>
 .header {
+    z-index: 99;
+    display: flex;
     width: 100%;
     padding: 0 10px;
     line-height: 1;
     background: #fff;
-    display: flex;
+    transition: width 0.3s ease;
     justify-content: space-between;
     align-items: center;
-    transition: width 0.3s ease;
-    z-index: 99;
+
     &-left {
         display: flex;
         align-items: center;
+
         &__logo {
             display: flex;
             justify-content: space-between;
             align-items: center;
             width: 198px;
+
             img {
                 width: 120px;
             }
+
             span {
                 display: inline-block;
                 padding: 3px 8px;
@@ -95,46 +99,56 @@ const logout = () => {
                 border-radius: 2px;
             }
         }
+
         &__text {
             padding: 0 15px;
             font-size: 15px;
             border-left: 1px solid #d5d9de;
         }
     }
+
     &-right {
         display: flex;
         align-items: center;
+
         .full-screen,
         .notify-badge {
             margin-right: 20px;
         }
     }
 }
+
 .ant-avatar {
     background: #fff;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 }
+
 .user-info {
     width: 200px;
-    border-radius: 5px;
     background: #fff;
+    border-radius: 5px;
+
     &-desc {
         display: flex;
-        align-items: center;
-        font-size: 15px;
         padding: 10px 15px;
+        font-size: 15px;
+        align-items: center;
+
         .ant-avatar {
             margin-right: 15px;
         }
     }
+
     &-menu {
         padding: 10px 0;
         border-top: 1px solid #ebeef5;
+
         > div {
-            line-height: 2.5;
             padding: 0 15px;
-            transition: all 0.3s ease;
+            line-height: 2.5;
             cursor: pointer;
+            transition: all 0.3s ease;
+
             &:hover {
                 color: var(--ant-primary-color);
                 background-color: var(--ant-primary-1);

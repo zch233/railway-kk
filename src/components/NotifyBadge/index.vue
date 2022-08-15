@@ -18,24 +18,25 @@ defineProps({
 
 <style lang="less" scoped>
 .notify-badge {
+    position: relative;
     font-size: 24px;
     color: var(--ant-primary-color);
-    position: relative;
     cursor: pointer;
+
     i {
-        font-style: normal;
-        font-size: 13px;
-        display: inline-block;
         position: absolute;
+        top: -6px;
+        right: -6px;
+        display: inline-block;
         width: 18px;
         height: 18px;
-        text-align: center;
+        font-size: 13px;
+        font-style: normal;
         line-height: 18px;
-        border-radius: 100%;
-        right: -6px;
-        top: -6px;
         color: #fff;
+        text-align: center;
         background: var(--ant-error-color);
+        border-radius: 100%;
     }
 }
 </style>
