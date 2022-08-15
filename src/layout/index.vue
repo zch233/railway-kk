@@ -19,6 +19,7 @@
             </a-layout>
         </a-layout>
     </a-layout>
+    <Setting />
 </template>
 
 <script setup>
@@ -29,6 +30,7 @@ import Footer from './components/Footer.vue';
 import GoBack from './components/GoBack.vue';
 import Breadcrumb from './components/Breadcrumb.vue';
 import Sider from './components/Sider/index.vue';
+import Setting from './setting/index.vue';
 const route = useRoute();
 
 const routeKey = computed(() => {

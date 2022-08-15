@@ -8,4 +8,18 @@
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ConfigProvider } from 'ant-design-vue';
+import useSettingStore from '@src/store/modules/setting';
+
+watch(
+    () => useSettingStore().themeColor,
+    val => {
+        ConfigProvider.config({
+            theme: {
+                primaryColor: val,
+            },
+        });
+    }
+);
+</script>
