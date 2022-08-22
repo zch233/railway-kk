@@ -1,6 +1,6 @@
 <template>
-    <a-layout-sider width="208" v-model:collapsed="collapsed" theme="light" class="layout-sider box-shadow" collapsible v-if="mode === 'inline'">
-        <a-menu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" mode="inline">
+    <a-layout-sider width="208" v-model:collapsed="collapsed" :theme="siderTheme" class="layout-sider box-shadow" collapsible v-if="mode === 'inline'">
+        <a-menu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :theme="siderTheme" mode="inline">
             <Menu v-for="sider in siderList" :key="sider.path" :data="sider" />
         </a-menu>
         <template #trigger>
@@ -12,7 +12,7 @@
         </template>
     </a-layout-sider>
     <div class="horizontal-header" v-if="mode === 'horizontal'">
-        <a-menu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" mode="horizontal">
+        <a-menu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :theme="siderHorizontalTheme" mode="horizontal">
             <Menu v-for="sider in siderList" :key="sider.path" :data="sider" />
         </a-menu>
     </div>
@@ -24,8 +24,18 @@ import { useRoute } from 'vue-router';
 import { uniq } from 'lodash';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 import usePermissionStore from '@src/store/modules/permission';
+import useSettingStore from '@src/store/modules/setting';
 import Menu from './Menu';
 const route = useRoute();
+
+const siderTheme = computed(() => {
+    const useSetting = useSettingStore();
+    return ['darkSider', 'darkTop'].includes(useSetting.siderType) ? 'dark' : 'light';
+});
+const siderHorizontalTheme = computed(() => {
+    const useSetting = useSettingStore();
+    return useSetting.siderType === 'darkTop' ? 'dark' : 'light';
+});
 
 defineProps({
     mode: {
@@ -221,36 +231,59 @@ watch(
 }
 
 .horizontal-header {
+    position: relative;
     padding-right: 15px;
     margin-right: 30px;
-    border-right: 1px solid @BorderColor1;
+
+    &::after {
+        width: 1px;
+        height: 15px;
+        background: @BorderColor1;
+        content: '';
+    }
 
     .ant-menu-horizontal {
         border: none;
     }
 
-    .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-selected:after {
+    .ant-menu-horizontal > .ant-menu-item-selected:after {
         display: none;
     }
 
-    .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item,
-    .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu {
+    .ant-menu-horizontal > .ant-menu-item,
+    .ant-menu-horizontal > .ant-menu-submenu {
         padding: 0 15px;
     }
 
-    .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:after,
-    .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu:after {
+    .ant-menu-horizontal > .ant-menu-item:after,
+    .ant-menu-horizontal > .ant-menu-submenu:after {
         display: none;
     }
 
     .menu-item {
         display: flex;
-        font-size: 15px;
         align-items: center;
+        font-size: 15px;
+        line-height: 64px;
 
         .anticon {
             font-size: 18px;
         }
     }
+
+    .ant-menu-dark .ant-menu-submenu-selected,
+    .ant-menu-dark .ant-menu-item-selected .anticon,
+    .ant-menu-dark .ant-menu-item-selected .anticon + span {
+        color: var(--ant-primary-color);
+    }
+
+    .ant-menu.ant-menu-dark .ant-menu-item-selected,
+    .ant-menu-dark.ant-menu-horizontal > .ant-menu-item:hover {
+        background: none;
+    }
+}
+
+.ant-layout-sider.ant-layout-sider-dark.layout-sider .ant-layout-sider-trigger .trigger {
+    border-top: none;
 }
 </style>

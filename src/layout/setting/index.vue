@@ -11,8 +11,8 @@
             <div class="setting-item__content">
                 <div class="theme-color">
                     <span :style="{ background: setting.themeColor }" @click="colorRef.click()"></span>
-                    <input type="color" ref="colorRef" :value="setting.themeColor" @change="colorChange" />
-                    <a-input :value="setting.themeColor" @change="colorChange" placeholder="请输入颜色值" />
+                    <input type="color" ref="colorRef" :value="setting.themeColor" @change="e => changeState('themeColor', e)" />
+                    <a-input :value="setting.themeColor" @change="e => changeState('themeColor', e)" placeholder="请输入颜色值" />
                 </div>
             </div>
             <div class="setting-item__title">导航模式</div>
@@ -22,7 +22,7 @@
                         <template #title>
                             <span>左侧菜单模式</span>
                         </template>
-                        <div class="checkbox-layout-item" @click="layoutChange('left')">
+                        <div class="checkbox-layout-item" @click="changeState('layoutType', 'left')">
                             <CheckOutlined v-if="setting.layoutType === 'left'" />
                         </div>
                     </a-tooltip>
@@ -30,8 +30,37 @@
                         <template #title>
                             <span>顶部菜单模式</span>
                         </template>
-                        <div class="checkbox-layout-item" @click="layoutChange('top')">
+                        <div class="checkbox-layout-item" @click="changeState('layoutType', 'top')">
                             <CheckOutlined v-if="setting.layoutType === 'top'" />
+                        </div>
+                    </a-tooltip>
+                </div>
+            </div>
+            <div class="setting-item__title">导航栏风格</div>
+            <div class="setting-item__content">
+                <div class="checkbox-layout sider">
+                    <a-tooltip placement="top">
+                        <template #title>
+                            <span>白色侧边栏</span>
+                        </template>
+                        <div class="checkbox-layout-item" @click="changeState('siderType', 'whiteSider')">
+                            <CheckOutlined v-if="setting.siderType === 'whiteSider'" />
+                        </div>
+                    </a-tooltip>
+                    <a-tooltip placement="top">
+                        <template #title>
+                            <span>暗色侧边栏</span>
+                        </template>
+                        <div class="checkbox-layout-item" @click="changeState('siderType', 'darkSider')">
+                            <CheckOutlined v-if="setting.siderType === 'darkSider'" />
+                        </div>
+                    </a-tooltip>
+                    <a-tooltip placement="top">
+                        <template #title>
+                            <span>暗色顶栏</span>
+                        </template>
+                        <div class="checkbox-layout-item" @click="changeState('siderType', 'darkTop')">
+                            <CheckOutlined v-if="setting.siderType === 'darkTop'" />
                         </div>
                     </a-tooltip>
                 </div>
@@ -58,13 +87,9 @@ const setting = computed(() => {
 /**
  * methods
  */
-const colorChange = e => {
+const changeState = (state, value) => {
     const settingStore = useSettingStore();
-    settingStore.setState('themeColor', e.srcElement.value);
-};
-const layoutChange = type => {
-    const settingStore = useSettingStore();
-    settingStore.setState('layoutType', type);
+    settingStore.setState(state, state === 'themeColor' ? value.srcElement.value : value);
 };
 </script>
 
@@ -177,6 +202,24 @@ const layoutChange = type => {
             position: absolute;
             right: 7px;
             bottom: 6px;
+        }
+    }
+
+    &.sider {
+        .checkbox-layout-item:nth-child(1)::before {
+            background-color: #fff;
+        }
+
+        .checkbox-layout-item:nth-child(2)::before {
+            background-color: #001529;
+        }
+
+        .checkbox-layout-item:nth-child(2)::after {
+            background-color: #fff;
+        }
+
+        .checkbox-layout-item:nth-child(3)::after {
+            background-color: #001529;
         }
     }
 }

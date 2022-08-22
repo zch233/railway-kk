@@ -1,5 +1,5 @@
 <template>
-    <a-layout-header class="header box-shadow">
+    <a-layout-header class="header box-shadow" :class="isDarkTheme ? 'dark' : ''">
         <div class="header-left">
             <div class="header-left__logo">
                 <img src="../../assets/logo.png" />
@@ -57,6 +57,10 @@ const showSider = computed(() => {
     const useSetting = useSettingStore();
     return useSetting.layoutType === 'top';
 });
+const isDarkTheme = computed(() => {
+    const useSetting = useSettingStore();
+    return useSetting.siderType === 'darkTop';
+});
 const logout = () => {
     const userStore = useUserStore();
     Modal.confirm({
@@ -79,9 +83,9 @@ const logout = () => {
     padding: 0 10px;
     line-height: 1;
     background: #fff;
-    transition: width 0.3s ease;
     justify-content: space-between;
     align-items: center;
+    transition: background 0.3s, width 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;
 
     &-left {
         display: flex;
@@ -122,6 +126,11 @@ const logout = () => {
         .notify-badge {
             margin-right: 20px;
         }
+    }
+
+    &.dark {
+        color: #fff;
+        background: #001529;
     }
 }
 

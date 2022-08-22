@@ -6,6 +6,7 @@ const settingStore = defineStore({
         return {
             themeColor: '#1890ff',
             layoutType: 'left',
+            siderType: 'whiteSider',
         };
     },
     actions: {
