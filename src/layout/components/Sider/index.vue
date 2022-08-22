@@ -1,5 +1,5 @@
 <template>
-    <a-layout-sider width="208" v-model:collapsed="collapsed" theme="light" class="layout-sider box-shadow" collapsible>
+    <a-layout-sider width="208" v-model:collapsed="collapsed" theme="light" class="layout-sider box-shadow" collapsible v-if="mode === 'inline'">
         <a-menu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" mode="inline">
             <Menu v-for="sider in siderList" :key="sider.path" :data="sider" />
         </a-menu>
@@ -11,6 +11,11 @@
             </div>
         </template>
     </a-layout-sider>
+    <div class="horizontal-header" v-if="mode === 'horizontal'">
+        <a-menu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" mode="horizontal">
+            <Menu v-for="sider in siderList" :key="sider.path" :data="sider" />
+        </a-menu>
+    </div>
 </template>
 
 <script setup>
@@ -21,6 +26,13 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 import usePermissionStore from '@src/store/modules/permission';
 import Menu from './Menu';
 const route = useRoute();
+
+defineProps({
+    mode: {
+        type: String,
+        default: 'inline',
+    },
+});
 
 /**
  * data
@@ -206,5 +218,39 @@ watch(
 
 .ant-tooltip-inner .menu-item .anticon {
     display: none;
+}
+
+.horizontal-header {
+    padding-right: 15px;
+    margin-right: 30px;
+    border-right: 1px solid @BorderColor1;
+
+    .ant-menu-horizontal {
+        border: none;
+    }
+
+    .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-selected:after {
+        display: none;
+    }
+
+    .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item,
+    .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu {
+        padding: 0 15px;
+    }
+
+    .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:after,
+    .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu:after {
+        display: none;
+    }
+
+    .menu-item {
+        display: flex;
+        font-size: 15px;
+        align-items: center;
+
+        .anticon {
+            font-size: 18px;
+        }
+    }
 }
 </style>

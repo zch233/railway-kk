@@ -8,6 +8,7 @@
             <div class="header-left__text">标准后台模板</div>
         </div>
         <div class="header-right">
+            <Sider mode="horizontal" v-if="showSider" />
             <FullScreen />
             <NotifyBadge />
             <a-dropdown>
@@ -44,11 +45,17 @@ import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 import FullScreen from '@src/components/FullScreen/index.vue';
 import NotifyBadge from '@src/components/NotifyBadge/index.vue';
 import useUserStore from '@src/store/modules/user';
+import useSettingStore from '@src/store/modules/setting';
 import defaultAvatar from '@src/assets/images/avatar.png';
+import Sider from './Sider/index.vue';
 
 const userInfo = computed(() => {
     const userStore = useUserStore();
     return userStore.userInfo;
+});
+const showSider = computed(() => {
+    const useSetting = useSettingStore();
+    return useSetting.layoutType === 'top';
 });
 const logout = () => {
     const userStore = useUserStore();

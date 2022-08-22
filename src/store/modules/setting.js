@@ -5,6 +5,7 @@ const settingStore = defineStore({
     state: () => {
         return {
             themeColor: '#1890ff',
+            layoutType: 'left',
         };
     },
     actions: {

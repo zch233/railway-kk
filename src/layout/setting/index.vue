@@ -1,6 +1,6 @@
 <template>
     <div class="setting">
-        <a-drawer :width="400" :placement="right" :visible="visible" :closable="false" class="setting-drawer">
+        <a-drawer :width="300" :placement="right" :visible="visible" :closable="false" class="setting-drawer">
             <template #handle>
                 <div class="setting-button" @click="visible = !visible">
                     <CloseOutlined v-if="visible" />
@@ -15,13 +15,34 @@
                     <a-input :value="setting.themeColor" @change="colorChange" placeholder="请输入颜色值" />
                 </div>
             </div>
+            <div class="setting-item__title">导航模式</div>
+            <div class="setting-item__content">
+                <div class="checkbox-layout">
+                    <a-tooltip placement="top">
+                        <template #title>
+                            <span>左侧菜单模式</span>
+                        </template>
+                        <div class="checkbox-layout-item" @click="layoutChange('left')">
+                            <CheckOutlined v-if="setting.layoutType === 'left'" />
+                        </div>
+                    </a-tooltip>
+                    <a-tooltip placement="top">
+                        <template #title>
+                            <span>顶部菜单模式</span>
+                        </template>
+                        <div class="checkbox-layout-item" @click="layoutChange('top')">
+                            <CheckOutlined v-if="setting.layoutType === 'top'" />
+                        </div>
+                    </a-tooltip>
+                </div>
+            </div>
         </a-drawer>
     </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
-import { SettingOutlined, CloseOutlined } from '@ant-design/icons-vue';
+import { SettingOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons-vue';
 import useSettingStore from '@src/store/modules/setting';
 
 /**
@@ -40,6 +61,10 @@ const setting = computed(() => {
 const colorChange = e => {
     const settingStore = useSettingStore();
     settingStore.setState('themeColor', e.srcElement.value);
+};
+const layoutChange = type => {
+    const settingStore = useSettingStore();
+    settingStore.setState('layoutType', type);
 };
 </script>
 
@@ -70,31 +95,89 @@ const colorChange = e => {
 }
 
 .setting-item__title {
-    color: rgba(0, 0, 0, 0.85);
+    margin-bottom: 12px;
     font-size: 14px;
     line-height: 22px;
-    margin-bottom: 12px;
+    color: rgba(0, 0, 0, 0.85);
 }
+
 .setting-item__content {
-    margin-bottom: 24px;
     padding-bottom: 24px;
+    margin-bottom: 24px;
     border-bottom: 1px solid @BorderColor1;
 }
+
 .theme-color {
-    display: flex;
     position: relative;
+    display: flex;
+
     > span {
         display: block;
         width: 80px;
         height: 32px;
-        border: 2px solid @BorderColor1;
         margin-right: @space12;
+        border: 2px solid @BorderColor1;
     }
+
     input[type='color'] {
-        visibility: hidden;
         position: absolute;
         bottom: 0;
         left: 0;
+        visibility: hidden;
+    }
+}
+
+.checkbox-layout {
+    display: flex;
+
+    &-item {
+        position: relative;
+        width: 45px;
+        height: 35px;
+        margin-right: 16px;
+        overflow: hidden;
+        cursor: pointer;
+        background-color: #f0f2f5;
+        border-radius: 4px;
+        box-shadow: 0 1px 2.5px 0 rgb(0 0 0 / 18%);
+
+        &::before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            width: 15px;
+            height: 35px;
+            background-color: #001529;
+            content: '';
+        }
+
+        &::after {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 0;
+            width: 30px;
+            height: 10px;
+            background-color: #fff;
+            content: '';
+        }
+
+        &:nth-child(2) {
+            &::before {
+                background-color: #fff;
+            }
+
+            &::after {
+                background-color: #001529;
+            }
+        }
+
+        :deep(.anticon-check) {
+            position: absolute;
+            right: 7px;
+            bottom: 6px;
+        }
     }
 }
 </style>
