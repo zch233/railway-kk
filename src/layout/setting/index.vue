@@ -120,16 +120,33 @@ const changeState = (state, value) => {
 }
 
 .setting-item__title {
-    margin-bottom: 12px;
-    font-size: 14px;
+    position: relative;
+    margin-bottom: 24px;
+    font-size: 15px;
     line-height: 22px;
     color: rgba(0, 0, 0, 0.85);
+    text-align: center;
+
+    &::before,
+    &::after {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        display: inline-block;
+        width: 30%;
+        height: 1px;
+        background: @BorderColor1;
+        content: '';
+    }
+
+    &::after {
+        right: 0;
+        left: auto;
+    }
 }
 
 .setting-item__content {
-    padding-bottom: 24px;
-    margin-bottom: 24px;
-    border-bottom: 1px solid @BorderColor1;
+    margin-bottom: 36px;
 }
 
 .theme-color {
