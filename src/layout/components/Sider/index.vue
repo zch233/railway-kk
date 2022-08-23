@@ -236,10 +236,15 @@ watch(
     margin-right: 30px;
 
     &::after {
+        position: absolute;
+        right: 0;
+        bottom: 50%;
+        display: inline-block;
         width: 1px;
         height: 15px;
         background: @BorderColor1;
         content: '';
+        transform: translateY(50%);
     }
 
     .ant-menu-horizontal {
