@@ -18,6 +18,12 @@ const routes = [
 const router = createRouter({
     history: createWebHashHistory(),
     routes,
+    // 路由切换回滚到指定位置
+    scrollBehavior: () => {
+        if (document.querySelector('.ant-layout-content.content')) {
+            document.querySelector('.ant-layout-content.content').scrollTop = 0;
+        }
+    },
 });
 
 export default router;
