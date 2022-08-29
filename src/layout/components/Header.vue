@@ -40,7 +40,7 @@
 
 <script setup>
 import { computed, createVNode } from 'vue';
-import { Modal } from 'ant-design-vue';
+import Modal from 'ant-design-vue/lib/modal';
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 import FullScreen from '@src/components/FullScreen/index.vue';
 import NotifyBadge from '@src/components/NotifyBadge/index.vue';
