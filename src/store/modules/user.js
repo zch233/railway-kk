@@ -25,15 +25,21 @@ const userStore = defineStore({
             // const { data } = await getUserDetail();
             // this.setUserInfo(data);
         },
-        logout() {
+        clearData() {
             this.token = '';
             this.systemCode = '';
             this.userInfo = {};
-            window.location.href = import.meta.env.VITE_LOGIN_URL;
+        },
+        logout() {
+            this.clearData();
+            window.location.replace(import.meta.env.VITE_LOGIN_URL);
         },
     },
     getters: {},
-    persist: true,
+    persist: {
+        key: 'demo',
+        paths: ['token', 'systemCode'],
+    },
 });
 
 export default function useUserStore() {
