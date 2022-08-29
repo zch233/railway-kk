@@ -11,11 +11,12 @@ router.beforeEach(async (to, from, next) => {
     NProgress.start();
     const userStore = useUserStore();
     const permissionStore = usePermissionStore();
-    const { token: queryToken, system_code: querySystemCode } = to.query;
+    const { token: queryToken, system_code: querySystemCode, org_id: queryOrgId } = to.query;
     const token = userStore.token;
     if (queryToken && queryToken !== token) {
         userStore.setToken(queryToken);
         userStore.setSystemCode(querySystemCode);
+        userStore.setOrgId(Number(queryOrgId));
     }
     if (!Object.keys(userStore.userInfo).length) await userStore.initUser();
     if (!permissionStore.hasRoute && !includes(excludePath, to.path)) {

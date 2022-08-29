@@ -7,6 +7,7 @@ const userStore = defineStore({
         return {
             token: '',
             systemCode: '',
+            orgId: '',
             userInfo: {},
         };
     },
@@ -16,6 +17,9 @@ const userStore = defineStore({
         },
         setSystemCode(value) {
             this.systemCode = value;
+        },
+        setOrgId(id) {
+            this.orgId = id;
         },
         setUserInfo(value) {
             this.userInfo = value;
