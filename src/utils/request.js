@@ -1,6 +1,9 @@
 import axios from 'axios';
 import useUserStore from '@src/store/modules/user';
 import { downloadFile } from '@src/utils/index';
+import { message } from 'ant-design-vue';
+import { isDdOrZzd } from '@src/utils/index.js';
+import router from '@src/router';
 
 export const request = axios.create({
     baseURL: import.meta.env.VITE_APP_API_URL,
@@ -96,7 +99,21 @@ request.interceptors.response.use(
                 return data;
             } else if (data.code === 401) {
                 const userStore = useUserStore();
-                userStore.logout();
+                // 钉钉，浙政钉退到登录失效页面
+                if (isDdOrZzd()) {
+                    userStore.clearData();
+                    router.replace({
+                        name: 'forbidden',
+                        query: {
+                            code: 401,
+                        },
+                    });
+                } else {
+                    message.error(data.message || '无权限或登录失效，请重新登录');
+                    setTimeout(() => {
+                        userStore.logout();
+                    }, 2000);
+                }
             } else {
                 console.error('😭😭😭', response);
                 alert(data.message || '出错了');

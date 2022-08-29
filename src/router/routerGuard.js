@@ -5,7 +5,7 @@ import router from '@src/router';
 import useUserStore from '@src/store/modules/user';
 import usePermissionStore from '@src/store/modules/permission';
 
-const excludePath = ['/auth', '/404']; // 排除的路径
+const excludePath = ['/auth', '/404', '/forbidden']; // 排除的路径
 
 router.beforeEach(async (to, from, next) => {
     NProgress.start();

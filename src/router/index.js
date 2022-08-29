@@ -10,7 +10,13 @@ const routes = [
     {
         name: '404',
         path: '/404',
-        component: () => import('@src/views/404.vue'),
+        component: () => import('@src/views/Forbidden/404.vue'),
+        hidden: true,
+    },
+    {
+        name: 'forbidden',
+        path: '/forbidden',
+        component: () => import('@src/views/Forbidden/index.vue'),
         hidden: true,
     },
 ];
