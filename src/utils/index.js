@@ -16,6 +16,7 @@ export const getBrowser = () => {
                 iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
                 iPad: u.indexOf('iPad') > -1, //是否iPad
                 dingtalk: u.indexOf('DingTalk') > -1, //是否为钉钉内部
+                taurusapp: u.indexOf('TaurusApp') > -1, //是否为专有钉钉和浙政钉钉
                 alipay: u.indexOf('AlipayClient') > -1, //是否为支付宝
                 wechat: /MicroMessenger/i.test(u), //是否微信中
                 webApp: u.indexOf('Safari') === -1, //是否web应该程序，没有头部与底部
@@ -59,4 +60,18 @@ export const downloadFile = response => {
         };
         fileReader.readAsText(response.data);
     });
+};
+
+// 日期选择同一天拼接时间
+export const formatDateTime = date => {
+    if (date.length === 2) {
+        return date[0] === date[1] ? [date[0] + ' 00:00:00', date[1] + ' 23:59:59'] : date;
+    } else {
+        return date;
+    }
+};
+
+// 判断是否是钉钉或者浙政钉
+export const isDdOrZzd = () => {
+    return getBrowser().versions.dingtalk || getBrowser().versions.taurusapp;
 };

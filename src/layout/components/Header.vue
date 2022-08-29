@@ -11,7 +11,7 @@
             <Sider mode="horizontal" v-if="showSider" />
             <FullScreen />
             <NotifyBadge />
-            <a-dropdown>
+            <a-dropdown :trigger="['click']">
                 <a-avatar :size="36">
                     <template #icon>
                         <img :src="userInfo.img || defaultAvatar" />
@@ -29,7 +29,7 @@
                         </div>
                         <div class="user-info-menu">
                             <div>修改信息</div>
-                            <div @click="logout">退出登录</div>
+                            <div @click="logout" v-if="!isDdOrZzd()">退出登录</div>
                         </div>
                     </div>
                 </template>
@@ -48,6 +48,7 @@ import useUserStore from '@src/store/modules/user';
 import useSettingStore from '@src/store/modules/setting';
 import defaultAvatar from '@src/assets/images/avatar.png';
 import Sider from './Sider/index.vue';
+import { isDdOrZzd } from '@src/utils/index.js';
 
 const userInfo = computed(() => {
     const userStore = useUserStore();
