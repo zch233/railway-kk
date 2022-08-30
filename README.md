@@ -8,6 +8,7 @@
 // .env
 
 VITE_APP_TITLE=应用名称
+VITE_APP_STORAGE_KEY=本地持久化key
 VITE_PORT=11226
 ```
 
