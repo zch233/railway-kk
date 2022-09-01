@@ -10,9 +10,9 @@
             <div class="setting-item__title">主题色</div>
             <div class="setting-item__content">
                 <div class="theme-color">
-                    <span :style="{ background: setting.themeColor }" @click="colorRef.click()"></span>
-                    <input type="color" ref="colorRef" :value="setting.themeColor" @change="e => changeState('themeColor', e)" />
-                    <a-input :value="setting.themeColor" @change="e => changeState('themeColor', e)" placeholder="请输入颜色值" />
+                    <span :style="{ background: storeSetting.themeColor }" @click="colorRef.click()"></span>
+                    <input type="color" ref="colorRef" :value="storeSetting.themeColor" @change="e => changeState('themeColor', e)" />
+                    <a-input :value="storeSetting.themeColor" @change="e => changeState('themeColor', e)" placeholder="请输入颜色值" />
                 </div>
             </div>
             <div class="setting-item__title">导航模式</div>
@@ -23,7 +23,7 @@
                             <span>左侧菜单模式</span>
                         </template>
                         <div class="checkbox-layout-item" @click="changeState('layoutType', 'left')">
-                            <CheckOutlined v-if="setting.layoutType === 'left'" />
+                            <CheckOutlined v-if="storeSetting.layoutType === 'left'" />
                         </div>
                     </a-tooltip>
                     <a-tooltip placement="top">
@@ -31,7 +31,7 @@
                             <span>顶部菜单模式</span>
                         </template>
                         <div class="checkbox-layout-item" @click="changeState('layoutType', 'top')">
-                            <CheckOutlined v-if="setting.layoutType === 'top'" />
+                            <CheckOutlined v-if="storeSetting.layoutType === 'top'" />
                         </div>
                     </a-tooltip>
                 </div>
@@ -44,7 +44,7 @@
                             <span>白色侧边栏</span>
                         </template>
                         <div class="checkbox-layout-item" @click="changeState('siderType', 'whiteSider')">
-                            <CheckOutlined v-if="setting.siderType === 'whiteSider'" />
+                            <CheckOutlined v-if="storeSetting.siderType === 'whiteSider'" />
                         </div>
                     </a-tooltip>
                     <a-tooltip placement="top">
@@ -52,7 +52,7 @@
                             <span>暗色侧边栏</span>
                         </template>
                         <div class="checkbox-layout-item" @click="changeState('siderType', 'darkSider')">
-                            <CheckOutlined v-if="setting.siderType === 'darkSider'" />
+                            <CheckOutlined v-if="storeSetting.siderType === 'darkSider'" />
                         </div>
                     </a-tooltip>
                     <a-tooltip placement="top">
@@ -60,7 +60,7 @@
                             <span>暗色顶栏</span>
                         </template>
                         <div class="checkbox-layout-item" @click="changeState('siderType', 'darkTop')">
-                            <CheckOutlined v-if="setting.siderType === 'darkTop'" />
+                            <CheckOutlined v-if="storeSetting.siderType === 'darkTop'" />
                         </div>
                     </a-tooltip>
                 </div>
@@ -70,26 +70,22 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { SettingOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons-vue';
-import useSettingStore from '@src/store/modules/setting';
+import { useStoreSetting } from '@src/store/modules/setting';
 
 /**
  * data
  */
 const visible = ref(false);
 const colorRef = ref();
-const setting = computed(() => {
-    const settingStore = useSettingStore();
-    return settingStore;
-});
+const storeSetting = useStoreSetting();
 
 /**
  * methods
  */
 const changeState = (state, value) => {
-    const settingStore = useSettingStore();
-    settingStore.setState(state, state === 'themeColor' ? value.srcElement.value : value);
+    storeSetting.setState(state, state === 'themeColor' ? value.srcElement.value : value);
 };
 </script>
 

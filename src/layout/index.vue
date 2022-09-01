@@ -2,7 +2,7 @@
     <a-layout class="layout">
         <Header />
         <a-layout>
-            <Sider v-if="showSider" />
+            <Sider v-if="storeSetting.layoutType === 'left'" />
             <a-layout>
                 <Breadcrumb />
                 <GoBack />
@@ -27,21 +27,19 @@
 <script setup>
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-import useSettingStore from '@src/store/modules/setting';
+import { useStoreSetting } from '@src/store/modules/setting';
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
 import GoBack from './components/GoBack.vue';
 import Breadcrumb from './components/Breadcrumb.vue';
 import Sider from './components/Sider/index.vue';
 import Setting from './setting/index.vue';
+
 const route = useRoute();
+const storeSetting = useStoreSetting();
 
 const routeKey = computed(() => {
     return route.path;
-});
-const showSider = computed(() => {
-    const useSetting = useSettingStore();
-    return useSetting.layoutType === 'left';
 });
 </script>
 

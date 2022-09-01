@@ -1,51 +1,40 @@
 import { defineStore } from 'pinia';
-// import { getUserDetail } from '@src/api/auth/index';
+import { useLocalStorage } from '@src/utils/storage';
 
-const userStore = defineStore({
-    id: 'user',
-    state: () => {
-        return {
-            token: '',
-            systemCode: '',
-            orgId: '',
-            userInfo: {},
-        };
-    },
-    actions: {
-        setToken(value) {
-            this.token = value;
-        },
-        setSystemCode(value) {
-            this.systemCode = value;
-        },
-        setOrgId(id) {
-            this.orgId = id;
-        },
-        setUserInfo(value) {
-            this.userInfo = value;
-        },
-        async initUser() {
-            // 设置用户信息
-            // const { data } = await getUserDetail();
-            // this.setUserInfo(data);
-        },
-        clearData() {
-            this.token = '';
-            this.systemCode = '';
-            this.userInfo = {};
-        },
-        logout() {
-            this.clearData();
-            window.location.replace(import.meta.env.VITE_LOGIN_URL);
-        },
-    },
-    getters: {},
-    persist: {
-        key: 'demo',
-        paths: ['token', 'systemCode'],
-    },
+export const useStoreUser = defineStore('user', () => {
+    const token = useLocalStorage('token', '');
+    const setToken = value => (token.value = value);
+    const systemCode = useLocalStorage('systemCode', '');
+    const setSystemCode = value => (systemCode.value = value);
+    const orgId = ref('');
+    const setOrgId = value => (orgId.value = value);
+    const userInfo = ref({});
+    const setUserInfo = value => (userInfo.value = value);
+    const clearData = () => {
+        token.value = '';
+        systemCode.value = '';
+        userInfo.value = {};
+    };
+    const initUser = async () => {
+        // 设置用户信息
+        // const { data } = await getUserDetail();
+        // this.setUserInfo(data);
+    };
+    const logout = () => {
+        clearData();
+        window.location.replace(import.meta.env.VITE_LOGIN_URL);
+    };
+    return {
+        token,
+        setToken,
+        systemCode,
+        setSystemCode,
+        orgId,
+        setOrgId,
+        userInfo,
+        setUserInfo,
+        clearData,
+        initUser,
+        logout,
+    };
 });
-
-export default function useUserStore() {
-    return userStore();
-}

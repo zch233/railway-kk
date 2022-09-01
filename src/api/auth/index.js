@@ -1,5 +1,5 @@
 import { request } from '@src/utils/request';
-import useUserStore from '@src/store/modules/user';
+import { useStoreUser } from '@src/store/modules/user';
 const userApiUrl = import.meta.env.VITE_USER_API_URL;
 
 // 用户中心 查询账号信息
@@ -13,13 +13,13 @@ export const getUserDetail = () => {
 
 // 用户中心 获取用户路由权限
 export const getRouterPermission = () => {
-    const userStore = useUserStore();
+    const storeUser = useStoreUser();
     return request({
         baseURL: userApiUrl,
         url: '/apiRouterPermissionNew',
         method: 'get',
         params: {
-            system_code: userStore.systemCode,
+            system_code: storeUser.systemCode,
         },
     });
 };

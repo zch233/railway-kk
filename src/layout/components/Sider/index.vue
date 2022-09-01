@@ -1,7 +1,7 @@
 <template>
     <a-layout-sider width="208" v-model:collapsed="collapsed" :theme="siderTheme" class="layout-sider box-shadow" collapsible v-if="mode === 'inline'">
         <a-menu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :theme="siderTheme" mode="inline">
-            <Menu v-for="sider in siderList" :key="sider.path" :data="sider" />
+            <Menu v-for="sider in storePermission.menuList" :key="sider.path" :data="sider" />
         </a-menu>
         <template #trigger>
             <div class="trigger">
@@ -13,7 +13,7 @@
     </a-layout-sider>
     <div class="horizontal-header" v-if="mode === 'horizontal'">
         <a-menu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :theme="siderHorizontalTheme" mode="horizontal">
-            <Menu v-for="sider in siderList" :key="sider.path" :data="sider" />
+            <Menu v-for="sider in storePermission.menuList" :key="sider.path" :data="sider" />
         </a-menu>
     </div>
 </template>
@@ -23,19 +23,15 @@ import { ref, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { uniq } from 'lodash';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
-import usePermissionStore from '@src/store/modules/permission';
-import useSettingStore from '@src/store/modules/setting';
+import { useStorePermission } from '@src/store/modules/permission';
+import { useStoreSetting } from '@src/store/modules/setting';
 import Menu from './Menu';
-const route = useRoute();
 
-const siderTheme = computed(() => {
-    const useSetting = useSettingStore();
-    return ['darkSider', 'darkTop'].includes(useSetting.siderType) ? 'dark' : 'light';
-});
-const siderHorizontalTheme = computed(() => {
-    const useSetting = useSettingStore();
-    return useSetting.siderType === 'darkTop' ? 'dark' : 'light';
-});
+const route = useRoute();
+const storeSetting = useStoreSetting();
+
+const siderTheme = computed(() => (['darkSider', 'darkTop'].includes(storeSetting.siderType) ? 'dark' : 'light'));
+const siderHorizontalTheme = computed(() => (storeSetting.siderType === 'darkTop' ? 'dark' : 'light'));
 
 defineProps({
     mode: {
@@ -50,10 +46,8 @@ defineProps({
 const selectedKeys = ref([]);
 const openKeys = ref([]);
 const collapsed = ref(false);
-const siderList = computed(() => {
-    const permissionStore = usePermissionStore();
-    return permissionStore.menuList;
-});
+
+const storePermission = useStorePermission();
 
 /**
  * methods
@@ -95,11 +89,11 @@ watch(
         const { meta, path } = route;
         if (meta.activeMenu) {
             selectedKeys.value = [meta.activeMenu];
-            openKeys.value = uniq([...openKeys.value, ...findPatentValue(siderList.value, meta.activeMenu)]);
+            openKeys.value = uniq([...openKeys.value, ...findPatentValue(storePermission.menuList, meta.activeMenu)]);
             return;
         }
         selectedKeys.value = [path];
-        openKeys.value = uniq([...openKeys.value, ...findPatentValue(siderList.value, path)]);
+        openKeys.value = uniq([...openKeys.value, ...findPatentValue(storePermission.menuList, path)]);
     },
     {
         deep: true,

@@ -14,7 +14,7 @@
             <a-dropdown :trigger="['click']">
                 <a-avatar :size="36">
                     <template #icon>
-                        <img :src="userInfo.img || defaultAvatar" />
+                        <img :src="storeUser.userInfo.img || defaultAvatar" />
                     </template>
                 </a-avatar>
                 <template #overlay>
@@ -22,10 +22,10 @@
                         <div class="user-info-desc">
                             <a-avatar :size="36">
                                 <template #icon>
-                                    <img :src="userInfo.img || defaultAvatar" />
+                                    <img :src="storeUser.userInfo.img || defaultAvatar" />
                                 </template>
                             </a-avatar>
-                            <div>{{ userInfo?.name || '—' }}<br />{{ userInfo?.phone || '—' }}</div>
+                            <div>{{ storeUser.userInfo?.name || '—' }}<br />{{ storeUser.userInfo?.phone || '—' }}</div>
                         </div>
                         <div class="user-info-menu">
                             <div>修改信息</div>
@@ -44,33 +44,26 @@ import Modal from 'ant-design-vue/lib/modal';
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 import FullScreen from '@src/components/FullScreen/index.vue';
 import NotifyBadge from '@src/components/NotifyBadge/index.vue';
-import useUserStore from '@src/store/modules/user';
-import useSettingStore from '@src/store/modules/setting';
+import { useStoreUser } from '@src/store/modules/user';
+import { useStoreSetting } from '@src/store/modules/setting';
 import defaultAvatar from '@src/assets/images/avatar.png';
 import Sider from './Sider/index.vue';
 import { isDdOrZzd } from '@src/utils/index.js';
 
-const userInfo = computed(() => {
-    const userStore = useUserStore();
-    return userStore.userInfo;
-});
-const showSider = computed(() => {
-    const useSetting = useSettingStore();
-    return useSetting.layoutType === 'top';
-});
-const isDarkTheme = computed(() => {
-    const useSetting = useSettingStore();
-    return useSetting.siderType === 'darkTop';
-});
+const storeUser = useStoreUser();
+const storeSetting = useStoreSetting();
+
+const showSider = computed(() => storeSetting.layoutType === 'top');
+const isDarkTheme = computed(() => storeSetting.siderType === 'darkTop');
+
 const logout = () => {
-    const userStore = useUserStore();
     Modal.confirm({
         title: '是否确认退出登录？',
         icon: createVNode(ExclamationCircleOutlined),
         okText: '确定',
         cancelText: '取消',
         onOk() {
-            userStore.logout();
+            storeUser.logout();
         },
     });
 };

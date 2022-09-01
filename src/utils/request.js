@@ -1,5 +1,5 @@
 import axios from 'axios';
-import useUserStore from '@src/store/modules/user';
+import { useStoreUser } from '@src/store/modules/user';
 import { downloadFile } from '@src/utils/index';
 import { message } from 'ant-design-vue';
 import { isDdOrZzd } from '@src/utils/index.js';
@@ -68,8 +68,8 @@ export const clearPending = () => {
 
 request.interceptors.request.use(
     config => {
-        const userStore = useUserStore();
-        const token = userStore.token;
+        const storeUser = useStoreUser();
+        const token = storeUser.token;
         if (token) {
             config.headers.common['Authorization'] = 'Bearer ' + token;
         }
@@ -98,10 +98,10 @@ request.interceptors.response.use(
             if (data.code === 200) {
                 return data;
             } else if (data.code === 401) {
-                const userStore = useUserStore();
+                const storeUser = useStoreUser();
                 // 钉钉，浙政钉退到登录失效页面
                 if (isDdOrZzd()) {
-                    userStore.clearData();
+                    storeUser.clearData();
                     router.replace({
                         name: 'forbidden',
                         query: {
@@ -111,7 +111,7 @@ request.interceptors.response.use(
                 } else {
                     message.error(data.message || '无权限或登录失效，请重新登录');
                     setTimeout(() => {
-                        userStore.logout();
+                        storeUser.logout();
                     }, 2000);
                 }
             } else {

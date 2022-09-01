@@ -1,21 +1,16 @@
 import { defineStore } from 'pinia';
 
-const settingStore = defineStore({
-    id: 'app',
-    state: () => {
-        return {
-            themeColor: '#1890ff',
-            layoutType: 'left',
-            siderType: 'whiteSider',
-        };
-    },
-    actions: {
-        setState(key, value) {
-            this[key] = value;
-        },
-    },
+export const useStoreSetting = defineStore('settings', () => {
+    const settings = reactive({
+        themeColor: '#1890ff',
+        layoutType: 'left',
+        siderType: 'whiteSider',
+    });
+    const setState = (key, value) => {
+        settings[key] = value;
+    };
+    return {
+        ...toRefs(settings),
+        setState,
+    };
 });
-
-export default function useSettingStore() {
-    return settingStore();
-}

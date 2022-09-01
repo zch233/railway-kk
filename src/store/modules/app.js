@@ -1,13 +1,5 @@
 import { defineStore } from 'pinia';
 
-const appStore = defineStore({
-    id: 'app',
-    state: () => {},
-    getters: {},
-    actions: {},
-    persist: true,
+export const useStoreApp = defineStore('app', () => {
+    return {};
 });
-
-export default function useAppStore() {
-    return appStore();
-}

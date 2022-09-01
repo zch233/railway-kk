@@ -16,10 +16,10 @@
 </template>
 
 <script setup>
-import { computed, reactive, watch } from 'vue';
+import { reactive, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { get } from 'lodash';
-import usePermissionStore from '@src/store/modules/permission';
+import { useStorePermission } from '@src/store/modules/permission';
 const route = useRoute();
 
 const levelList = reactive({
@@ -30,11 +30,7 @@ watch(route, () => {
     if (route.path.startsWith('/redirect/')) return;
     getBreadcrumb();
 });
-
-const menuList = computed(() => {
-    let permissionStore = usePermissionStore();
-    return permissionStore.menuList;
-});
+let storePermission = useStorePermission();
 
 const getBreadcrumb = () => {
     const { meta, path } = route;
@@ -46,10 +42,10 @@ const getBreadcrumb = () => {
     };
     const activeMenu = get(meta, 'activeMenu', '');
     if (activeMenu) {
-        let list = loopMenu(menuList.value, activeMenu) || [];
+        let list = loopMenu(storePermission.menuList, activeMenu) || [];
         levelList.data = list.concat([jRoute]);
     } else {
-        levelList.data = loopMenu(menuList.value, path) || [];
+        levelList.data = loopMenu(storePermission.menuList, path) || [];
     }
 };
 

@@ -12,14 +12,14 @@
 
 <script setup>
 import { ConfigProvider } from 'ant-design-vue';
-import useSettingStore from '@src/store/modules/setting';
+import { useStoreSetting } from '@src/store/modules/setting';
 import zhCN from 'ant-design-vue/es/locale/zh_CN';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 dayjs.locale('zh-cn');
 
 watch(
-    () => useSettingStore().themeColor,
+    () => useStoreSetting().themeColor,
     val => {
         ConfigProvider.config({
             theme: {
