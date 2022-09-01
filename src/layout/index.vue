@@ -49,7 +49,6 @@ const routeKey = computed(() => {
     height: 100vh;
 
     .content {
-        padding: @space24 @space24 0;
         overflow-x: hidden;
         overflow-y: auto;
 
@@ -61,8 +60,6 @@ const routeKey = computed(() => {
             > div:not(.footer) {
                 width: 100%;
                 min-height: 400px;
-                background: #fff;
-                box-shadow: 0 0 5px rgba(148, 161, 196, 0.3);
             }
         }
     }

@@ -50,7 +50,7 @@ export default configEnv => {
             preprocessorOptions: {
                 less: {
                     javascriptEnabled: true,
-                    additionalData: `@import "${path.resolve(__dirname, 'src/styles/variables.less')}";`,
+                    additionalData: `@import "${path.resolve(__dirname, 'src/styles/theme/index.less')}";`,
                 },
             },
         },

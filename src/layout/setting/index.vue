@@ -1,6 +1,6 @@
 <template>
     <div class="setting">
-        <a-drawer :width="300" :placement="right" :visible="visible" :closable="false" class="setting-drawer">
+        <a-drawer :width="300" placement="right" :visible="visible" :closable="false" class="setting-drawer">
             <template #handle>
                 <div class="setting-button" @click="visible = !visible">
                     <CloseOutlined v-if="visible" />
@@ -153,7 +153,7 @@ const changeState = (state, value) => {
         display: block;
         width: 80px;
         height: 32px;
-        margin-right: @space12;
+        margin-right: @space3;
         border: 2px solid @BorderColor1;
     }
 
