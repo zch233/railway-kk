@@ -43,7 +43,7 @@ export default {
             ],
         },
     ],
-    button: [],
+    button: ['demo'],
     otherPage: [
         {
             path: '/Table/Details',

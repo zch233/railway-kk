@@ -9,9 +9,9 @@
         />
         <GlobalTable ref="$globalTable" :columns="columns" bordered :listApi="getList" :rowSelection="false" tableTitle="B超列表">
             <template #operation>
-                <a-button type="primary">
+                <a-button type="primary" v-permission="'demo'">
                     <template #icon><PlusOutlined /></template>
-                    新建
+                    自定义指令
                 </a-button>
             </template>
             <!-- 表格插槽 -->
