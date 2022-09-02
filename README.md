@@ -25,9 +25,16 @@ VITE_APP_API_URL=后台 api 地址
 -   可以在项目中使用 components/Icon 组件来引用 assets/svg 下的 svg 文件
 -   其属性见：[gupo-icons](https://release.group-ds.com/gupo-icons/#/docs)
 
-##### pinia 的持久化和加密
+##### setup 上使用 name
 
--   使用配置 store/index 的 createPersistedState 和 store/modules persist
+-   <script setup name="MyComponent">...</script>
+
+##### 状态持久化和加密
+
+-   使用配置 utils/storage 导出的 `useLocalStorage`,`useSessionStorage` 的方法
+-   const xxx = useLocalStorage('key', 'initValue')
+-   xxx 就是一个响应式的 localStorage 数据
+-   默认配置 { crypto: !isDevMode() }，在非开发环境下使用 crypto-js 加密
 
 ##### axios 拦截器
 
@@ -49,6 +56,7 @@ VITE_APP_API_URL=后台 api 地址
 -   用于自动触发流水线
 -   使用 yarn deploy 发布测试环境，具体 tag 在配置文件 .env.staging 中的 OSS_TAG
 -   使用 yarn deploy:prod 发布正式环境，具体 tag 在配置文件 .env.production 中的 OSS_TAG
+-   默认在版本号末尾 +1，使用 gupo-deploy --release_as x.x.x 可以指定版本号
 -   **注意：本意是方便测试环境代码发布，生产环境请合并 main 或 master 后手动打标签**
 
 ### 还有这些功能可以通过配置环境变量的方法开启
@@ -86,7 +94,7 @@ VITE_UNPLUGINS_IMPORTS=''
 # 请注意配置完成以后：请手动安装 ui 库的依赖包
 ```
 
-##### 是否开启自动解包 ref
+##### 是否开启自动解包 ref（鱿鱼西推荐，这样的写法更像普通 js）
 
 ```
 // .env
