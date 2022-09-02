@@ -27,7 +27,7 @@ const handleGoBack = () => {
 <style lang="less" scoped>
 .go-back {
     height: 60px;
-    padding: 0 @space24;
+    padding: 0 @space6;
     font-size: 20px;
     line-height: 60px;
     color: @FontColor1;
@@ -39,7 +39,7 @@ const handleGoBack = () => {
         cursor: pointer;
 
         span:last-child {
-            margin-left: @space8;
+            margin-left: @space2;
         }
     }
 }

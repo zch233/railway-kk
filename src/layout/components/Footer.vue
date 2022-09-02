@@ -18,7 +18,7 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    padding: @space16 0 0;
+    padding: @space4 0 0;
     padding-bottom: 10px;
     font-size: 12px;
     line-height: 18px;
@@ -31,7 +31,7 @@
     }
 
     div:first-child {
-        margin-bottom: @space8;
+        margin-bottom: @space2;
     }
 }
 </style>

@@ -1,13 +1,13 @@
 <template>
-    <div id="app">
-        <router-view v-slot="{ Component }">
-            <transition>
-                <a-config-provider :locale="zhCN">
+    <a-config-provider :locale="zhCN">
+        <div id="app">
+            <router-view v-slot="{ Component }">
+                <transition>
                     <component :is="Component" />
-                </a-config-provider>
-            </transition>
-        </router-view>
-    </div>
+                </transition>
+            </router-view>
+        </div>
+    </a-config-provider>
 </template>
 
 <script setup>

@@ -10,7 +10,7 @@
                     <div class="main">
                         <router-view v-slot="{ Component }">
                             <transition name="fade-transform" mode="out-in">
-                                <keep-alive :key="routeKey">
+                                <keep-alive :key="routeKey" :include="include">
                                     <component :is="Component" />
                                 </keep-alive>
                             </transition>
@@ -34,12 +34,32 @@ import GoBack from './components/GoBack.vue';
 import Breadcrumb from './components/Breadcrumb.vue';
 import Sider from './components/Sider/index.vue';
 import Setting from './setting/index.vue';
+import { useStorePermission } from '@src/store/modules/permission.js';
 
 const route = useRoute();
 const storeSetting = useStoreSetting();
+const storePermission = useStorePermission();
 
 const routeKey = computed(() => {
     return route.path;
+});
+
+const getKeepAliveName = arr => {
+    let v = [];
+    for (let index = 0; index < arr.length; index++) {
+        const item = arr[index];
+        if (item.meta.keepAlive) {
+            v.push(item?.name);
+        }
+        if (item.children.length) {
+            v.push(...getKeepAliveName(item.children));
+        }
+    }
+    return v;
+};
+
+const include = computed(() => {
+    return getKeepAliveName(storePermission.menuList);
 });
 </script>
 
@@ -49,7 +69,6 @@ const routeKey = computed(() => {
     height: 100vh;
 
     .content {
-        padding: @space24 @space24 0;
         overflow-x: hidden;
         overflow-y: auto;
 
@@ -61,8 +80,6 @@ const routeKey = computed(() => {
             > div:not(.footer) {
                 width: 100%;
                 min-height: 400px;
-                background: #fff;
-                box-shadow: 0 0 5px rgba(148, 161, 196, 0.3);
             }
         }
     }

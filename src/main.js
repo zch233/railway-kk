@@ -8,7 +8,8 @@ import '@src/styles/reset.css';
 import '@src/styles/global.less';
 import '@src/styles/transition.less';
 import 'ant-design-vue/dist/antd.variable.min.css';
+import { permissionDirective } from '@src/utils/directives.js';
 
 export const app = createApp(App);
-
+permissionDirective(app);
 app.use(router).use(store).mount('#app');

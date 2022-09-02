@@ -73,7 +73,7 @@ getBreadcrumb();
 .breadcrumb {
     width: 100%;
     height: 45px;
-    padding: 0 @space24;
+    padding: 0 @space6;
     line-height: 45px;
     background: #fff;
 
