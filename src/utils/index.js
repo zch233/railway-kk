@@ -64,7 +64,7 @@ export const downloadFile = response => {
 
 // 日期选择同一天拼接时间
 export const formatDateTime = date => {
-    if (date.length === 2) {
+    if (date && date.length === 2) {
         return date[0] === date[1] ? [date[0] + ' 00:00:00', date[1] + ' 23:59:59'] : date;
     } else {
         return date;
