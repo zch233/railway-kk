@@ -3,13 +3,15 @@ import { useLocalStorage } from '@src/utils/storage';
 
 export const useStoreUser = defineStore('user', () => {
     const token = useLocalStorage('token', '');
-    const setToken = value => (token.value = value);
-    const systemCode = useLocalStorage('systemCode', '');
-    const setSystemCode = value => (systemCode.value = value);
-    const orgId = ref('');
-    const setOrgId = value => (orgId.value = value);
+    const orgId = useLocalStorage('orgId', '');
     const userInfo = ref({});
+    const systemCode = useLocalStorage('systemCode', '');
+
+    const setToken = value => (token.value = value);
+    const setSystemCode = value => (systemCode.value = value);
+    const setOrgId = value => (orgId.value = value);
     const setUserInfo = value => (userInfo.value = value);
+
     const clearData = () => {
         token.value = '';
         systemCode.value = '';

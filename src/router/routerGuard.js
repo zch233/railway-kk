@@ -13,11 +13,19 @@ router.beforeEach(async (to, from, next) => {
     const storePermission = useStorePermission();
     const { token: queryToken, system_code: querySystemCode, org_id: queryOrgId } = to.query;
     const token = storeUser.token;
+    const orgId = storeUser.orgId;
+    const systemCode = storeUser.systemCode;
+
     if (queryToken && queryToken !== token) {
         storeUser.setToken(queryToken);
+    }
+    if (querySystemCode && querySystemCode !== systemCode) {
         storeUser.setSystemCode(querySystemCode);
+    }
+    if (queryOrgId && queryOrgId !== orgId) {
         storeUser.setOrgId(Number(queryOrgId));
     }
+
     if (!Object.keys(storeUser.userInfo).length) await storeUser.initUser();
     if (!storePermission.hasRoute && !includes(excludePath, to.path)) {
         const { redirectRoute } = await storePermission.initRoutes();

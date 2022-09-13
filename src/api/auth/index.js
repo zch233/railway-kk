@@ -6,7 +6,7 @@ const userApiUrl = import.meta.env.VITE_USER_API_URL;
 export const getUserDetail = () => {
     return request({
         baseURL: userApiUrl,
-        url: '/apiUser/apiUserDetails',
+        url: '/open/user/tokenDetail',
         method: 'get',
     });
 };
@@ -16,10 +16,11 @@ export const getRouterPermission = () => {
     const storeUser = useStoreUser();
     return request({
         baseURL: userApiUrl,
-        url: '/apiRouterPermissionNew',
+        url: '/open/permission/router',
         method: 'get',
         params: {
             system_code: storeUser.systemCode,
+            org_id: storeUser.orgId,
         },
     });
 };

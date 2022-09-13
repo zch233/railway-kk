@@ -64,7 +64,7 @@
                 :size="density"
                 :loading="tableData.loading"
                 v-bind="$attrs"
-                rowKey="id"
+                :rowKey="rowKey"
             >
                 <template #headerCell="{ title, column }">
                     <slot name="headerCell" :column="column" :title="title"></slot>
@@ -247,9 +247,8 @@ const change = (data, filters, sorter) => {
 // 刷新 传参: 不恢复到默认页码;
 const refresh = flag => {
     if (!flag) {
-        const { current_page, per_page } = defaultMeta;
+        const { current_page } = defaultMeta;
         meta.current_page = current_page;
-        meta.per_page = per_page;
     } else if (tableData.dataSource.length === 1 && meta.current_page > 1) {
         // 当删除只有最后一条数据时，并且不是最后一页，页码 -1
         meta.current_page -= 1;
