@@ -3483,10 +3483,10 @@ gupo-deploy@1.1.0:
   resolved "https://packages.aliyun.com/5eb3e37038076f00011bcd4a/npm/npm-registry/gupo-deploy/-/gupo-deploy-1.1.0.tgz#49a1cc6b446f284ad58500e202e873483c824c05"
   integrity sha512-7cmMObOtFsK1Ld3LGgChhxWR9CfgwaBfaZegHdH5xuRsBVJGbQA5a5dKr3UPR9P35HxumTmJOknPmkSMEvi4qw==
 
-gupo-vue3-persistedstate@0.0.4:
-  version "0.0.4"
-  resolved "https://packages.aliyun.com/5eb3e37038076f00011bcd4a/npm/npm-registry/gupo-vue3-persistedstate/-/gupo-vue3-persistedstate-0.0.4.tgz#cf18a0748b4eeb069e9b6e80481da3abb3802845"
-  integrity sha512-jHKLax2EhwuPTaNiqyaL6MkawVheiQxu6qX4pyRIYYGtQOzt7VOC+XwZEpl1zTV2eg5t77WygafkcKiFfhW8gQ==
+gupo-vue3-persistedstate@0.0.7:
+  version "0.0.7"
+  resolved "https://packages.aliyun.com/5eb3e37038076f00011bcd4a/npm/npm-registry/gupo-vue3-persistedstate/-/gupo-vue3-persistedstate-0.0.7.tgz#c9887da9f37bdf3b54083592508afa029db0cc1d"
+  integrity sha512-mBZ6ZvtxwcPPY6hpnjkDVtaEltoWTbkeK5DV+A8W+ArjoElJT/YoDkHwgeGez3tOAhXcwDUe48+trtLZqjOjtw==
   dependencies:
     "@vueuse/core" "9.1.1"
     crypto-js "4.1.1"
