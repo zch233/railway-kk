@@ -21,7 +21,7 @@
         "prepare": "husky install"
     },
     "dependencies": {
-        "ant-design-vue": "^3.2.9",
+        "ant-design-vue": "3.2.12",
         "axios": "0.26.1",
         "gupo-vue3-persistedstate": "0.0.7",
         "lodash": "^4.17.21",

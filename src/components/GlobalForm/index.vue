@@ -111,7 +111,47 @@
 </template>
 
 <script setup>
-/**  @description:form封装  **/
+/**  @description:form封装  
+
+支持类型
+    input, input.password, input.textarea,
+    inputNumber, 它不属于antd input组件下，是单独的一个组件，所以不写成input.number
+    select, 新增了showSearch（搜索）属性，
+    checkbox,
+    radio,
+    switch,
+    datePicker, datePicker.rangePicker,
+    timePicker, timePicker.timeRangePicker,
+    rate,
+    slider,
+    cascader, 新增了showSearch（搜索）属性，
+    treeSelect,
+    upload
+
+    
+    props参数除了formItemProps和props.showSearch其余和antd文档相同
+    举例配置项：
+    configItem:[
+        {
+            key: 'key',
+            label: '输入框',
+            type: 'select',
+            props:{
+                showSearch:true,
+                options:[]
+            },
+            // 配置Form.Item，这个配置项用的比较少
+            formItemProps: {
+                labelAlign: 'right',
+            },
+        },
+    ]
+
+tips：
+    1、select和treeSelect 在单选的时候定义参数写成undefined,否则placeholder不显示。
+    2、当select和treeSelect自定义后缀失效的时候可能是开了多选或者checkable导致。
+    3、触发自己的方法(例如select的change事件),在props传on+事件名(onChange)
+ * **/
 import {
     GupoButton,
     GupoForm,

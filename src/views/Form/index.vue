@@ -6,18 +6,19 @@
                 :configItem="addForm.configItem"
                 :formData="addForm.formData"
                 @update:formData="Object.assign(addForm.formData, $event)"
-                :labelCol="{ span: 0 }"
+                :labelCol="{ span: 5 }"
                 ref="$globalForm"
+                @submit="submit"
             />
             <!-- 自定义按钮 -->
-            <a-button type="primary" @click="submit">保存</a-button>
+            <a-button type="primary" @click="customSubmit">自定义按钮</a-button>
         </div>
     </div>
 </template>
 
 <script setup>
 /**  @description:数据同步  **/
-import { useDataSync } from './index.js';
+import { useDataSync } from './index.jsx';
 
 const addForm = useDataSync().addFrom;
 const $globalForm = ref('');
@@ -26,10 +27,14 @@ onMounted(() => {
     getConfigDetails();
 });
 
-const submit = () => {
+const customSubmit = () => {
     $globalForm.value.validateFields().then(() => {
-        console.log('保存成功');
+        console.log('addForm.formData :>> ', addForm.formData);
     });
+};
+
+const submit = () => {
+    console.log('addForm.formData :>> ', addForm.formData);
 };
 
 // 获取详情赋值
@@ -48,7 +53,7 @@ const getConfigDetails = () => {
 
     .form-content {
         width: 500px;
-        margin: 100px auto;
+        margin: 50px auto;
     }
 }
 </style>
