@@ -20,8 +20,8 @@
                 </a-layout-content>
             </a-layout>
         </a-layout>
+        <Setting />
     </a-layout>
-    <Setting />
 </template>
 
 <script setup>

@@ -1,5 +1,17 @@
 // global transition css
 
+/* scale transition */
+.scale-transform-leave-active,
+.scale-transform-enter-active {
+    transition: all 0.4s ease;
+}
+
+.scale-transform-enter-from,
+.scale-transform-leave-to {
+    opacity: 0;
+    transform: scale(1.2);
+}
+
 /* page transition */
 .fade-transform-leave-active,
 .fade-transform-enter-active {
