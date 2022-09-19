@@ -14,7 +14,13 @@ import GlobalEmpty from '@src/components/GlobalEmpty/index.vue';
 </script>
 
 <style lang="less" scoped>
+.a {
+    width: 100%;
+    height: 50px;
+    background: red;
+}
+
 .search {
-    margin: @space6;
+    padding: @space6;
 }
 </style>
