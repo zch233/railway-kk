@@ -92,6 +92,22 @@ export const useStorePermission = defineStore('permission', () => {
             resolve({ redirectRoute: menuList.value[0]?.children?.[0]?.path || menuList.value[0]?.path || '/' });
         });
     };
+    const getKeepAliveName = arr => {
+        let v = [];
+        for (let index = 0; index < arr.length; index++) {
+            const item = arr[index];
+            if (item.meta.keepAlive) {
+                v.push(item?.name);
+            }
+            if (item.children.length) {
+                v.push(...getKeepAliveName(item.children));
+            }
+        }
+        return v;
+    };
+    const getKeepAliveList = () => {
+        return getKeepAliveName(menuList.value);
+    };
     return {
         menuList,
         hasRoute,
@@ -101,5 +117,6 @@ export const useStorePermission = defineStore('permission', () => {
         setPermission,
         setRoutes,
         initRoutes,
+        getKeepAliveList,
     };
 });

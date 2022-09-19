@@ -10,7 +10,7 @@
                     <div class="main">
                         <router-view v-slot="{ Component }">
                             <transition name="fade-transform" mode="out-in">
-                                <keep-alive :key="routeKey" :include="include">
+                                <keep-alive :include="include">
                                     <component :is="Component" />
                                 </keep-alive>
                             </transition>
@@ -26,7 +26,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { useRoute } from 'vue-router';
+// import { useRoute } from 'vue-router';
 import { useStoreSetting } from '@src/store/modules/setting';
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
@@ -36,30 +36,16 @@ import Sider from './components/Sider/index.vue';
 import Setting from './setting/index.vue';
 import { useStorePermission } from '@src/store/modules/permission.js';
 
-const route = useRoute();
+// const route = useRoute();
 const storeSetting = useStoreSetting();
 const storePermission = useStorePermission();
 
-const routeKey = computed(() => {
-    return route.path;
-});
-
-const getKeepAliveName = arr => {
-    let v = [];
-    for (let index = 0; index < arr.length; index++) {
-        const item = arr[index];
-        if (item.meta.keepAlive) {
-            v.push(item?.name);
-        }
-        if (item.children.length) {
-            v.push(...getKeepAliveName(item.children));
-        }
-    }
-    return v;
-};
+// const routeKey = computed(() => {
+//     return route.path;
+// });
 
 const include = computed(() => {
-    return getKeepAliveName(storePermission.menuList);
+    return storePermission.getKeepAliveList();
 });
 </script>
 
