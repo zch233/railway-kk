@@ -16,8 +16,8 @@ router.replace('/');
 <style lang="less" scoped>
 .auth {
     display: flex;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     justify-content: center;
     align-items: center;
     flex-direction: column;
