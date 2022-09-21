@@ -1,17 +1,19 @@
 <template>
-    <div class="form global-page-content">
-        <div class="form-content">
-            <GlobalForm
-                :rules="addForm.rules"
-                :configItem="addForm.configItem"
-                :formData="addForm.formData"
-                @update:formData="Object.assign(addForm.formData, $event)"
-                :labelCol="{ span: 5 }"
-                ref="$globalForm"
-                @submit="submit"
-            />
-            <!-- 自定义按钮 -->
-            <a-button type="primary" @click="customSubmit">自定义提交</a-button>
+    <div class="form-parent">
+        <div class="form">
+            <div class="form-content">
+                <GlobalForm
+                    :rules="addForm.rules"
+                    :configItem="addForm.configItem"
+                    :formData="addForm.formData"
+                    @update:formData="Object.assign(addForm.formData, $event)"
+                    :labelCol="{ span: 5 }"
+                    ref="$globalForm"
+                    @submit="submit"
+                />
+                <!-- 自定义按钮 -->
+                <a-button type="primary" @click="customSubmit">自定义提交</a-button>
+            </div>
         </div>
     </div>
 </template>
@@ -47,12 +49,17 @@ const getConfigDetails = () => {
 };
 </script>
 <style lang="less" scoped>
-.form {
-    box-sizing: border-box;
+.form-parent {
+    padding: @space6;
 
-    .form-content {
-        width: 500px;
-        margin: 50px auto;
+    .form {
+        background-color: #fff;
+
+        .form-content {
+            width: 500px;
+            padding: @space6 0;
+            margin: 0px auto;
+        }
     }
 }
 </style>
