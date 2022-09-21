@@ -11,7 +11,7 @@
                 @submit="submit"
             />
             <!-- 自定义按钮 -->
-            <a-button type="primary" @click="customSubmit">自定义按钮</a-button>
+            <a-button type="primary" @click="customSubmit">自定义提交</a-button>
         </div>
     </div>
 </template>
@@ -48,7 +48,6 @@ const getConfigDetails = () => {
 </script>
 <style lang="less" scoped>
 .form {
-    margin: @space6;
     box-sizing: border-box;
 
     .form-content {
