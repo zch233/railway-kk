@@ -27,6 +27,7 @@ router.beforeEach(async (to, from, next) => {
     }
 
     if (!Object.keys(storeUser.userInfo).length) await storeUser.initUser();
+    if (!storeUser.orgListMenu.length) await storeUser.getUserSystemOrg();
     if (!storePermission.hasRoute && !includes(excludePath, to.path)) {
         const { redirectRoute } = await storePermission.initRoutes();
         next({ ...to, replace: true, path: to.fullPath === '/' ? redirectRoute : to.fullPath });
