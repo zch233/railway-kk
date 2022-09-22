@@ -2,7 +2,7 @@
     <div class="setting">
         <a-drawer :width="300" placement="right" :visible="visible" :closable="false" class="setting-drawer">
             <template #handle>
-                <div class="setting-button" @click="visible = !visible">
+                <div class="setting-button" @click="visible = !visible" :style="{ backgroundColor: storeSetting.theme['--ant-primary-color'] }">
                     <CloseOutlined v-if="visible" />
                     <SettingOutlined v-else />
                 </div>
@@ -10,10 +10,47 @@
             <div class="setting-item__title">主题色</div>
             <div class="setting-item__content">
                 <div class="theme-color">
-                    <span :style="{ background: storeSetting.themeColor }" @click="colorRef.click()"></span>
-                    <input type="color" ref="colorRef" :value="storeSetting.themeColor" @change="e => changeState('themeColor', e)" />
-                    <a-input :value="storeSetting.themeColor" @change="e => changeState('themeColor', e)" placeholder="请输入颜色值" />
+                    <span :style="{ backgroundColor: storeSetting.theme['--ant-primary-color'] }" @click="colorRef.click()"></span>
+                    <input type="color" ref="colorRef" :value="storeSetting" @change="e => storeSetting.setTheme({ '--ant-primary-color': e.target.value })" />
+                    <a-input
+                        :value="storeSetting.theme['--ant-primary-color']"
+                        @change="e => storeSetting.setTheme({ '--ant-primary-color': e.target.value })"
+                        placeholder="请输入颜色值"
+                    />
                 </div>
+                <ul class="theme-list">
+                    <li
+                        v-for="backgroundColor in [
+                            '#2d8cf0',
+                            '#0960bd',
+                            '#0084f4',
+                            '#009688',
+                            '#536dfe',
+                            '#ff5c93',
+                            '#ee4f12',
+                            '#0096c7',
+                            '#9c27b0',
+                            '#ff9800',
+                            '#ff3d68',
+                            '#00c1d4',
+                            '#71efa3',
+                            '#171010',
+                            '#78dec7',
+                            '#1768ac',
+                            '#fc5404',
+                            '#ff4848',
+                            '#0a1d37',
+                            '#39a6a3',
+                            '#ff8474',
+                        ]"
+                        :key="backgroundColor"
+                        :style="{ backgroundColor }"
+                        :class="{ active: storeSetting.theme['--ant-primary-color'] === backgroundColor }"
+                        @click="storeSetting.setTheme({ '--ant-primary-color': backgroundColor })"
+                    >
+                        ✓
+                    </li>
+                </ul>
             </div>
             <div class="setting-item__title">导航模式</div>
             <div class="setting-item__content">
@@ -85,7 +122,7 @@ const storeSetting = useStoreSetting();
  * methods
  */
 const changeState = (state, value) => {
-    storeSetting.setState(state, state === 'themeColor' ? value.srcElement.value : value);
+    storeSetting.setState(state, state === 'themeColor' ? value.target.value : value);
 };
 </script>
 
@@ -103,7 +140,6 @@ const changeState = (state, value) => {
     text-align: center;
     pointer-events: auto;
     cursor: pointer;
-    background-color: var(--ant-primary-color);
     border-radius: 4px 0 0 4px;
     align-items: center;
     justify-content: center;
@@ -162,6 +198,28 @@ const changeState = (state, value) => {
         bottom: 0;
         left: 0;
         visibility: hidden;
+    }
+}
+
+.theme-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+
+    li {
+        display: flex;
+        width: 20px;
+        height: 20px;
+        margin: 0 5px 5px 3px;
+        color: transparent;
+        cursor: pointer;
+        transition: all 0.25s;
+        align-items: center;
+        justify-content: center;
+
+        &.active {
+            color: #fff;
+        }
     }
 }
 
