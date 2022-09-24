@@ -52,7 +52,27 @@ export const configData = () => {
             },
         ],
     });
-    return { searchData };
+    const addForm = {
+        formData: reactive({
+            title: '',
+        }),
+        rules: {
+            title: {
+                required: true,
+                message: '请输⼊姓名',
+                trigger: 'blur',
+            },
+        },
+        configItem: [
+            {
+                key: 'title',
+                label: '姓名',
+                type: 'input',
+                props: {},
+            },
+        ],
+    };
+    return { searchData, addForm };
 };
 
 export const columns = [
