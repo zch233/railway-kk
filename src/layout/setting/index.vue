@@ -102,6 +102,13 @@
                     </a-tooltip>
                 </div>
             </div>
+            <div class="setting-item__title">界面显示</div>
+            <div class="setting-item__content">
+                <div class="setting-group">
+                    <div class="setting-group__title">显示面包屑导航</div>
+                    <a-switch :checked="storeSetting.shwoBreadcrumb" @change="val => changeState('shwoBreadcrumb', val)" />
+                </div>
+            </div>
             <div class="setting-item__title">动画</div>
             <div class="setting-item__content">
                 <div class="setting-group">
@@ -212,7 +219,7 @@ const changeState = (state, value) => {
 .theme-list {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 10px;
+    margin: 18px 0 0;
 
     li {
         display: flex;

@@ -16,6 +16,7 @@ export const useStoreSetting = defineStore('settings', () => {
         layoutType: 'left',
         siderType: 'whiteSider',
         animateType: 'fade-slide',
+        shwoBreadcrumb: true,
     });
     const theme = useLocalStorage('theme', initTheme);
     const setTheme = data => {

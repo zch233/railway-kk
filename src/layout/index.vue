@@ -4,7 +4,7 @@
         <a-layout>
             <Sider v-if="storeSetting.layoutType === 'left'" />
             <a-layout>
-                <Breadcrumb />
+                <Breadcrumb v-if="storeSetting.shwoBreadcrumb" />
                 <GoBack />
                 <a-layout-content class="content">
                     <div class="main">
