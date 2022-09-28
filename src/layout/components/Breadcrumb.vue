@@ -71,11 +71,13 @@ getBreadcrumb();
 
 <style lang="less" scoped>
 .breadcrumb {
+    z-index: 2;
     width: 100%;
     height: 45px;
     padding: 0 @space6;
     line-height: 45px;
     background: #fff;
+    box-shadow: 0 3px 3px rgba(148, 161, 196, 0.1);
 
     .no-redirect {
         color: #666;

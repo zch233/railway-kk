@@ -1,5 +1,6 @@
 <template>
     <a-layout-sider width="208" v-model:collapsed="collapsed" :theme="siderTheme" class="layout-sider box-shadow" collapsible v-if="mode === 'inline'">
+        <SelectedOrg :collapsed="collapsed" :list="storeUser.orgListMenu" :modelValue="orgValue" valueKey="id" @onChange="onChange" />
         <a-menu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :theme="siderTheme" mode="inline">
             <Menu v-for="sider in storePermission.menuList" :key="sider.path" :data="sider" />
         </a-menu>
@@ -19,16 +20,21 @@
 </template>
 
 <script setup>
+import Menu from './Menu';
+import SelectedOrg from './SelectedOrg.vue';
+
 import { ref, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { uniq } from 'lodash';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 import { useStorePermission } from '@src/store/modules/permission';
 import { useStoreSetting } from '@src/store/modules/setting';
-import Menu from './Menu';
+import { useStoreUser } from '@src/store/modules/user.js';
 
 const route = useRoute();
+const router = useRouter();
 const storeSetting = useStoreSetting();
+const storeUser = useStoreUser();
 
 const siderTheme = computed(() => (['darkSider', 'darkTop'].includes(storeSetting.siderType) ? 'dark' : 'light'));
 const siderHorizontalTheme = computed(() => (storeSetting.siderType === 'darkTop' ? 'dark' : 'light'));
@@ -40,6 +46,7 @@ defineProps({
     },
 });
 
+const orgValue = ref(storeUser.orgId);
 /**
  * data
  */
@@ -80,6 +87,17 @@ const findPatentValue = (array, value, valueName = 'path', childrenName = 'child
     return valid ? result : [];
 };
 
+const onChange = params => {
+    if (params.key != orgValue.value) {
+        storeUser.setOrgId(params.key);
+        if (route.name !== 'Overview') {
+            router.push({ name: 'Overview' });
+        }
+        setTimeout(() => {
+            window.location.reload();
+        }, 300);
+    }
+};
 /**
  * watch
  */
@@ -152,7 +170,13 @@ watch(
         }
 
         .anticon {
-            font-size: 22px !important;
+            font-size: 22px;
+        }
+
+        .ant-menu-inline-collapsed {
+            .anticon {
+                font-size: 22px !important;
+            }
         }
     }
 

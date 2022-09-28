@@ -3,11 +3,10 @@ import dayjs from 'dayjs';
 export const configData = () => {
     const searchData = reactive({
         formData: {
-            time_frame: [],
             keyword: '',
-            type: undefined,
+            name: '',
             area: undefined,
-            is_open: undefined,
+            time_frame: [],
         },
         configItem: [
             {
@@ -18,18 +17,28 @@ export const configData = () => {
                 },
             },
             {
-                key: 'keyword',
+                key: 'name',
                 type: 'input',
                 props: {
                     placeholder: '姓名',
                 },
             },
             {
-                key: 'type',
+                key: 'area',
                 type: 'select',
                 props: {
                     placeholder: '地址',
-                    options: [],
+                    showSearch: true,
+                    options: [
+                        {
+                            label: '浙江',
+                            value: 'zhejiang',
+                        },
+                        {
+                            label: '安徽',
+                            value: 'anhui',
+                        },
+                    ],
                 },
             },
             {
@@ -43,7 +52,27 @@ export const configData = () => {
             },
         ],
     });
-    return { searchData };
+    const addForm = {
+        formData: reactive({
+            title: '',
+        }),
+        rules: {
+            title: {
+                required: true,
+                message: '请输⼊姓名',
+                trigger: 'blur',
+            },
+        },
+        configItem: [
+            {
+                key: 'title',
+                label: '姓名',
+                type: 'input',
+                props: {},
+            },
+        ],
+    };
+    return { searchData, addForm };
 };
 
 export const columns = [

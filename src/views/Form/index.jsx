@@ -30,6 +30,8 @@ export const useDataSync = () => {
             },
             select: {
                 required: true,
+                message: '请选择选项',
+                trigger: 'change',
             },
         },
         // 如果configItem需要响应式同formData加上reactive

@@ -24,3 +24,16 @@ export const getRouterPermission = () => {
         },
     });
 };
+
+// 用户中心 - 用户指定系统下机构列表（左上角）
+export const userSystemOrg = () => {
+    const userStore = useStoreUser();
+    return request({
+        baseURL: userApiUrl,
+        url: '/org/user/system/org',
+        method: 'get',
+        params: {
+            system_code: userStore.systemCode,
+        },
+    });
+};

@@ -9,9 +9,9 @@
         />
         <GlobalTable ref="$globalTable" :columns="columns" bordered :listApi="getList" :rowSelection="false" tableTitle="B超列表">
             <template #operation>
-                <a-button type="primary" v-permission="'demo'">
+                <a-button type="primary" v-permission="'demo'" @click="visible = true">
                     <template #icon><PlusOutlined /></template>
-                    自定义指令
+                    新建
                 </a-button>
             </template>
             <!-- 表格插槽 -->
@@ -21,6 +21,16 @@
                 </div>
             </template>
         </GlobalTable>
+        <a-modal v-model:visible="visible" title="新建" @ok="handelOk" width="550px" :confirmLoading="confirmLoading" @cancel="cancelModal">
+            <GlobalForm
+                :rules="addForm.rules"
+                :configItem="addForm.configItem"
+                :formData="addForm.formData"
+                @update:formData="Object.assign(addForm.formData, $event)"
+                :labelCol="{ span: 4 }"
+                ref="$globalForm"
+            />
+        </a-modal>
     </div>
 </template>
 
@@ -39,6 +49,12 @@ const router = useRouter();
 
 const searchData = configData().searchData;
 const $globalTable = ref(null);
+
+const addForm = configData().addForm;
+const $globalForm = ref('');
+const visible = ref(false);
+const confirmLoading = ref(false);
+
 /* 
     methods
 */
@@ -59,6 +75,12 @@ const goPage = (name, id) => {
         name,
         query: { id },
     });
+};
+
+const handelOk = () => {};
+
+const cancelModal = () => {
+    $globalForm.value.resetFields();
 };
 </script>
 <style lang="less" scoped>

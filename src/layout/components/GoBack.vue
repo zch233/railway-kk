@@ -26,13 +26,14 @@ const handleGoBack = () => {
 
 <style lang="less" scoped>
 .go-back {
+    z-index: 1;
     height: 60px;
     padding: 0 @space6;
     font-size: 20px;
     line-height: 60px;
     color: @FontColor1;
     background: #fff;
-    box-shadow: inset 0 5px 5px rgba(148, 161, 196, 0.1);
+    box-shadow: 0 5px 5px rgba(148, 161, 196, 0.1);
 
     div {
         display: inline-block;
