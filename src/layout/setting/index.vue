@@ -116,12 +116,18 @@
                     <a-select :value="storeSetting.animateType" :options="animates" @change="val => changeState('animateType', val)" />
                 </div>
             </div>
+            <!-- 复制配置 -->
+            <div class="setting-copy">
+                <a-alert message="点击复制配置，需覆盖到 src\store\modules\setting.js 中 initTheme、settings 变量中" type="warning" @click="handleCopy" />
+            </div>
         </a-drawer>
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { message } from 'ant-design-vue';
+import copy from 'copy-to-clipboard';
 import { SettingOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons-vue';
 import { useStoreSetting } from '@src/store/modules/setting';
 import { animates } from './libs/animateSetting';
@@ -138,6 +144,23 @@ const storeSetting = useStoreSetting();
  */
 const changeState = (state, value) => {
     storeSetting.setState(state, state === 'themeColor' ? value.target.value : value);
+};
+const handleCopy = () => {
+    const { layoutType, siderType, animateType, shwoBreadcrumb } = storeSetting;
+    copy(
+        `${JSON.stringify(storeSetting.theme, null, 4)}\n${JSON.stringify(
+            {
+                layoutType,
+                siderType,
+                animateType,
+                shwoBreadcrumb,
+            },
+            null,
+            4
+        )}
+        `
+    );
+    message.success('复制成功');
 };
 </script>
 
@@ -324,6 +347,14 @@ const changeState = (state, value) => {
 
     > div:not(.setting-group__title) {
         flex: 1;
+    }
+}
+
+.setting-copy {
+    .ant-alert {
+        cursor: pointer;
+        opacity: 0.8;
+        user-select: none;
     }
 }
 </style>
