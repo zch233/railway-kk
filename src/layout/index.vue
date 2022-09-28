@@ -9,7 +9,7 @@
                 <a-layout-content class="content">
                     <div class="main">
                         <router-view v-slot="{ Component }">
-                            <transition name="fade-transform" mode="out-in">
+                            <transition :name="storeSetting.animateType" mode="out-in">
                                 <keep-alive :include="include">
                                     <component :is="Component" />
                                 </keep-alive>

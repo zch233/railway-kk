@@ -5,6 +5,7 @@ export const useStoreSetting = defineStore('settings', () => {
         themeColor: '#1890ff',
         layoutType: 'left',
         siderType: 'whiteSider',
+        animateType: 'fade-slide',
     });
     const setState = (key, value) => {
         settings[key] = value;

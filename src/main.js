@@ -6,7 +6,7 @@ import '@src/router/routerGuard';
 import store from '@src/store';
 import '@src/styles/reset.css';
 import '@src/styles/global.less';
-import '@src/styles/transition.less';
+import '@src/styles/transition/index.less';
 import 'ant-design-vue/dist/antd.variable.min.css';
 import { permissionDirective } from '@src/utils/directives.js';
 

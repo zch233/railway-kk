@@ -1,7 +1,7 @@
 <template>
     <a-config-provider :locale="zhCN">
         <router-view v-slot="{ Component }">
-            <transition name="scale-transform" mode="out-in">
+            <transition>
                 <component :is="Component" />
             </transition>
         </router-view>

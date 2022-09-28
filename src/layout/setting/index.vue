@@ -65,6 +65,13 @@
                     </a-tooltip>
                 </div>
             </div>
+            <div class="setting-item__title">动画</div>
+            <div class="setting-item__content">
+                <div class="setting-group">
+                    <div class="setting-group__title">动画类型</div>
+                    <a-select :value="storeSetting.animateType" :options="animates" @change="val => changeState('animateType', val)" />
+                </div>
+            </div>
         </a-drawer>
     </div>
 </template>
@@ -73,6 +80,7 @@
 import { ref } from 'vue';
 import { SettingOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons-vue';
 import { useStoreSetting } from '@src/store/modules/setting';
+import { animates } from './libs/animateSetting';
 
 /**
  * data
@@ -234,6 +242,23 @@ const changeState = (state, value) => {
         .checkbox-layout-item:nth-child(3)::after {
             background-color: #001529;
         }
+    }
+}
+
+.setting-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &__title {
+        height: 32px;
+        margin-right: 18px;
+        line-height: 32px;
+        flex-shrink: 0;
+    }
+
+    > div:not(.setting-group__title) {
+        flex: 1;
     }
 }
 </style>
