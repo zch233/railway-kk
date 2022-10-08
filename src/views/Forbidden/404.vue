@@ -180,7 +180,7 @@
 
         &__headline {
             margin-bottom: 10px;
-            font-size: 20px;
+            font-size: var(--font-size-headline);
             font-weight: bold;
             line-height: 24px;
             color: #222;
@@ -193,7 +193,7 @@
 
         &__info {
             margin-bottom: 30px;
-            font-size: 13px;
+            font-size: calc(var(--font-size-content) - 1px);
             line-height: 21px;
             color: grey;
             opacity: 0;
@@ -212,7 +212,7 @@
             float: left;
             width: 110px;
             height: 36px;
-            font-size: 14px;
+            font-size: var(--font-size-content);
             line-height: 36px;
             color: #fff;
             text-align: center;

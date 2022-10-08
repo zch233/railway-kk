@@ -20,9 +20,9 @@
     width: 100%;
     padding: @space4 0 0;
     padding-bottom: 10px;
-    font-size: 12px;
+    font-size: var(--font-size-tips);
     line-height: 18px;
-    color: @FontColor2;
+    color: var(--font-color-2);
     text-align: center;
 
     img {
