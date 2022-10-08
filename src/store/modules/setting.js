@@ -31,11 +31,16 @@ const initTheme = {
     '--base-space': '4px',
 };
 
+const initSettings = {
+    layoutType: 'left',
+    siderType: 'whiteSider',
+    animateType: 'fade-slide',
+    shwoBreadcrumb: true,
+    shwoReloadView: true,
+};
+
 export const useStoreSetting = defineStore('settings', () => {
-    const settings = reactive({
-        layoutType: 'left',
-        siderType: 'whiteSider',
-    });
+    const settings = reactive(initSettings);
     const theme = useLocalStorage('theme', { ...initTheme });
     const setTheme = data => {
         theme.value = { ...theme.value, ...data };

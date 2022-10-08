@@ -76,14 +76,39 @@
                     </a-tooltip>
                 </div>
             </div>
+            <div class="setting-item__title">界面显示</div>
+            <div class="setting-item__content">
+                <div class="setting-group">
+                    <div class="setting-group__title">显示面包屑导航</div>
+                    <a-switch :checked="storeSetting.shwoBreadcrumb" @change="val => changeState('shwoBreadcrumb', val)" />
+                </div>
+                <div class="setting-group">
+                    <div class="setting-group__title">显示刷新按钮</div>
+                    <a-switch :checked="storeSetting.shwoReloadView" @change="val => changeState('shwoReloadView', val)" />
+                </div>
+            </div>
+            <div class="setting-item__title">动画</div>
+            <div class="setting-item__content">
+                <div class="setting-group">
+                    <div class="setting-group__title">动画类型</div>
+                    <a-select :value="storeSetting.animateType" :options="animates" @change="val => changeState('animateType', val)" />
+                </div>
+            </div>
+            <!-- 复制配置 -->
+            <div class="setting-copy">
+                <a-alert message="点击复制配置，需覆盖到 src\store\modules\setting.js 中 initTheme、settings 变量中" type="warning" @click="handleCopy" />
+            </div>
         </a-drawer>
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { message } from 'ant-design-vue';
+import copy from 'copy-to-clipboard';
 import { SettingOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons-vue';
 import { useStoreSetting } from '@src/store/modules/setting';
+import { animates } from './libs/animateSetting';
 
 /**
  * data
@@ -121,6 +146,24 @@ const themes = [
  */
 const changeState = (state, value) => {
     storeSetting.setState(state, state === 'themeColor' ? value.target.value : value);
+};
+const handleCopy = () => {
+    const { layoutType, siderType, animateType, shwoBreadcrumb, shwoReloadView } = storeSetting;
+    copy(
+        `${JSON.stringify(storeSetting.theme, null, 4)}\n${JSON.stringify(
+            {
+                layoutType,
+                siderType,
+                animateType,
+                shwoBreadcrumb,
+                shwoReloadView,
+            },
+            null,
+            4
+        )}
+        `
+    );
+    message.success('复制成功');
 };
 </script>
 
@@ -202,7 +245,7 @@ const changeState = (state, value) => {
 .theme-list {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 10px;
+    margin: 18px 0 0;
 
     li {
         display: flex;
@@ -290,6 +333,33 @@ const changeState = (state, value) => {
         .checkbox-layout-item:nth-child(3)::after {
             background-color: #001529;
         }
+    }
+}
+
+.setting-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & + .setting-group {
+        margin-top: 18px;
+    }
+
+    &__title {
+        margin-right: 18px;
+        flex-shrink: 0;
+    }
+
+    > div:not(.setting-group__title) {
+        flex: 1;
+    }
+}
+
+.setting-copy {
+    .ant-alert {
+        cursor: pointer;
+        opacity: 0.8;
+        user-select: none;
     }
 }
 </style>
