@@ -70,6 +70,7 @@ const currentItem = computed(() => {
 <style lang="less" scoped>
 .switch-org {
     padding: 0 18px 10px;
+    overflow: hidden;
     transition: all 0.3s ease;
 
     &.is-dark {
