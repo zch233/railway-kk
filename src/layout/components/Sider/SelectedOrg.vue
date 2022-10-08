@@ -62,6 +62,7 @@ const title = computed(() => {
     return currentItem.value[props.labelKey];
 });
 </script>
+
 <style lang="less" scoped>
 .slider-top {
     padding: @space2 20px 0;
@@ -79,29 +80,29 @@ const title = computed(() => {
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+
+        :deep(.anticon.anticon-home) {
+            font-size: 18px;
+        }
     }
 
     .change-company {
         display: flex;
         padding: 6px 0 0 30px;
         font-size: 13px;
-        color: @masterColor;
+        color: var(--color-master);
         cursor: pointer;
         align-items: center;
-    }
 
-    :deep(.anticon.anticon-swap) {
-        margin-left: 6px;
-        font-size: 14px !important;
+        & :deep(.anticon.anticon-swap) {
+            margin-left: 6px;
+            font-size: 14px;
+        }
     }
 }
 
 .home-icon {
     padding: 0 31px;
     margin: 15px 0 13px;
-}
-
-:deep(.anticon.anticon-home) {
-    font-size: 18px !important;
 }
 </style>

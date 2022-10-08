@@ -2,7 +2,7 @@
     <div class="setting">
         <a-drawer :width="300" placement="right" :visible="visible" :closable="false" class="setting-drawer">
             <template #handle>
-                <div class="setting-button" @click="visible = !visible" :style="{ backgroundColor: storeSetting.theme['--ant-primary-color'] }">
+                <div class="setting-button" @click="visible = !visible" :style="{ backgroundColor: colorMaster }">
                     <CloseOutlined v-if="visible" />
                     <SettingOutlined v-else />
                 </div>
@@ -10,43 +10,17 @@
             <div class="setting-item__title">主题色</div>
             <div class="setting-item__content">
                 <div class="theme-color">
-                    <span :style="{ backgroundColor: storeSetting.theme['--ant-primary-color'] }" @click="colorRef.click()"></span>
-                    <input type="color" ref="colorRef" :value="storeSetting" @change="e => storeSetting.setTheme({ '--ant-primary-color': e.target.value })" />
-                    <a-input
-                        :value="storeSetting.theme['--ant-primary-color']"
-                        @change="e => storeSetting.setTheme({ '--ant-primary-color': e.target.value })"
-                        placeholder="请输入颜色值"
-                    />
+                    <span :style="{ backgroundColor: colorMaster }" @click="colorRef.click()"></span>
+                    <input type="color" ref="colorRef" :value="storeSetting" @change="e => storeSetting.setTheme({ '--color-master': e.target.value })" />
+                    <a-input :value="colorMaster" @change="e => storeSetting.setTheme({ '--color-master': e.target.value })" placeholder="请输入颜色值" />
                 </div>
                 <ul class="theme-list">
                     <li
-                        v-for="backgroundColor in [
-                            '#2d8cf0',
-                            '#0960bd',
-                            '#0084f4',
-                            '#009688',
-                            '#536dfe',
-                            '#ff5c93',
-                            '#ee4f12',
-                            '#0096c7',
-                            '#9c27b0',
-                            '#ff9800',
-                            '#ff3d68',
-                            '#00c1d4',
-                            '#71efa3',
-                            '#171010',
-                            '#78dec7',
-                            '#1768ac',
-                            '#fc5404',
-                            '#ff4848',
-                            '#0a1d37',
-                            '#39a6a3',
-                            '#ff8474',
-                        ]"
+                        v-for="backgroundColor in themes"
                         :key="backgroundColor"
                         :style="{ backgroundColor }"
-                        :class="{ active: storeSetting.theme['--ant-primary-color'] === backgroundColor }"
-                        @click="storeSetting.setTheme({ '--ant-primary-color': backgroundColor })"
+                        :class="{ active: colorMaster === backgroundColor }"
+                        @click="storeSetting.setTheme({ '--color-master': backgroundColor })"
                     >
                         ✓
                     </li>
@@ -117,6 +91,30 @@ import { useStoreSetting } from '@src/store/modules/setting';
 const visible = ref(false);
 const colorRef = ref();
 const storeSetting = useStoreSetting();
+const colorMaster = computed(() => storeSetting.theme['--color-master']);
+const themes = [
+    '#2d8cf0',
+    '#0960bd',
+    '#0084f4',
+    '#009688',
+    '#536dfe',
+    '#ff5c93',
+    '#ee4f12',
+    '#0096c7',
+    '#9c27b0',
+    '#ff9800',
+    '#ff3d68',
+    '#00c1d4',
+    '#71efa3',
+    '#171010',
+    '#78dec7',
+    '#1768ac',
+    '#fc5404',
+    '#ff4848',
+    '#0a1d37',
+    '#39a6a3',
+    '#ff8474',
+];
 
 /**
  * methods
@@ -167,7 +165,7 @@ const changeState = (state, value) => {
         display: inline-block;
         width: 30%;
         height: 1px;
-        background: @BorderColor1;
+        background: var(--border-color);
         content: '';
     }
 
@@ -190,7 +188,7 @@ const changeState = (state, value) => {
         width: 80px;
         height: 32px;
         margin-right: @space3;
-        border: 2px solid @BorderColor1;
+        border: 2px solid var(--border-color);
     }
 
     input[type='color'] {

@@ -4,11 +4,31 @@ import { ConfigProvider } from 'ant-design-vue';
 import { camelCase } from 'lodash';
 
 const initTheme = {
-    '--ant-primary-color': '#1890ff',
-    '--ant-success-color': '#52c41a',
-    '--ant-error-color': '#ff4d4f',
-    '--ant-warning-color': '#faad14',
-    '--ant-info-color': '#1890ff',
+    // 更改初始值如果发现没有生效，请清空 LocalStorage
+    '--color-master-dark-1': '#0886fa',
+    '--color-master': '#1890ff',
+    '--color-master-light-1': '#2995f8',
+    '--color-master-light-2': '#63aff3',
+    '--color-master-light-3': '#90c6f6',
+    '--color-master-light-4': '#e6f7ff',
+    '--color-success': '#52c41a',
+    '--color-error': '#ff4d4f',
+    '--color-warning': '#faad14',
+    '--color-info': '#1890ff',
+    '--font-color-1': '#333',
+    '--font-color-2': '#666',
+    '--font-color-3': '#999',
+    '--font-color-4': '#cecece',
+    '--font-color-link': '#576b95',
+    '--font-size-footnote': '10px',
+    '--font-size-tips': '12px',
+    '--font-size-content': '14px',
+    '--font-size-subtitle': '16px',
+    '--font-size-title': '18px',
+    '--font-size-headline': '20px',
+    '--border-color': '#f0f0f0',
+    '--background-color': '#f5f7fa',
+    '--base-space': '4px',
 };
 
 export const useStoreSetting = defineStore('settings', () => {
@@ -16,16 +36,23 @@ export const useStoreSetting = defineStore('settings', () => {
         layoutType: 'left',
         siderType: 'whiteSider',
     });
-    const theme = useLocalStorage('theme', initTheme);
+    const theme = useLocalStorage('theme', { ...initTheme });
     const setTheme = data => {
         theme.value = { ...theme.value, ...data };
-        // 如果是 ant 的主题色，需要调用 ConfigProvider.config
-        const themeColors = ['--ant-primary-color', '--ant-success-color', '--ant-error-color', '--ant-warning-color', '--ant-info-color'];
-        if (themeColors.find(v => Object.keys(data).includes(v))) {
+        // 如果是需要改变 ant 的主题色，需要调用 ConfigProvider.config
+        const themeColors = {
+            '--color-master': '--ant-primary-color',
+            '--color-success': '--ant-success-color',
+            '--color-error': '--ant-error-color',
+            '--color-warning': '--ant-warning-color',
+            '--color-info': '--ant-info-color',
+        };
+        const configColor = Object.keys(themeColors);
+        if (configColor.find(v => Object.keys(data).includes(v))) {
             ConfigProvider.config({
                 theme: Object.keys(theme.value)
-                    .filter(v => themeColors.includes(v))
-                    .reduce((res, key) => (res[camelCase(key.replace('ant', ''))] = theme.value[key]) && res, {}),
+                    .filter(v => configColor.includes(v))
+                    .reduce((res, key) => (res[camelCase(themeColors[key].replace('ant', ''))] = theme.value[key]) && res, {}),
             });
         }
     };

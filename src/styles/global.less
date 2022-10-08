@@ -2,7 +2,7 @@
     min-width: 100vh;
     min-height: 100vh;
     overflow: hidden;
-    font-size: 14px;
+    font-size: var(--font-size-content);
     color: #333;
     background-color: #f6f7f8;
 
@@ -38,7 +38,7 @@
 }
 
 .global-master-color {
-    color: @masterColor;
+    color: var(--color-master);
     cursor: pointer;
 }
 
@@ -57,14 +57,14 @@
     }
 
     a {
-        color: #fff !important;
-        background-color: @masterColor;
+        color: #fff;
+        background-color: var(--color-master);
     }
 }
 
 .ant-table-tbody {
     > tr:hover:not(.ant-table-expanded-row) > td,
     .ant-table-row-hover {
-        background: @masterColor-light-4!important;
+        background: var(--color-master-light-4);
     }
 }
