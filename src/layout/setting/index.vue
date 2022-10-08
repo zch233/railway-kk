@@ -2,7 +2,7 @@
     <div class="setting">
         <a-drawer :width="300" placement="right" :visible="visible" :closable="false" class="setting-drawer">
             <template #handle>
-                <div class="setting-button" @click="visible = !visible" :style="{ backgroundColor: storeSetting.theme['--ant-primary-color'] }">
+                <div class="setting-button" @click="visible = !visible" :style="{ backgroundColor: colorMaster }">
                     <CloseOutlined v-if="visible" />
                     <SettingOutlined v-else />
                 </div>
@@ -10,43 +10,17 @@
             <div class="setting-item__title">主题色</div>
             <div class="setting-item__content">
                 <div class="theme-color">
-                    <span :style="{ backgroundColor: storeSetting.theme['--ant-primary-color'] }" @click="colorRef.click()"></span>
-                    <input type="color" ref="colorRef" :value="storeSetting" @change="e => storeSetting.setTheme({ '--ant-primary-color': e.target.value })" />
-                    <a-input
-                        :value="storeSetting.theme['--ant-primary-color']"
-                        @change="e => storeSetting.setTheme({ '--ant-primary-color': e.target.value })"
-                        placeholder="请输入颜色值"
-                    />
+                    <span :style="{ backgroundColor: colorMaster }" @click="colorRef.click()"></span>
+                    <input type="color" ref="colorRef" :value="storeSetting" @change="e => storeSetting.setTheme({ '--color-master': e.target.value })" />
+                    <a-input :value="colorMaster" @change="e => storeSetting.setTheme({ '--color-master': e.target.value })" placeholder="请输入颜色值" />
                 </div>
                 <ul class="theme-list">
                     <li
-                        v-for="backgroundColor in [
-                            '#2d8cf0',
-                            '#0960bd',
-                            '#0084f4',
-                            '#009688',
-                            '#536dfe',
-                            '#ff5c93',
-                            '#ee4f12',
-                            '#0096c7',
-                            '#9c27b0',
-                            '#ff9800',
-                            '#ff3d68',
-                            '#00c1d4',
-                            '#71efa3',
-                            '#171010',
-                            '#78dec7',
-                            '#1768ac',
-                            '#fc5404',
-                            '#ff4848',
-                            '#0a1d37',
-                            '#39a6a3',
-                            '#ff8474',
-                        ]"
+                        v-for="backgroundColor in themes"
                         :key="backgroundColor"
                         :style="{ backgroundColor }"
-                        :class="{ active: storeSetting.theme['--ant-primary-color'] === backgroundColor }"
-                        @click="storeSetting.setTheme({ '--ant-primary-color': backgroundColor })"
+                        :class="{ active: colorMaster === backgroundColor }"
+                        @click="storeSetting.setTheme({ '--color-master': backgroundColor })"
                     >
                         ✓
                     </li>
@@ -102,14 +76,39 @@
                     </a-tooltip>
                 </div>
             </div>
+            <div class="setting-item__title">界面显示</div>
+            <div class="setting-item__content">
+                <div class="setting-group">
+                    <div class="setting-group__title">显示面包屑导航</div>
+                    <a-switch :checked="storeSetting.shwoBreadcrumb" @change="val => changeState('shwoBreadcrumb', val)" />
+                </div>
+                <div class="setting-group">
+                    <div class="setting-group__title">显示刷新按钮</div>
+                    <a-switch :checked="storeSetting.shwoReloadView" @change="val => changeState('shwoReloadView', val)" />
+                </div>
+            </div>
+            <div class="setting-item__title">动画</div>
+            <div class="setting-item__content">
+                <div class="setting-group">
+                    <div class="setting-group__title">动画类型</div>
+                    <a-select :value="storeSetting.animateType" :options="animates" @change="val => changeState('animateType', val)" />
+                </div>
+            </div>
+            <!-- 复制配置 -->
+            <div class="setting-copy">
+                <a-alert message="点击复制配置，需覆盖到 src\store\modules\setting.js 中 initTheme、settings 变量中" type="warning" @click="handleCopy" />
+            </div>
         </a-drawer>
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { message } from 'ant-design-vue';
+import copy from 'copy-to-clipboard';
 import { SettingOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons-vue';
 import { useStoreSetting } from '@src/store/modules/setting';
+import { animates } from './libs/animateSetting';
 
 /**
  * data
@@ -117,12 +116,54 @@ import { useStoreSetting } from '@src/store/modules/setting';
 const visible = ref(false);
 const colorRef = ref();
 const storeSetting = useStoreSetting();
+const colorMaster = computed(() => storeSetting.theme['--color-master']);
+const themes = [
+    '#2d8cf0',
+    '#0960bd',
+    '#0084f4',
+    '#009688',
+    '#536dfe',
+    '#ff5c93',
+    '#ee4f12',
+    '#0096c7',
+    '#9c27b0',
+    '#ff9800',
+    '#ff3d68',
+    '#00c1d4',
+    '#71efa3',
+    '#171010',
+    '#78dec7',
+    '#1768ac',
+    '#fc5404',
+    '#ff4848',
+    '#0a1d37',
+    '#39a6a3',
+    '#ff8474',
+];
 
 /**
  * methods
  */
 const changeState = (state, value) => {
     storeSetting.setState(state, state === 'themeColor' ? value.target.value : value);
+};
+const handleCopy = () => {
+    const { layoutType, siderType, animateType, shwoBreadcrumb, shwoReloadView } = storeSetting;
+    copy(
+        `${JSON.stringify(storeSetting.theme, null, 4)}\n${JSON.stringify(
+            {
+                layoutType,
+                siderType,
+                animateType,
+                shwoBreadcrumb,
+                shwoReloadView,
+            },
+            null,
+            4
+        )}
+        `
+    );
+    message.success('复制成功');
 };
 </script>
 
@@ -167,7 +208,7 @@ const changeState = (state, value) => {
         display: inline-block;
         width: 30%;
         height: 1px;
-        background: @BorderColor1;
+        background: var(--border-color);
         content: '';
     }
 
@@ -190,7 +231,7 @@ const changeState = (state, value) => {
         width: 80px;
         height: 32px;
         margin-right: @space3;
-        border: 2px solid @BorderColor1;
+        border: 2px solid var(--border-color);
     }
 
     input[type='color'] {
@@ -204,7 +245,7 @@ const changeState = (state, value) => {
 .theme-list {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 10px;
+    margin: 18px 0 0;
 
     li {
         display: flex;
@@ -292,6 +333,33 @@ const changeState = (state, value) => {
         .checkbox-layout-item:nth-child(3)::after {
             background-color: #001529;
         }
+    }
+}
+
+.setting-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & + .setting-group {
+        margin-top: 18px;
+    }
+
+    &__title {
+        margin-right: 18px;
+        flex-shrink: 0;
+    }
+
+    > div:not(.setting-group__title) {
+        flex: 1;
+    }
+}
+
+.setting-copy {
+    .ant-alert {
+        cursor: pointer;
+        opacity: 0.8;
+        user-select: none;
     }
 }
 </style>

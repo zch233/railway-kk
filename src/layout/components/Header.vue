@@ -9,6 +9,7 @@
         </div>
         <div class="header-right">
             <Sider mode="horizontal" v-if="showSider" />
+            <ReloadView v-if="shwoReloadView" />
             <FullScreen />
             <NotifyBadge />
             <a-dropdown :trigger="['click']">
@@ -44,6 +45,7 @@ import Modal from 'ant-design-vue/lib/modal';
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 import FullScreen from '@src/components/FullScreen/index.vue';
 import NotifyBadge from '@src/components/NotifyBadge/index.vue';
+import ReloadView from '@src/components/ReloadView/index.vue';
 import { useStoreUser } from '@src/store/modules/user';
 import { useStoreSetting } from '@src/store/modules/setting';
 import defaultAvatar from '@src/assets/images/avatar.png';
@@ -54,6 +56,7 @@ const storeUser = useStoreUser();
 const storeSetting = useStoreSetting();
 
 const showSider = computed(() => storeSetting.layoutType === 'top');
+const shwoReloadView = computed(() => storeSetting.shwoReloadView);
 const isDarkTheme = computed(() => storeSetting.siderType === 'darkTop');
 
 const logout = () => {
@@ -116,6 +119,7 @@ const logout = () => {
         display: flex;
         align-items: center;
 
+        .reload-view,
         .full-screen,
         .notify-badge {
             margin-right: 20px;

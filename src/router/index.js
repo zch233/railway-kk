@@ -19,6 +19,18 @@ const routes = [
         component: () => import('@src/views/Forbidden/index.vue'),
         hidden: true,
     },
+    {
+        name: 'redirect',
+        path: '/redirect',
+        component: () => import('@src/layout/index.vue'),
+        hidden: true,
+        children: [
+            {
+                path: '/redirect/:path(.*)',
+                component: () => import('@src/views/Redirect/index.vue'),
+            },
+        ],
+    },
 ];
 
 const router = createRouter({

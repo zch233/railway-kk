@@ -36,7 +36,7 @@ defineProps({
     .title-content {
         display: flex;
         padding: @space4 @space6;
-        border-bottom: 1px solid @borderColor;
+        border-bottom: 1px solid var(--border-color);
         align-items: center;
         justify-content: space-between;
 
@@ -45,7 +45,7 @@ defineProps({
             align-items: center;
 
             .title {
-                font-size: 18px;
+                font-size: var(--font-size-title);
             }
 
             .line {
@@ -53,7 +53,7 @@ defineProps({
                 width: 3px;
                 height: 18px;
                 margin-right: @space2;
-                background-color: @masterColor;
+                background-color: var(--master-color);
             }
         }
     }

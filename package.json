@@ -23,6 +23,7 @@
     "dependencies": {
         "ant-design-vue": "3.2.12",
         "axios": "0.26.1",
+        "copy-to-clipboard": "^3.3.2",
         "dayjs": "1.11.5",
         "gupo-vue3-persistedstate": "0.0.7",
         "lodash": "^4.17.21",

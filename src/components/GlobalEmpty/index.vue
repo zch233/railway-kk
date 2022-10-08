@@ -28,7 +28,7 @@ defineProps({
     margin: @space8 0;
 
     :deep(.ant-empty-description) {
-        color: @textColor-second;
+        color: var(--font-color-2);
     }
 }
 </style>

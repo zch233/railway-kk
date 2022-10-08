@@ -309,8 +309,8 @@ defineExpose({ insideReset });
 
         .operation {
             margin-left: @space3;
-            font-size: 14px;
-            color: @masterColor;
+            font-size: var(--font-size-content);
+            color: var(--color-master);
             cursor: pointer;
             user-select: none;
 

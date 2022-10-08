@@ -27,7 +27,7 @@ router.replace('/');
     }
 
     p {
-        font-size: 18px;
+        font-size: var(--font-size-title);
         color: #ccc;
     }
 }

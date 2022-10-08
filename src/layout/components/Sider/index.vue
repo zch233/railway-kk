@@ -159,14 +159,14 @@ watch(
         .ant-menu-item,
         .ant-menu-submenu-title {
             height: 52px;
-            padding: 0 18px !important;
+            padding: 0 18px;
             margin: 0;
             line-height: 52px;
             user-select: none;
         }
 
         .ant-menu-sub .ant-menu-item {
-            padding-left: 48px !important;
+            padding-left: 48px;
         }
 
         .anticon {
@@ -174,8 +174,11 @@ watch(
         }
 
         .ant-menu-inline-collapsed {
-            .anticon {
-                font-size: 22px !important;
+            & > .ant-menu-submenu > .ant-menu-submenu-title,
+            & > .ant-menu-item {
+                .anticon {
+                    font-size: 22px;
+                }
             }
         }
     }
@@ -214,7 +217,7 @@ watch(
         .ant-layout-sider-children {
             .ant-menu-item,
             .ant-menu-submenu-title {
-                padding: 0 calc(50% - 11px) !important;
+                padding: 0 calc(50% - 11px);
             }
         }
 
@@ -260,7 +263,7 @@ watch(
         display: inline-block;
         width: 1px;
         height: 15px;
-        background: @BorderColor1;
+        background: var(--border-color);
         content: '';
         transform: translateY(50%);
     }
@@ -286,7 +289,7 @@ watch(
     .menu-item {
         display: flex;
         align-items: center;
-        font-size: 15px;
+        font-size: calc(var(--font-size-subtitle) - 1px);
         line-height: 64px;
 
         .anticon {

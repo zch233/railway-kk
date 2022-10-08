@@ -429,7 +429,7 @@ defineExpose({ refresh, selectedDataSource, onSelectChange });
                 }
 
                 &:hover {
-                    color: @masterColor;
+                    color: var(--color-master);
                 }
             }
         }
@@ -439,16 +439,16 @@ defineExpose({ refresh, selectedDataSource, onSelectChange });
         display: flex;
         padding: @space3 @space4;
         margin-bottom: @space4;
-        font-size: 14px;
-        background-color: @masterColor-light-4;
-        border: 1px solid @masterColor-light-3;
+        font-size: var(--font-size-content);
+        background-color: var(--color-master-light-4);
+        border: 1px solid var(--color-master-light-3);
         justify-content: space-between;
         align-items: center;
 
         .selected-left {
             .anticon-info-circle {
                 margin-right: @space2;
-                color: @masterColor;
+                color: var(--color-master);
             }
 
             span.global-master-color {
@@ -478,10 +478,10 @@ defineExpose({ refresh, selectedDataSource, onSelectChange });
 <style lang="less">
 .ant-dropdown.density {
     .ant-dropdown-menu-item.active {
-        background-color: @masterColor-light-4;
+        background-color: var(--color-master-light-4);
 
         span {
-            color: @masterColor;
+            color: var(--color-master);
         }
     }
 }
