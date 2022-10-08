@@ -37,6 +37,7 @@ const initSettings = {
     animateType: 'fade-slide',
     shwoBreadcrumb: true,
     shwoReloadView: true,
+    shwoSwitchOrg: true,
 };
 
 export const useStoreSetting = defineStore('settings', () => {
@@ -70,6 +71,7 @@ export const useStoreSetting = defineStore('settings', () => {
     return {
         ...toRefs(settings),
         theme,
+        initSettings,
         setTheme,
         setState,
     };

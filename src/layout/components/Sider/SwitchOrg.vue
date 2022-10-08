@@ -1,19 +1,19 @@
 <template>
-    <div class="selected-org">
+    <div class="switch-org" :class="{ 'is-dark': theme === 'dark' }">
         <Tooltip placement="right">
             <template #title>{{ title }}</template>
-            <div class="selected-org__name">
+            <div class="switch-org__name">
                 <HomeFilled />
                 <div>{{ title }}</div>
             </div>
         </Tooltip>
         <Dropdown>
-            <div class="selected-org__change">
+            <div class="switch-org__change">
                 切换机构
                 <SwapOutlined />
             </div>
             <template #overlay>
-                <Menu @click="handleMenuClick">
+                <Menu @click="handleMenuClick" :theme="theme">
                     <Menu.Item v-for="item in list" :key="item[valueKey]">
                         <span>{{ item[labelKey] }}</span>
                     </Menu.Item>
@@ -48,6 +48,10 @@ const props = defineProps({
         type: String,
         default: 'value',
     },
+    theme: {
+        type: String,
+        default: 'light',
+    },
 });
 const emit = defineEmits(['update:modelValue', 'onChange']);
 
@@ -64,9 +68,15 @@ const currentItem = computed(() => {
 </script>
 
 <style lang="less" scoped>
-.selected-org {
+.switch-org {
     padding: 0 18px 10px;
     transition: all 0.3s ease;
+
+    &.is-dark {
+        .switch-org__name {
+            color: #fff;
+        }
+    }
 
     &__name {
         display: flex;
@@ -106,7 +116,7 @@ const currentItem = computed(() => {
     }
 }
 
-.ant-layout-sider-collapsed .selected-org {
+.ant-layout-sider-collapsed .switch-org {
     height: 52px;
     padding: 0 calc(50% - 9px) !important;
     line-height: 52px;

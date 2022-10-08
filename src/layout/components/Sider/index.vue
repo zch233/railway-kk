@@ -1,6 +1,14 @@
 <template>
     <a-layout-sider width="208" v-model:collapsed="collapsed" :theme="siderTheme" class="layout-sider box-shadow" collapsible v-if="mode === 'inline'">
-        <SelectedOrg :collapsed="collapsed" :list="storeUser.orgListMenu" :modelValue="orgValue" valueKey="id" @onChange="onChange" />
+        <SwitchOrg
+            :collapsed="collapsed"
+            :list="storeUser.orgListMenu"
+            :modelValue="orgValue"
+            :theme="siderTheme"
+            valueKey="id"
+            @onChange="onChange"
+            v-if="storeSetting.shwoSwitchOrg"
+        />
         <a-menu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :theme="siderTheme" mode="inline">
             <Menu v-for="sider in storePermission.menuList" :key="sider.path" :data="sider" />
         </a-menu>
@@ -21,8 +29,7 @@
 
 <script setup>
 import Menu from './Menu';
-import SelectedOrg from './SelectedOrg.vue';
-
+import SwitchOrg from './SwitchOrg.vue';
 import { ref, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { uniq } from 'lodash';
