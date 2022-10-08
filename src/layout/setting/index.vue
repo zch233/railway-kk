@@ -108,6 +108,10 @@
                     <div class="setting-group__title">显示面包屑导航</div>
                     <a-switch :checked="storeSetting.shwoBreadcrumb" @change="val => changeState('shwoBreadcrumb', val)" />
                 </div>
+                <div class="setting-group">
+                    <div class="setting-group__title">显示刷新按钮</div>
+                    <a-switch :checked="storeSetting.shwoReloadView" @change="val => changeState('shwoReloadView', val)" />
+                </div>
             </div>
             <div class="setting-item__title">动画</div>
             <div class="setting-item__content">
@@ -146,7 +150,7 @@ const changeState = (state, value) => {
     storeSetting.setState(state, state === 'themeColor' ? value.target.value : value);
 };
 const handleCopy = () => {
-    const { layoutType, siderType, animateType, shwoBreadcrumb } = storeSetting;
+    const { layoutType, siderType, animateType, shwoBreadcrumb, shwoReloadView } = storeSetting;
     copy(
         `${JSON.stringify(storeSetting.theme, null, 4)}\n${JSON.stringify(
             {
@@ -154,6 +158,7 @@ const handleCopy = () => {
                 siderType,
                 animateType,
                 shwoBreadcrumb,
+                shwoReloadView,
             },
             null,
             4
@@ -338,10 +343,12 @@ const handleCopy = () => {
     justify-content: space-between;
     align-items: center;
 
+    & + .setting-group {
+        margin-top: 18px;
+    }
+
     &__title {
-        height: 32px;
         margin-right: 18px;
-        line-height: 32px;
         flex-shrink: 0;
     }
 
