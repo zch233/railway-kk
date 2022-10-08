@@ -278,7 +278,31 @@ const handelDesity = ({ key }) => {
 };
 
 // 设置
-const defineColumns = ref(props.columns);
+const defaultColumns = ref(cloneDeep(props.columns));
+const defineColumns = computed({
+    get() {
+        return defaultColumns.value.map(item => {
+            return {
+                ...item,
+                dataIndex: item?.dataIndex || item.key,
+                customRender:
+                    item.customRender ||
+                    (({ text: val, record: row }) => {
+                        //当前单元格值 是否为 空 值
+                        const isNullValue = val === null || val === '' || val === ' ';
+                        //判断值若为 空 则返回 '-'
+                        //否则判断值若 自定义格式化 则返回自己的 setValue() 方法的返回值
+                        //否则返回 prop
+                        return isNullValue ? '—' : item.setValue ? item.setValue(val, row) : val;
+                    }),
+            };
+        });
+    },
+    set(val) {
+        defaultColumns.value = val;
+    },
+});
+
 const columnSettingOptions = computed(() => props.columns.map(item => item.title));
 
 const changeOption = options => {
