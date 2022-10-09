@@ -1,16 +1,19 @@
 <template>
-    <div class="slider-top" v-show="!collapsed">
+    <div class="switch-org" :class="{ 'is-dark': theme === 'dark' }">
         <Tooltip placement="right">
-            <template #title> {{ title }} </template>
-            <div class="company">
+            <template #title>{{ title }}</template>
+            <div class="switch-org__name">
                 <HomeFilled />
-                <div class="company-name">{{ title }}</div>
+                <div>{{ title }}</div>
             </div>
         </Tooltip>
         <Dropdown>
-            <div class="change-company">切换机构 <SwapOutlined /></div>
+            <div class="switch-org__change">
+                切换机构
+                <SwapOutlined />
+            </div>
             <template #overlay>
-                <Menu @click="handleMenuClick">
+                <Menu @click="handleMenuClick" :theme="theme">
                     <Menu.Item v-for="item in list" :key="item[valueKey]">
                         <span>{{ item[labelKey] }}</span>
                     </Menu.Item>
@@ -18,13 +21,9 @@
             </template>
         </Dropdown>
     </div>
-    <div class="home-icon">
-        <HomeFilled v-show="collapsed" />
-    </div>
 </template>
 
 <script setup>
-/**  @description:机构切换  **/
 import { Tooltip, Dropdown, Menu } from 'ant-design-vue';
 import { HomeFilled, SwapOutlined } from '@ant-design/icons-vue';
 import { find } from 'lodash';
@@ -49,60 +48,84 @@ const props = defineProps({
         type: String,
         default: 'value',
     },
+    theme: {
+        type: String,
+        default: 'light',
+    },
 });
 const emit = defineEmits(['update:modelValue', 'onChange']);
+
 const handleMenuClick = e => {
     emit('update:modelValue', e.key);
     emit('onChange', e);
 };
-const currentItem = computed(() => {
-    return find(props.list, [props.valueKey, props.modelValue]);
-});
 const title = computed(() => {
     return currentItem.value[props.labelKey];
+});
+const currentItem = computed(() => {
+    return find(props.list, [props.valueKey, props.modelValue]);
 });
 </script>
 
 <style lang="less" scoped>
-.slider-top {
-    padding: @space2 20px 0;
-    background-color: #fff;
+.switch-org {
+    padding: 0 18px 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
 
-    .company {
+    &.is-dark {
+        .switch-org__name {
+            color: #fff;
+        }
+    }
+
+    &__name {
         display: flex;
         align-items: center;
+        margin-bottom: 5px;
 
-        .company-name {
+        > div {
             margin-left: 10px;
             overflow: hidden;
             font-size: 17px;
             font-weight: bold;
             text-overflow: ellipsis;
             white-space: nowrap;
+            transition: opacity 0.3s ease;
         }
 
         :deep(.anticon.anticon-home) {
-            font-size: 18px;
+            font-size: 18px !important;
         }
     }
 
-    .change-company {
+    &__change {
         display: flex;
-        padding: 6px 0 0 30px;
+        padding-left: 28px;
+        overflow: hidden;
         font-size: 13px;
-        color: var(--color-master);
+        color: var(--ant-primary-color);
+        white-space: nowrap;
         cursor: pointer;
+        transition: opacity 0.3s ease;
         align-items: center;
 
-        & :deep(.anticon.anticon-swap) {
+        :deep(.anticon.anticon-swap) {
             margin-left: 6px;
-            font-size: 14px;
+            font-size: 14px !important;
         }
     }
 }
 
-.home-icon {
-    padding: 0 31px;
-    margin: 15px 0 13px;
+.ant-layout-sider-collapsed .switch-org {
+    height: 52px;
+    padding: 0 calc(50% - 9px) !important;
+    line-height: 52px;
+
+    &__name > div,
+    &__change {
+        text-align: center;
+        opacity: 0;
+    }
 }
 </style>
