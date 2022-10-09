@@ -83,6 +83,7 @@ const currentItem = computed(() => {
         display: flex;
         align-items: center;
         margin-bottom: 5px;
+        transition: color 0.3s ease;
 
         > div {
             margin-left: 10px;
