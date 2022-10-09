@@ -26,7 +26,7 @@
                         <FullscreenOutlined />
                     </GupoTooltip>
                 </div> -->
-                <div class="operation-icon" @click="refresh">
+                <div class="operation-icon" @click="refresh(true)">
                     <GupoTooltip>
                         <template #title>刷新</template>
                         <ReloadOutlined />
@@ -386,6 +386,7 @@ const formatPagination = computed(() => {
               total: tableData.total,
               current: meta.current_page,
               defaultPageSize: meta.per_page,
+              showTotal: total => `总计${total}条`,
               'show-quick-jumper': true,
               ...props.pagination,
           }

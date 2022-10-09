@@ -122,6 +122,7 @@ watch(
 
 <style lang="less">
 .ant-layout-sider.layout-sider {
+    z-index: 98;
     padding-bottom: 55px;
 
     .ant-menu-inline,
