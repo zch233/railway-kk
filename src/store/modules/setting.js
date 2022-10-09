@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { useLocalStorage } from '@src/utils/storage';
 import { ConfigProvider } from 'ant-design-vue';
 import { camelCase } from 'lodash';
+import insertCss from '@src/utils/insert-css';
 
 const initTheme = {
     // 更改初始值如果发现没有生效，请清空 LocalStorage
@@ -40,6 +41,24 @@ const initSettings = {
     shwoSwitchOrg: true,
 };
 
+// 设置样式变量
+const setCssVariable = data => {
+    insertCss(
+        `
+:root {
+${Object.keys(data)
+    .map(key => {
+        return `${key}: ${data[key]};\n`;
+    })
+    .join('')}
+}`,
+        {
+            replace: true,
+            prepend: true,
+        }
+    );
+};
+
 export const useStoreSetting = defineStore('settings', () => {
     const settings = reactive(initSettings);
     const theme = useLocalStorage('theme', { ...initTheme });
@@ -61,6 +80,7 @@ export const useStoreSetting = defineStore('settings', () => {
                     .reduce((res, key) => (res[camelCase(themeColors[key].replace('ant', ''))] = theme.value[key]) && res, {}),
             });
         }
+        setCssVariable(theme.value);
     };
     const setState = (key, value) => {
         settings[key] = value;
