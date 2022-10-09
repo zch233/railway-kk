@@ -55,7 +55,7 @@ import { isDdOrZzd } from '@src/utils/index.js';
 const storeUser = useStoreUser();
 const storeSetting = useStoreSetting();
 
-const showSider = computed(() => storeSetting.layoutType === 'top');
+const showSider = computed(() => storeSetting.layoutType === 'top' && storeSetting.showMenu);
 const shwoReloadView = computed(() => storeSetting.shwoReloadView);
 const isDarkTheme = computed(() => storeSetting.siderType === 'darkTop');
 

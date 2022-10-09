@@ -79,6 +79,14 @@
             <div class="setting-item__title">界面显示</div>
             <div class="setting-item__content">
                 <div class="setting-group">
+                    <div class="setting-group__title">显示头部栏</div>
+                    <a-switch :checked="storeSetting.showHeader" @change="val => changeState('showHeader', val)" />
+                </div>
+                <div class="setting-group">
+                    <div class="setting-group__title">显示侧边栏</div>
+                    <a-switch :checked="storeSetting.showMenu" @change="val => changeState('showMenu', val)" />
+                </div>
+                <div class="setting-group">
                     <div class="setting-group__title">显示面包屑导航</div>
                     <a-switch :checked="storeSetting.shwoBreadcrumb" @change="val => changeState('shwoBreadcrumb', val)" />
                 </div>

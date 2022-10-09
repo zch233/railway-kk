@@ -39,6 +39,8 @@ const initSettings = {
     shwoBreadcrumb: true,
     shwoReloadView: true,
     shwoSwitchOrg: true,
+    showMenu: true,
+    showHeader: true,
 };
 
 // 设置样式变量

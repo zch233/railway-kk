@@ -1,8 +1,8 @@
 <template>
     <a-layout class="layout">
-        <Header />
+        <Header v-if="storeSetting.showHeader" />
         <a-layout>
-            <Sider v-if="storeSetting.layoutType === 'left'" />
+            <Sider v-if="storeSetting.layoutType === 'left' && storeSetting.showMenu" />
             <a-layout>
                 <Breadcrumb v-if="storeSetting.shwoBreadcrumb" />
                 <GoBack />
