@@ -236,7 +236,10 @@ const resize = () => {
  * onMounted
  */
 onMounted(() => {
-    getChart();
+    const timer = setTimeout(() => {
+        getChart();
+        clearTimeout(timer);
+    });
     window.addEventListener('resize', resize); // 添加监听
 });
 

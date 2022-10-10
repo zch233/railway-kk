@@ -20,6 +20,8 @@
 
 // 滚动条样式修改
 .global-scrollbar {
+    overflow: auto;
+
     &::-webkit-scrollbar {
         width: 6px;
         scrollbar-arrow-color: #c1c1c1;
@@ -67,4 +69,12 @@
     .ant-table-row-hover {
         background: var(--color-master-light-4);
     }
+}
+
+.main .container {
+    padding: @space6;
+}
+
+.container-background {
+    background: #fff;
 }
