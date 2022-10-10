@@ -23,19 +23,20 @@ export const useStorePermission = defineStore('permission', () => {
             redirect: '',
             children: [],
         };
-        const generateMeta = ({ activeMenu, ...meta }) => {
+        const generateMeta = (meta = {}) => {
             return {
                 ...meta,
-                ...(activeMenu && {
-                    activeMenu: transferPascalCase2Kebabcase(activeMenu),
+                ...(meta?.activeMenu && {
+                    activeMenu: transferPascalCase2Kebabcase(meta.activeMenu),
                 }),
+                showGoBack: true,
             };
         };
         const modules = import.meta.glob('../../views/**/*.vue');
         const generateRoute = item => ({
             path: transferPascalCase2Kebabcase(item.path ?? ''),
             name: item.path?.slice(1).replace(/\//g, '.'),
-            meta: item.meta && generateMeta(item.meta),
+            meta: item.meta,
             component: modules[`../../views${item.path}/index.vue`],
         });
         const generateRoutes = list => {
@@ -56,7 +57,7 @@ export const useStorePermission = defineStore('permission', () => {
         const otherPageRoutes = {
             path: '/more',
             component: Layout,
-            children: (menus.otherPage || []).map(item => generateRoute(item)),
+            children: (menus.otherPage || []).map(item => generateRoute(item)).map(item => ({ ...item, meta: generateMeta(item.meta) })),
         };
         if (otherPageRoutes.children.length > 0) {
             // 如果有详情页的路由则加入
