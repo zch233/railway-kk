@@ -5,7 +5,9 @@
             <Sider v-if="storeSetting.layoutType === 'left' && storeSetting.showMenu" />
             <a-layout>
                 <Breadcrumb v-if="storeSetting.shwoBreadcrumb" />
-                <GoBack />
+                <transition :name="storeSetting.animateType" mode="out-in">
+                    <GoBack />
+                </transition>
                 <a-layout-content class="content">
                     <div class="main">
                         <router-view v-slot="{ Component }">
