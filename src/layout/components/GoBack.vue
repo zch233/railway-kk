@@ -1,18 +1,9 @@
-<template>
-    <div class="go-back" v-if="showGoBack">
-        <div @click="handleGoBack">
-            <arrow-left-outlined />
-            <span>{{ title }}</span>
-        </div>
-    </div>
-</template>
-
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
 import { ArrowLeftOutlined } from '@ant-design/icons-vue';
+
 const route = useRoute();
 const router = useRouter();
-
 const title = computed(() => {
     return route.meta.title;
 });
@@ -20,9 +11,18 @@ const showGoBack = computed(() => {
     return route.meta?.showGoBack || false;
 });
 const handleGoBack = () => {
-    router.go(-1);
+    router.back();
 };
 </script>
+
+<template>
+    <div class="go-back" v-show="showGoBack">
+        <div @click="handleGoBack">
+            <arrow-left-outlined />
+            <span>{{ title }}</span>
+        </div>
+    </div>
+</template>
 
 <style lang="less" scoped>
 .go-back {
