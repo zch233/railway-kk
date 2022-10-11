@@ -17,7 +17,7 @@
             <!-- 表格插槽 -->
             <template #bodyCell="{ record, column }">
                 <div v-if="column.key === 'operation'">
-                    <span class="global-master-color" @click="goPage('Organization.Detail', record.id)">查看详情</span>
+                    <span class="global-master-color" @click="goPage('Table.Details', record.id)">查看详情</span>
                 </div>
             </template>
         </GlobalTable>
@@ -34,7 +34,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup name="Table">
 /**  @description:列表模板  **/
 import GlobalSearch from '@src/components/GlobalSearch/index.vue';
 import GlobalTable from '@src/components/GlobalTable/index.vue';
@@ -68,6 +68,7 @@ const getList = async listData => {
     //     ...searchData.formData,
     //     ...listData,
     // });
+    return { data: { list: [{}] } };
 };
 
 const goPage = (name, id) => {

@@ -1,27 +1,28 @@
-<template>
-    <div class="notify-badge">
-        <bell-outlined />
-        <i>{{ count >= 99 ? 99 : count }}</i>
-    </div>
-</template>
-
 <script setup>
 import { BellOutlined } from '@ant-design/icons-vue';
 
 defineProps({
     count: {
         type: Number,
-        default: 99,
+        default: 11,
     },
 });
 </script>
+
+<template>
+    <div class="notify-badge">
+        <BellOutlined />
+        <i v-if="count > 0">{{ count >= 99 ? 99 : count }}</i>
+    </div>
+</template>
 
 <style lang="less" scoped>
 .notify-badge {
     position: relative;
     font-size: 24px;
-    color: var(--ant-primary-color);
+    color: var(--color-master);
     cursor: pointer;
+    user-select: none;
 
     i {
         position: absolute;
@@ -35,7 +36,7 @@ defineProps({
         line-height: 18px;
         color: #fff;
         text-align: center;
-        background: var(--ant-error-color);
+        background: var(--color-error);
         border-radius: 100%;
     }
 }

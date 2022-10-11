@@ -1,24 +1,11 @@
-<template>
-    <div class="full-screen" @click="handleClick">
-        <fullscreen-exit-outlined v-if="isFullScreen" />
-        <fullscreen-outlined v-else />
-    </div>
-</template>
-
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { message } from 'ant-design-vue';
 import { FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons-vue';
 import screenfull from 'screenfull';
 
-/**
- * data
- */
 const isFullScreen = ref(false);
 
-/**
- * method
- */
 const handleClick = () => {
     if (!screenfull.isEnabled) {
         return message.error('您的浏览器不支持全屏');
@@ -40,10 +27,17 @@ onBeforeUnmount(() => {
 });
 </script>
 
+<template>
+    <div class="full-screen" @click="handleClick">
+        <FullscreenExitOutlined v-if="isFullScreen" />
+        <FullscreenOutlined v-else />
+    </div>
+</template>
+
 <style lang="less" scoped>
 .full-screen {
     font-size: 24px;
-    color: var(--ant-primary-color);
+    color: var(--color-master);
     cursor: pointer;
 }
 </style>

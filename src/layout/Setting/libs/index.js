@@ -7,3 +7,27 @@ export const animates = [
     { value: 'fade-bottom', label: '底部消退' },
     { value: 'fade-scale', label: '缩放消退' },
 ];
+
+export const themes = [
+    '#2d8cf0',
+    '#0960bd',
+    '#0084f4',
+    '#009688',
+    '#536dfe',
+    '#ff5c93',
+    '#ee4f12',
+    '#0096c7',
+    '#9c27b0',
+    '#ff9800',
+    '#ff3d68',
+    '#00c1d4',
+    '#71efa3',
+    '#171010',
+    '#78dec7',
+    '#1768ac',
+    '#fc5404',
+    '#ff4848',
+    '#0a1d37',
+    '#39a6a3',
+    '#ff8474',
+];

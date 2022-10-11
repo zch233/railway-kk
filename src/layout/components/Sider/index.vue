@@ -1,47 +1,18 @@
-<template>
-    <a-layout-sider width="208" v-model:collapsed="collapsed" :theme="siderTheme" class="layout-sider box-shadow" collapsible v-if="mode === 'inline'">
-        <SwitchOrg
-            :collapsed="collapsed"
-            :list="storeUser.orgListMenu"
-            :modelValue="orgValue"
-            :theme="siderTheme"
-            valueKey="id"
-            @onChange="onChange"
-            v-if="storeSetting.shwoSwitchOrg"
-        />
-        <a-menu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :theme="siderTheme" mode="inline">
-            <Menu v-for="sider in storePermission.menuList" :key="sider.path" :data="sider" />
-        </a-menu>
-        <template #trigger>
-            <div class="trigger">
-                <menu-unfold-outlined v-if="collapsed" />
-                <menu-fold-outlined v-else />
-                <span>收起菜单</span>
-            </div>
-        </template>
-    </a-layout-sider>
-    <div class="horizontal-header" v-if="mode === 'horizontal'">
-        <a-menu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :theme="siderHorizontalTheme" mode="horizontal">
-            <Menu v-for="sider in storePermission.menuList" :key="sider.path" :data="sider" />
-        </a-menu>
-    </div>
-</template>
-
 <script setup>
 import Menu from './Menu';
 import SwitchOrg from './SwitchOrg.vue';
-import { ref, computed, watch } from 'vue';
-import { useRoute } from 'vue-router';
 import { uniq } from 'lodash';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 import { useStorePermission } from '@src/store/modules/permission';
 import { useStoreSetting } from '@src/store/modules/setting';
-import { useStoreUser } from '@src/store/modules/user.js';
+import { useStoreUser } from '@src/store/modules/user';
+import { message } from 'ant-design-vue';
 
 const route = useRoute();
 const router = useRouter();
 const storeSetting = useStoreSetting();
 const storeUser = useStoreUser();
+const storePermission = useStorePermission();
 
 const siderTheme = computed(() => (['darkSider', 'darkTop'].includes(storeSetting.siderType) ? 'dark' : 'light'));
 const siderHorizontalTheme = computed(() => (storeSetting.siderType === 'darkTop' ? 'dark' : 'light'));
@@ -54,19 +25,11 @@ defineProps({
 });
 
 const orgValue = ref(storeUser.orgId);
-/**
- * data
- */
 const selectedKeys = ref([]);
 const openKeys = ref([]);
 const collapsed = ref(false);
 
-const storePermission = useStorePermission();
-
-/**
- * methods
- */
-const findPatentValue = (array, value, valueName = 'path', childrenName = 'children') => {
+const findParentValue = (array, value, valueName = 'path', childrenName = 'children') => {
     if (!value || !Array.isArray(array)) return [];
     const result = [];
     let valid = false;
@@ -94,31 +57,28 @@ const findPatentValue = (array, value, valueName = 'path', childrenName = 'child
     return valid ? result : [];
 };
 
-const onChange = params => {
-    if (params.key != orgValue.value) {
+const onChange = async params => {
+    if (params.key !== orgValue.value) {
+        message.loading('正在切换，请稍后...');
         storeUser.setOrgId(params.key);
         if (route.name !== 'Overview') {
-            router.push({ name: 'Overview' });
+            await router.push({ name: 'Overview' });
         }
-        setTimeout(() => {
-            window.location.reload();
-        }, 300);
+        window.location.reload();
     }
 };
-/**
- * watch
- */
+
 watch(
     () => route,
     route => {
         const { meta, path } = route;
         if (meta.activeMenu) {
             selectedKeys.value = [meta.activeMenu];
-            openKeys.value = uniq([...openKeys.value, ...findPatentValue(storePermission.menuList, meta.activeMenu)]);
+            openKeys.value = uniq([...openKeys.value, ...findParentValue(storePermission.menuList, meta.activeMenu)]);
             return;
         }
         selectedKeys.value = [path];
-        openKeys.value = uniq([...openKeys.value, ...findPatentValue(storePermission.menuList, path)]);
+        openKeys.value = uniq([...openKeys.value, ...findParentValue(storePermission.menuList, path)]);
     },
     {
         deep: true,
@@ -126,6 +86,35 @@ watch(
     }
 );
 </script>
+
+<template>
+    <ALayoutSider width="208" v-model:collapsed="collapsed" :theme="siderTheme" class="layout-sider box-shadow" collapsible v-if="mode === 'inline'">
+        <SwitchOrg
+            :collapsed="collapsed"
+            :list="storeUser.orgListMenu"
+            :modelValue="orgValue"
+            :theme="siderTheme"
+            valueKey="id"
+            @onChange="onChange"
+            v-if="storeSetting.shwoSwitchOrg"
+        />
+        <AMenu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :theme="siderTheme" mode="inline">
+            <Menu v-for="sider in storePermission.menuList" :key="sider.path" :data="sider" />
+        </AMenu>
+        <template #trigger>
+            <div class="trigger">
+                <MenuUnfoldOutlined v-if="collapsed" />
+                <MenuFoldOutlined v-else />
+                <span>收起菜单</span>
+            </div>
+        </template>
+    </ALayoutSider>
+    <div class="horizontal-header" v-if="mode === 'horizontal'">
+        <AMenu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :theme="siderHorizontalTheme" mode="horizontal">
+            <Menu v-for="sider in storePermission.menuList" :key="sider.path" :data="sider" />
+        </AMenu>
+    </div>
+</template>
 
 <style lang="less">
 .ant-layout-sider.layout-sider {
@@ -208,7 +197,7 @@ watch(
 
             .anticon {
                 font-size: 18px;
-                color: var(--ant-primary-color);
+                color: var(--color-master);
             }
 
             span:last-child {

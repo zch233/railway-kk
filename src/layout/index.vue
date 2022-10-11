@@ -1,55 +1,51 @@
-<template>
-    <a-layout class="layout">
-        <Header v-if="storeSetting.showHeader" />
-        <a-layout>
-            <Sider v-if="storeSetting.layoutType === 'left' && storeSetting.showMenu" />
-            <a-layout>
-                <Breadcrumb v-if="storeSetting.shwoBreadcrumb" />
-                <transition :name="storeSetting.animateType" mode="out-in">
-                    <GoBack />
-                </transition>
-                <a-layout-content class="content">
-                    <div class="main">
-                        <router-view v-slot="{ Component }">
-                            <transition :name="storeSetting.animateType" mode="out-in">
-                                <keep-alive :include="include">
-                                    <component :is="Component" />
-                                </keep-alive>
-                            </transition>
-                        </router-view>
-                        <Footer />
-                    </div>
-                </a-layout-content>
-            </a-layout>
-        </a-layout>
-        <Setting />
-    </a-layout>
-</template>
-
 <script setup>
 import { computed } from 'vue';
-// import { useRoute } from 'vue-router';
 import { useStoreSetting } from '@src/store/modules/setting';
+import { useStorePermission } from '@src/store/modules/permission.js';
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
 import GoBack from './components/GoBack.vue';
 import Breadcrumb from './components/Breadcrumb.vue';
 import Sider from './components/Sider/index.vue';
-import Setting from './setting/index.vue';
-import { useStorePermission } from '@src/store/modules/permission.js';
+import Setting from './Setting/index.vue';
 
-// const route = useRoute();
 const storeSetting = useStoreSetting();
 const storePermission = useStorePermission();
-
-// const routeKey = computed(() => {
-//     return route.path;
-// });
 
 const include = computed(() => {
     return storePermission.getKeepAliveList();
 });
 </script>
+
+<template>
+    <ALayout class="layout">
+        <Header v-if="storeSetting.showHeader" />
+        <ALayout>
+            <Sider v-if="storeSetting.layoutType === 'left' && storeSetting.showMenu" />
+            <ALayout>
+                <Breadcrumb v-if="storeSetting.shwoBreadcrumb" />
+                <transition :name="storeSetting.animateType" mode="out-in">
+                    <GoBack />
+                </transition>
+                <ALayoutContent class="content">
+                    <div class="main">
+                        <RouterView>
+                            <template #default="{ Component }">
+                                <transition :name="storeSetting.animateType" mode="out-in">
+                                    <KeepAlive :include="include">
+                                        <component :is="Component" />
+                                    </KeepAlive>
+                                </transition>
+                            </template>
+                        </RouterView>
+                        <Footer />
+                    </div>
+                </ALayoutContent>
+            </ALayout>
+        </ALayout>
+        <Setting />
+    </ALayout>
+</template>
 
 <style lang="less" scoped>
 .layout {
