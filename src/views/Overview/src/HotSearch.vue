@@ -48,7 +48,18 @@
                 <GupoCharts v-bind="searchCountOption" />
             </div>
         </div>
-        <a-table :columns="columns" :data-source="data" size="small" />
+        <a-table :columns="columns" :data-source="data" size="small">
+            <template #bodyCell="{ column, text, record }">
+                <template v-if="column.dataIndex === '2'">
+                    <a>{{ text }}</a>
+                </template>
+                <template v-if="column.dataIndex === '4'">
+                    <span :style="{ width: '45px', display: 'inline-block' }">{{ text }}</span>
+                    <CaretUpOutlined :style="{ color: '#ef6266' }" v-if="record['5']" />
+                    <CaretDownOutlined :style="{ color: '#5ec326' }" v-else />
+                </template>
+            </template>
+        </a-table>
     </div>
 </template>
 
