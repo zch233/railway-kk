@@ -101,6 +101,19 @@
                 <SalesRanking />
             </a-col>
         </a-row>
+        <a-row>
+            <a-col :span="12" class="container-background">
+                <HotSearch />
+            </a-col>
+            <a-col :span="12" class="container-background">
+                <CategoryProportion />
+            </a-col>
+        </a-row>
+        <a-row>
+            <a-col :span="24" class="container-background">
+                <TimeFlow />
+            </a-col>
+        </a-row>
     </div>
 </template>
 
@@ -109,6 +122,9 @@ import { computed } from 'vue';
 import { InfoCircleOutlined, CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons-vue';
 import SalesVolume from './src/SalesVolume.vue';
 import SalesRanking from './src/SalesRanking.vue';
+import HotSearch from './src/HotSearch.vue';
+import CategoryProportion from './src/CategoryProportion.vue';
+import TimeFlow from './src/TimeFlow.vue';
 import GupoCharts from '@src/components/GupoCharts/index.vue';
 
 /**
@@ -274,26 +290,54 @@ const payCountOption = computed(() => {
 
 <style lang="less">
 .overview {
-    .ant-row + .ant-row {
-        margin-top: @space4;
-    }
+    .ant-row {
+        flex-wrap: nowrap;
 
-    .ant-col + .ant-col {
-        flex: 1;
-        margin-left: @space4;
+        & + .ant-row {
+            margin-top: @space4;
+        }
     }
 
     .ant-col {
         padding: @space4;
+
+        & + .ant-col {
+            flex: 1;
+            margin-left: @space4;
+        }
     }
 
     .common-header {
         display: flex;
         padding-bottom: @space3;
         margin-bottom: @space3;
+        line-height: 32px;
         border-bottom: 1px solid #f0f0f0;
         justify-content: space-between;
         align-items: center;
+
+        &__title {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        &__operate {
+            display: flex;
+            align-items: center;
+
+            .anticon {
+                font-size: 15px;
+                cursor: pointer;
+
+                & + .anticon {
+                    margin-left: @space4;
+                }
+            }
+
+            .ant-radio-group {
+                margin-right: @space4;
+            }
+        }
     }
 
     .statistics {

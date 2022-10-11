@@ -47,7 +47,7 @@ const props = defineProps({
     },
     colors: {
         type: Array,
-        default: () => ['#006FFF', 'rgb(85, 188, 138)', 'rgb(245, 166, 35)', 'rgb(202, 38, 33)', '#29dfed', 'rgb(141, 102, 62)'],
+        default: () => ['#006FFF', '#08DAAA', '#FF8300', '#F93939', '#9E0CF1', '#00C0FC', '#93E869', '#F6CD2B'],
     },
     loading: {
         type: Boolean,
