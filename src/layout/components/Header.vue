@@ -11,6 +11,8 @@ import { useStoreSetting } from '@src/store/modules/setting';
 import defaultAvatar from '@src/assets/images/avatar.png';
 import logo from '@src/assets/logo.png';
 import { isDdOrZzd } from '@src/utils';
+import { logoutApi } from '@src/api/auth/index';
+import { message } from 'ant-design-vue';
 
 const storeUser = useStoreUser();
 const storeSetting = useStoreSetting();
@@ -24,9 +26,15 @@ const logout = () => {
         okText: '确定',
         cancelText: '取消',
         onOk() {
-            storeUser.logout();
+            handelLogoutApi();
         },
     });
+};
+
+const handelLogoutApi = async () => {
+    const data = await logoutApi();
+    message.success(data.message);
+    storeUser.logout();
 };
 </script>
 

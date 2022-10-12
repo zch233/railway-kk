@@ -37,3 +37,12 @@ export const userSystemOrg = () => {
         },
     });
 };
+
+// 用户中心 - 退出登录
+export const logoutApi = () => {
+    return request({
+        baseURL: userApiUrl,
+        url: '/apiUser/logout',
+        method: 'get',
+    });
+};
