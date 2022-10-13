@@ -5,7 +5,7 @@
             <Sider v-if="storeSetting.layoutType === 'left' && storeSetting.showMenu" />
             <a-layout>
                 <Breadcrumb v-if="storeSetting.shwoBreadcrumb" />
-                <GoBack />
+                <div class="content-top"></div>
                 <a-layout-content class="content">
                     <div class="main">
                         <router-view v-slot="{ Component }">
@@ -30,7 +30,6 @@ import { computed } from 'vue';
 import { useStoreSetting } from '@src/store/modules/setting';
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
-import GoBack from './components/GoBack.vue';
 import Breadcrumb from './components/Breadcrumb.vue';
 import Sider from './components/Sider/index.vue';
 import Setting from './setting/index.vue';

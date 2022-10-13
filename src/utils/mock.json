@@ -40,6 +40,23 @@
                     "children": []
                 }
             ]
+        },
+        {
+            "path": "/Navigation",
+            "meta": {
+                "icon": "discount",
+                "title": "顶部栏"
+            },
+            "children": [
+                {
+                    "path": "/GoBack",
+                    "meta": {
+                        "icon": "",
+                        "title": "顶部返回（GoBack）"
+                    },
+                    "children": []
+                }
+            ]
         }
     ],
     "button": [
