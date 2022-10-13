@@ -48,14 +48,14 @@ const handleGoBack = () => {
 
 onMounted(() => {
     display.value = true;
-    if (props.appendToLayout) {
-        document.querySelector('.content-top').appendChild(goBackRef.value);
-    }
+    if (!props.appendToLayout) return;
+    document.querySelector('.content-top').appendChild(goBackRef.value);
 });
 
 watch(
     () => route.path,
     () => {
+        if (!props.appendToLayout) return;
         goBackRef.value.parentNode.removeChild(goBackRef.value);
     }
 );
