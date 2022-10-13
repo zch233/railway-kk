@@ -15,7 +15,7 @@
  * GupoGoBack
  * @param { Boolean } title          标题
  * @param { Boolean } showGoBack     是否展示返回按钮
- * @param { Boolean } appendToLayout 是否放入layout
+ * @param { Boolean } appendToLayout 是否放入 layout
  */
 import { useRoute, useRouter } from 'vue-router';
 import { ArrowLeftOutlined } from '@ant-design/icons-vue';
@@ -63,7 +63,6 @@ watch(
 
 <style lang="less" scoped>
 .gupo-go-back {
-    z-index: 9;
     width: 100%;
     background: #fff;
     box-shadow: 0 5px 5px rgba(148, 161, 196, 0.1);
