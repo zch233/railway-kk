@@ -13,6 +13,7 @@ export default defineComponent({
     },
     setup(props) {
         const router = useRouter();
+
         return () =>
             props.data.children?.length ? (
                 <ASubMenu key={props.data.path} title={<MenuItem data={props.data?.meta} />}>

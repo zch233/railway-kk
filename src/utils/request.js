@@ -103,7 +103,7 @@ request.interceptors.response.use(
                 if (isDdOrZzd()) {
                     storeUser.clearData();
                     router.replace({
-                        name: 'forbidden',
+                        name: 'Forbidden',
                         query: {
                             code: 401,
                         },

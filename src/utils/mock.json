@@ -27,7 +27,8 @@
                     "path": "/Table",
                     "meta": {
                         "icon": "",
-                        "title": "表格（Table）"
+                        "title": "表格（Table）",
+                        "keepAlive": true
                     },
                     "children": []
                 },

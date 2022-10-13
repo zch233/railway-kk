@@ -1,6 +1,22 @@
+<script setup name="Setting">
+import { SettingOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons-vue';
+import { useStoreSetting } from '@src/store/modules/setting';
+import { animates, themes } from './libs/index';
+import SettingCopy from '@src/layout/Setting/components/SettingCopy.vue';
+
+const visible = ref(false);
+const colorRef = ref();
+const storeSetting = useStoreSetting();
+const colorMaster = computed(() => storeSetting.theme['--color-master']);
+
+const changeState = (state, value) => {
+    storeSetting.setState(state, state === 'themeColor' ? value.target.value : value);
+};
+</script>
+
 <template>
     <div class="setting">
-        <a-drawer :width="300" placement="right" :visible="visible" :closable="false" class="setting-drawer">
+        <ADrawer :width="300" placement="right" v-model:visible="visible" :closable="false" class="setting-drawer">
             <template #handle>
                 <div class="setting-button" @click="visible = !visible" :style="{ backgroundColor: colorMaster }">
                     <CloseOutlined v-if="visible" />
@@ -12,7 +28,7 @@
                 <div class="theme-color">
                     <span :style="{ backgroundColor: colorMaster }" @click="colorRef.click()"></span>
                     <input type="color" ref="colorRef" :value="storeSetting" @change="e => storeSetting.setTheme({ '--color-master': e.target.value })" />
-                    <a-input :value="colorMaster" @change="e => storeSetting.setTheme({ '--color-master': e.target.value })" placeholder="请输入颜色值" />
+                    <AInput :value="colorMaster" @change="e => storeSetting.setTheme({ '--color-master': e.target.value })" placeholder="请输入颜色值" />
                 </div>
                 <ul class="theme-list">
                     <li
@@ -29,141 +45,88 @@
             <div class="setting-item__title">导航模式</div>
             <div class="setting-item__content">
                 <div class="checkbox-layout">
-                    <a-tooltip placement="top">
+                    <ATooltip placement="top">
                         <template #title>
                             <span>左侧菜单模式</span>
                         </template>
                         <div class="checkbox-layout-item" @click="changeState('layoutType', 'left')">
                             <CheckOutlined v-if="storeSetting.layoutType === 'left'" />
                         </div>
-                    </a-tooltip>
-                    <a-tooltip placement="top">
+                    </ATooltip>
+                    <ATooltip placement="top">
                         <template #title>
                             <span>顶部菜单模式</span>
                         </template>
                         <div class="checkbox-layout-item" @click="changeState('layoutType', 'top')">
                             <CheckOutlined v-if="storeSetting.layoutType === 'top'" />
                         </div>
-                    </a-tooltip>
+                    </ATooltip>
                 </div>
             </div>
             <div class="setting-item__title">导航栏风格</div>
             <div class="setting-item__content">
                 <div class="checkbox-layout sider">
-                    <a-tooltip placement="top">
+                    <ATooltip placement="top">
                         <template #title>
                             <span>白色侧边栏</span>
                         </template>
                         <div class="checkbox-layout-item" @click="changeState('siderType', 'whiteSider')">
                             <CheckOutlined v-if="storeSetting.siderType === 'whiteSider'" />
                         </div>
-                    </a-tooltip>
-                    <a-tooltip placement="top">
+                    </ATooltip>
+                    <ATooltip placement="top">
                         <template #title>
                             <span>暗色侧边栏</span>
                         </template>
                         <div class="checkbox-layout-item" @click="changeState('siderType', 'darkSider')">
                             <CheckOutlined v-if="storeSetting.siderType === 'darkSider'" />
                         </div>
-                    </a-tooltip>
-                    <a-tooltip placement="top">
+                    </ATooltip>
+                    <ATooltip placement="top">
                         <template #title>
                             <span>暗色顶栏</span>
                         </template>
                         <div class="checkbox-layout-item" @click="changeState('siderType', 'darkTop')">
                             <CheckOutlined v-if="storeSetting.siderType === 'darkTop'" />
                         </div>
-                    </a-tooltip>
+                    </ATooltip>
                 </div>
             </div>
             <div class="setting-item__title">界面显示</div>
             <div class="setting-item__content">
                 <div class="setting-group">
                     <div class="setting-group__title">显示头部栏</div>
-                    <a-switch :checked="storeSetting.showHeader" @change="val => changeState('showHeader', val)" />
+                    <ASwitch :checked="storeSetting.showHeader" @change="val => changeState('showHeader', val)" />
                 </div>
                 <div class="setting-group">
                     <div class="setting-group__title">显示侧边栏</div>
-                    <a-switch :checked="storeSetting.showMenu" @change="val => changeState('showMenu', val)" />
+                    <ASwitch :checked="storeSetting.showMenu" @change="val => changeState('showMenu', val)" />
                 </div>
                 <div class="setting-group">
                     <div class="setting-group__title">显示面包屑导航</div>
-                    <a-switch :checked="storeSetting.shwoBreadcrumb" @change="val => changeState('shwoBreadcrumb', val)" />
+                    <ASwitch :checked="storeSetting.shwoBreadcrumb" @change="val => changeState('shwoBreadcrumb', val)" />
                 </div>
                 <div class="setting-group">
                     <div class="setting-group__title">显示刷新按钮</div>
-                    <a-switch :checked="storeSetting.shwoReloadView" @change="val => changeState('shwoReloadView', val)" />
+                    <ASwitch :checked="storeSetting.shwoReloadView" @change="val => changeState('shwoReloadView', val)" />
                 </div>
                 <div class="setting-group">
                     <div class="setting-group__title">显示机构切换</div>
-                    <a-switch :checked="storeSetting.shwoSwitchOrg" @change="val => changeState('shwoSwitchOrg', val)" />
+                    <ASwitch :checked="storeSetting.shwoSwitchOrg" @change="val => changeState('shwoSwitchOrg', val)" />
                 </div>
             </div>
             <div class="setting-item__title">动画</div>
             <div class="setting-item__content">
                 <div class="setting-group">
                     <div class="setting-group__title">动画类型</div>
-                    <a-select :value="storeSetting.animateType" :options="animates" @change="val => changeState('animateType', val)" />
+                    <ASelect :value="storeSetting.animateType" :options="animates" @change="val => changeState('animateType', val)" />
                 </div>
             </div>
             <!-- 复制配置 -->
-            <div class="setting-copy">
-                <a-alert message="点击复制配置，需覆盖到 src\store\modules\setting.js 中 initTheme、settings 变量中" type="warning" @click="handleCopy" />
-            </div>
-        </a-drawer>
+            <SettingCopy />
+        </ADrawer>
     </div>
 </template>
-
-<script setup>
-import { ref } from 'vue';
-import { message } from 'ant-design-vue';
-import copy from 'copy-to-clipboard';
-import { SettingOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons-vue';
-import { useStoreSetting } from '@src/store/modules/setting';
-import { animates } from './libs/animateSetting';
-
-/**
- * data
- */
-const visible = ref(false);
-const colorRef = ref();
-const storeSetting = useStoreSetting();
-const colorMaster = computed(() => storeSetting.theme['--color-master']);
-const themes = [
-    '#2d8cf0',
-    '#0960bd',
-    '#0084f4',
-    '#009688',
-    '#536dfe',
-    '#ff5c93',
-    '#ee4f12',
-    '#0096c7',
-    '#9c27b0',
-    '#ff9800',
-    '#ff3d68',
-    '#00c1d4',
-    '#71efa3',
-    '#171010',
-    '#78dec7',
-    '#1768ac',
-    '#fc5404',
-    '#ff4848',
-    '#0a1d37',
-    '#39a6a3',
-    '#ff8474',
-];
-
-/**
- * methods
- */
-const changeState = (state, value) => {
-    storeSetting.setState(state, state === 'themeColor' ? value.target.value : value);
-};
-const handleCopy = () => {
-    copy(`${JSON.stringify(storeSetting.theme, null, 4)}\n${JSON.stringify(storeSetting.initSettings, null, 4)}`);
-    message.success('复制成功');
-};
-</script>
 
 <style lang="less" scoped>
 .setting-button {
@@ -350,14 +313,6 @@ const handleCopy = () => {
 
     > div:not(.setting-group__title) {
         flex: 1;
-    }
-}
-
-.setting-copy {
-    .ant-alert {
-        cursor: pointer;
-        opacity: 0.8;
-        user-select: none;
     }
 }
 </style>

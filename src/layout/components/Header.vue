@@ -1,31 +1,71 @@
+<script setup>
+import { computed, h } from 'vue';
+import Modal from 'ant-design-vue/lib/modal'; // ant-design-vue bug，不得已这么写
+import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
+import FullScreen from '@src/components/FullScreen/index.vue';
+import NotifyBadge from '@src/components/NotifyBadge/index.vue';
+import ReloadView from '@src/components/ReloadView/index.vue';
+import Sider from './Sider/index.vue';
+import { useStoreUser } from '@src/store/modules/user';
+import { useStoreSetting } from '@src/store/modules/setting';
+import defaultAvatar from '@src/assets/images/avatar.png';
+import logo from '@src/assets/logo.png';
+import { isDdOrZzd } from '@src/utils';
+import { logoutApi } from '@src/api/auth/index';
+import { message } from 'ant-design-vue';
+
+const storeUser = useStoreUser();
+const storeSetting = useStoreSetting();
+
+const showSider = computed(() => storeSetting.layoutType === 'top' && storeSetting.showMenu);
+
+const logout = () => {
+    Modal.confirm({
+        title: '是否确认退出登录？',
+        icon: h(ExclamationCircleOutlined),
+        okText: '确定',
+        cancelText: '取消',
+        onOk() {
+            handelLogoutApi();
+        },
+    });
+};
+
+const handelLogoutApi = async () => {
+    const data = await logoutApi();
+    message.success(data.message);
+    storeUser.logout();
+};
+</script>
+
 <template>
-    <a-layout-header class="header box-shadow" :class="isDarkTheme ? 'dark' : ''">
+    <ALayoutHeader class="header box-shadow" :class="{ dark: storeSetting.siderType === 'darkTop' }">
         <div class="header-left">
             <div class="header-left__logo">
-                <img src="../../assets/logo.png" />
+                <img :src="logo" alt="logo" />
                 <span>萧山</span>
             </div>
             <div class="header-left__text">标准后台模板</div>
         </div>
         <div class="header-right">
             <Sider mode="horizontal" v-if="showSider" />
-            <ReloadView v-if="shwoReloadView" />
+            <ReloadView v-if="storeSetting.shwoReloadView" />
             <FullScreen />
             <NotifyBadge />
-            <a-dropdown :trigger="['click']">
-                <a-avatar :size="36">
+            <ADropdown :trigger="['click']">
+                <AAvatar :size="36">
                     <template #icon>
-                        <img :src="storeUser.userInfo.img || defaultAvatar" />
+                        <img :src="storeUser.userInfo.img || defaultAvatar" alt="" />
                     </template>
-                </a-avatar>
+                </AAvatar>
                 <template #overlay>
                     <div class="user-info box-shadow">
                         <div class="user-info-desc">
-                            <a-avatar :size="36">
+                            <AAvatar :size="36">
                                 <template #icon>
-                                    <img :src="storeUser.userInfo.img || defaultAvatar" />
+                                    <img :src="storeUser.userInfo.img || defaultAvatar" alt="" />
                                 </template>
-                            </a-avatar>
+                            </AAvatar>
                             <div>{{ storeUser.userInfo?.name || '—' }}<br />{{ storeUser.userInfo?.phone || '—' }}</div>
                         </div>
                         <div class="user-info-menu">
@@ -34,43 +74,10 @@
                         </div>
                     </div>
                 </template>
-            </a-dropdown>
+            </ADropdown>
         </div>
-    </a-layout-header>
+    </ALayoutHeader>
 </template>
-
-<script setup>
-import { computed, createVNode } from 'vue';
-import Modal from 'ant-design-vue/lib/modal';
-import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
-import FullScreen from '@src/components/FullScreen/index.vue';
-import NotifyBadge from '@src/components/NotifyBadge/index.vue';
-import ReloadView from '@src/components/ReloadView/index.vue';
-import { useStoreUser } from '@src/store/modules/user';
-import { useStoreSetting } from '@src/store/modules/setting';
-import defaultAvatar from '@src/assets/images/avatar.png';
-import Sider from './Sider/index.vue';
-import { isDdOrZzd } from '@src/utils/index.js';
-
-const storeUser = useStoreUser();
-const storeSetting = useStoreSetting();
-
-const showSider = computed(() => storeSetting.layoutType === 'top' && storeSetting.showMenu);
-const shwoReloadView = computed(() => storeSetting.shwoReloadView);
-const isDarkTheme = computed(() => storeSetting.siderType === 'darkTop');
-
-const logout = () => {
-    Modal.confirm({
-        title: '是否确认退出登录？',
-        icon: createVNode(ExclamationCircleOutlined),
-        okText: '确定',
-        cancelText: '取消',
-        onOk() {
-            storeUser.logout();
-        },
-    });
-};
-</script>
 
 <style lang="less" scoped>
 .header {
@@ -103,7 +110,7 @@ const logout = () => {
                 padding: 3px 8px;
                 margin-right: 15px;
                 color: #fff;
-                background: var(--ant-primary-color);
+                background: var(--color-master);
                 border-radius: 2px;
             }
         }
@@ -164,8 +171,8 @@ const logout = () => {
             transition: all 0.3s ease;
 
             &:hover {
-                color: var(--ant-primary-color);
-                background-color: var(--ant-primary-1);
+                color: var(--color-master);
+                background-color: var(--color-master-light-1);
             }
         }
     }

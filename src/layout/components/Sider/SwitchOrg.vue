@@ -1,32 +1,5 @@
-<template>
-    <div class="switch-org" :class="{ 'is-dark': theme === 'dark' }">
-        <Tooltip placement="right">
-            <template #title>{{ title }}</template>
-            <div class="switch-org__name">
-                <HomeFilled />
-                <div>{{ title }}</div>
-            </div>
-        </Tooltip>
-        <Dropdown>
-            <div class="switch-org__change">
-                切换机构
-                <SwapOutlined />
-            </div>
-            <template #overlay>
-                <Menu @click="handleMenuClick" :theme="theme">
-                    <Menu.Item v-for="item in list" :key="item[valueKey]">
-                        <span>{{ item[labelKey] }}</span>
-                    </Menu.Item>
-                </Menu>
-            </template>
-        </Dropdown>
-    </div>
-</template>
-
 <script setup>
-import { Tooltip, Dropdown, Menu } from 'ant-design-vue';
 import { HomeFilled, SwapOutlined } from '@ant-design/icons-vue';
-import { find } from 'lodash';
 
 const props = defineProps({
     modelValue: {
@@ -63,9 +36,34 @@ const title = computed(() => {
     return currentItem.value[props.labelKey];
 });
 const currentItem = computed(() => {
-    return find(props.list, [props.valueKey, props.modelValue]);
+    return props.list.find(v => v[props.valueKey] === props.modelValue);
 });
 </script>
+
+<template>
+    <div class="switch-org" :class="{ 'is-dark': theme === 'dark' }">
+        <ATooltip placement="right">
+            <template #title>{{ title }}</template>
+            <div class="switch-org__name">
+                <HomeFilled />
+                <div>{{ title }}</div>
+            </div>
+        </ATooltip>
+        <ADropdown>
+            <div class="switch-org__change">
+                切换机构
+                <SwapOutlined />
+            </div>
+            <template #overlay>
+                <AMenu @click="handleMenuClick" :theme="theme">
+                    <AMenuItem v-for="item in list" :key="item[valueKey]" :disabled="item[valueKey] === props.modelValue">
+                        <span>{{ item[labelKey] }}</span>
+                    </AMenuItem>
+                </AMenu>
+            </template>
+        </ADropdown>
+    </div>
+</template>
 
 <style lang="less" scoped>
 .switch-org {
@@ -105,7 +103,7 @@ const currentItem = computed(() => {
         padding-left: 28px;
         overflow: hidden;
         font-size: 13px;
-        color: var(--ant-primary-color);
+        color: var(--color-master);
         white-space: nowrap;
         cursor: pointer;
         transition: opacity 0.3s ease;
