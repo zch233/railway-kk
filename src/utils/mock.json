@@ -56,6 +56,14 @@
                         "title": "顶部返回（GoBack）"
                     },
                     "children": []
+                },
+                {
+                    "path": "/TopTabs",
+                    "meta": {
+                        "icon": "",
+                        "title": "顶部标签（TopTabs）"
+                    },
+                    "children": []
                 }
             ]
         }

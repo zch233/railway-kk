@@ -1,5 +1,5 @@
 <template>
-    <div class="GoBack">
+    <div class="go-back">
         <GupoGoBack title="加入到 Layout 中的" appendToLayout />
         <GupoGoBack title="默认情况" />
         <GupoGoBack :showGoBack="false">
@@ -18,12 +18,6 @@ const timeRange = ref([]);
 </script>
 
 <style lang="less" scoped>
-.custom-go-back {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .gupo-go-back {
     margin-bottom: @space6;
 }
