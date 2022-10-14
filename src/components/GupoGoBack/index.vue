@@ -39,10 +39,14 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    goBack: {
+        type: Function,
+    },
 });
 
 const goBackRef = ref();
 const handleGoBack = () => {
+    if (props.goBack) return props.goBack();
     router.go(-1);
 };
 

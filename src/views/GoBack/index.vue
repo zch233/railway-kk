@@ -8,6 +8,7 @@
                 <a-range-picker v-model:value="timeRange" />
             </div>
         </GupoGoBack>
+        <GupoGoBack title="自定义返回事件" :goBack="handleGoBack" />
     </div>
 </template>
 
@@ -15,6 +16,10 @@
 import GupoGoBack from '@src/components/GupoGoBack/index.vue';
 
 const timeRange = ref([]);
+
+const handleGoBack = () => {
+    alert('触发自定义返回事件');
+};
 </script>
 
 <style lang="less" scoped>
