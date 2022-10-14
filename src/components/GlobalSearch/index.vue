@@ -33,10 +33,10 @@
                 </GupoForm.Item>
             </div>
         </div>
-        <div class="btn-box" :class="{ isOpen: isOpen }">
+        <div class="btn-box" :class="{ isOpen: isOpen, label: isLabel }">
             <GupoButton @click="reset">重置</GupoButton>
             <GupoButton type="primary" @click="search">查询</GupoButton>
-            <span class="operation" @click="operation" v-if="isFeedLine">
+            <span class="operation" @click="isOpen = !isOpen" v-if="isFeedLine">
                 {{ isOpen ? '收起' : '展开' }}
                 <DownOutlined :class="{ active: isOpen }" />
             </span>
@@ -44,8 +44,7 @@
     </div>
 </template>
 
-<script setup>
-/**  @description:查询条件  **/
+<script name="GlobalSearch" setup>
 import { GupoButton, GupoInput, GupoSelect, GupoDatePicker, GupoTimePicker, GupoCascader, GupoTreeSelect, GupoForm } from '@src/components/UI/index.js';
 import { DownOutlined } from '@ant-design/icons-vue';
 import { cloneDeep } from 'lodash';
@@ -88,7 +87,7 @@ const generateProps = item => {
         ...item?.props,
     };
 };
-const emits = defineEmits(['reset', 'search', 'update:formData']);
+
 const props = defineProps({
     // 默认高度
     defaultHeight: {
@@ -100,7 +99,6 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-
     // 配置项,支持类型:input, select, datePicker, datePicker.rangePicker, timePicker, timePicker.timeRangePicker, cascader, treeSelect
     configItem: {
         type: Object,
@@ -128,12 +126,39 @@ const props = defineProps({
         default: true,
     },
 });
+const emits = defineEmits(['reset', 'search', 'update:formData']);
 
+/**
+ * data
+ */
 const defaultFormData = ref({});
-onMounted(() => {
-    searhBoxHeight.value = searchBox.value.offsetHeight;
-});
+const isOpen = ref(props.isOpenRow);
+const searchBox = ref('');
+const searhBoxHeight = ref('');
 
+/**
+ * methods
+ */
+const reset = () => {
+    emits('update:formData', defaultFormData.value);
+    emits('reset');
+};
+const insideReset = () => {
+    emits('update:formData', defaultFormData.value);
+};
+const search = () => {
+    emits('search');
+};
+const updateValue = (key, e) => {
+    emits('update:formData', { ...props.formData, [key]: e });
+};
+const getSearhBoxHeight = () => {
+    searhBoxHeight.value = searchBox.value.offsetHeight;
+};
+
+/**
+ * watch
+ */
 watch(
     () => props.configItem,
     () => {
@@ -144,55 +169,41 @@ watch(
         immediate: true,
     }
 );
-
-// select筛选选项
-const selectFilterOption = (input, option) => {
-    return Object.values(option).join().toLowerCase().indexOf(input.toLowerCase()) >= 0;
-};
-//cascader筛选
-const cascaderFilterOption = (inputValue, path) => {
-    return path.some(option => Object.values(option).join().toLowerCase().indexOf(inputValue.toLowerCase()) > -1);
-};
-
-const isOpen = ref(props.isOpenRow);
-
-const operation = () => {
-    isOpen.value = !isOpen.value;
-};
-
-const searchBox = ref('');
-const searhBoxHeight = ref('');
 watch([() => isOpen.value, () => props.configItem], () => {
     nextTick(() => {
-        searhBoxHeight.value = searchBox.value.offsetHeight;
+        getSearhBoxHeight();
     });
 });
+
+/**
+ * computed
+ */
+
 // 获取高度
 const boxHeight = computed(() => ({
     height: isOpen.value ? `${searhBoxHeight.value}px` : `${props.defaultHeight}px`,
 }));
 // 是否换行了
 const isFeedLine = computed(() => searhBoxHeight.value > props.defaultHeight);
-
 // 是否有label
 const isLabel = computed(() => props.configItem.find(item => item.label));
-
-const reset = () => {
-    emits('update:formData', defaultFormData.value);
-    emits('reset');
+// select筛选选项
+const selectFilterOption = (input, option) => {
+    return Object.values(option).join().toLowerCase().indexOf(input.toLowerCase()) >= 0;
+};
+// cascader筛选
+const cascaderFilterOption = (inputValue, path) => {
+    return path.some(option => Object.values(option).join().toLowerCase().indexOf(inputValue.toLowerCase()) > -1);
 };
 
-const insideReset = () => {
-    emits('update:formData', defaultFormData.value);
-};
+onMounted(() => {
+    getSearhBoxHeight();
+    window.addEventListener('resize', getSearhBoxHeight);
+});
 
-const search = () => {
-    emits('search');
-};
-
-const updateValue = (key, e) => {
-    emits('update:formData', { ...props.formData, [key]: e });
-};
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', getSearhBoxHeight);
+});
 
 defineExpose({ insideReset });
 </script>
@@ -322,6 +333,24 @@ defineExpose({ insideReset });
                 &.active {
                     transform: rotate(180deg);
                 }
+            }
+        }
+    }
+
+    .btn-box.label {
+        @media (min-width: 1024px) {
+            & {
+                width: calc(50% - 40px);
+            }
+        }
+        @media (min-width: 1440px) {
+            & {
+                width: calc(33.33% - 40px);
+            }
+        }
+        @media (min-width: 1920px) {
+            & {
+                width: calc(25% - 40px);
             }
         }
     }
