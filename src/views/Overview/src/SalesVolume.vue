@@ -46,7 +46,7 @@ const rangeList = ref([
  */
 const salesChartOption = computed(() => {
     return {
-        height: '300',
+        height: 300,
         title: activeKey.value === 1 ? '销售额趋势' : '访问量趋势',
         dataset: {
             dimensions: ['salesVolume', activeKey.value === 1 ? '销售量' : '访问量'],

@@ -18,11 +18,11 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 const props = defineProps({
     width: {
-        type: String || Number,
+        type: [String, Number],
         default: '100%',
     },
     height: {
-        type: String || Number,
+        type: [String, Number],
         default: '100%',
     },
     title: {
