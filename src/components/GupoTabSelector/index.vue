@@ -11,7 +11,7 @@ import { ref, watch } from 'vue';
 
 const props = defineProps({
     modelValue: {
-        type: String || Number,
+        type: [String, Number],
     },
     options: {
         type: Array,

@@ -132,7 +132,7 @@ import GupoCharts from '@src/components/GupoCharts/index.vue';
  */
 const visitsOption = computed(() => {
     return {
-        height: 45,
+        height: '45',
         dataset: {
             dimensions: ['visits', '访问量'],
             source: [
@@ -211,7 +211,7 @@ const visitsOption = computed(() => {
 });
 const payCountOption = computed(() => {
     return {
-        height: 45,
+        height: '45',
         dataset: {
             dimensions: ['visits', '访问量'],
             source: [

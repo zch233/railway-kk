@@ -138,7 +138,7 @@ const data = [
  */
 const searchCountOption = computed(() => {
     return {
-        height: 45,
+        height: '45',
         dataset: {
             dimensions: ['visits', '访问量'],
             source: [
