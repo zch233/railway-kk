@@ -51,7 +51,7 @@ const categoryProportionOption = computed(() => {
     }, {});
     return {
         width: 'calc(100% -10px)',
-        height: 410,
+        height: '410',
         title: '销售额',
         option: {
             tooltip: {
