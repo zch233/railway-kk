@@ -1,21 +1,21 @@
 <template>
     <div class="infinite-scroll container">
-        <GlobalContent title="默认">
+        <GupoCard title="默认">
             <GupoInfiniteScroll :height="400" :load="handleLoad1">
                 <p v-for="(item, i) in loadList1" :key="i">{{ item }}</p>
             </GupoInfiniteScroll>
-        </GlobalContent>
-        <GlobalContent title="异步请求 Loading">
+        </GupoCard>
+        <GupoCard title="异步请求 Loading">
             <GupoInfiniteScroll :height="400" :load="handleLoad2" :showLoading="true">
                 <p v-for="(item, i) in loadList2" :key="i">{{ item }}</p>
             </GupoInfiniteScroll>
-        </GlobalContent>
+        </GupoCard>
     </div>
 </template>
 
 <script setup>
 import GupoInfiniteScroll from '@src/components/GupoInfiniteScroll/index.vue';
-import GlobalContent from '@src/components/GlobalContent/index.vue';
+import GupoCard from '@src/components/GupoCard/index.vue';
 
 const loadList1 = ref(new Array(10).fill(0).map((item, i) => i + 1));
 const loadList2 = ref(new Array(10).fill(0).map((item, i) => i + 1));

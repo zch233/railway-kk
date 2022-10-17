@@ -1,10 +1,10 @@
 <template>
-    <div class="global-content">
-        <div class="global-content__title">
+    <div class="gupo-card">
+        <div class="gupo-card__title">
             <div class="title">{{ title }}</div>
             <slot name="extra"></slot>
         </div>
-        <div class="global-content__content">
+        <div class="gupo-card__content">
             <slot></slot>
         </div>
     </div>
@@ -20,7 +20,7 @@ defineProps({
 </script>
 
 <style lang="less" scoped>
-.global-content {
+.gupo-card {
     background: #fff;
 
     &__title {
