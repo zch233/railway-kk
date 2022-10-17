@@ -9,20 +9,38 @@
             "children": []
         },
         {
-            "path": "/Form",
+            "path": "/DataEntry",
             "meta": {
-                "icon": "form",
-                "title": "表单（Form）"
-            },
-            "children": []
-        },
-        {
-            "path": "/TableSearch",
-            "meta": {
-                "icon": "table",
-                "title": "列表"
+                "icon": "data-entry",
+                "title": "数据录入"
             },
             "children": [
+                {
+                    "path": "/Form",
+                    "meta": {
+                        "icon": "",
+                        "title": "表单（Form）",
+                        "keepAlive": true
+                    },
+                    "children": []
+                }
+            ]
+        },
+        {
+            "path": "/DataDisplay",
+            "meta": {
+                "icon": "data-display",
+                "title": "数据展示"
+            },
+            "children": [
+                {
+                    "path": "/Search",
+                    "meta": {
+                        "icon": "",
+                        "title": "搜索（Search）"
+                    },
+                    "children": []
+                },
                 {
                     "path": "/Table",
                     "meta": {
@@ -31,22 +49,14 @@
                         "keepAlive": true
                     },
                     "children": []
-                },
-                {
-                    "path": "/Search",
-                    "meta": {
-                        "icon": "",
-                        "title": "搜索（Search）"
-                    },
-                    "children": []
                 }
             ]
         },
         {
-            "path": "/Navigation",
+            "path": "/PageLayout",
             "meta": {
-                "icon": "discount",
-                "title": "顶部栏"
+                "icon": "page-layout",
+                "title": "页面布局"
             },
             "children": [
                 {
@@ -64,16 +74,16 @@
                         "title": "顶部标签（TopTabs）"
                     },
                     "children": []
+                },
+                {
+                    "path": "/InfiniteScroll",
+                    "meta": {
+                        "icon": "",
+                        "title": "无限滚动（InfiniteScroll）"
+                    },
+                    "children": []
                 }
             ]
-        },
-        {
-            "path": "/InfiniteScroll",
-            "meta": {
-                "icon": "scroll",
-                "title": "无限滚动（InfiniteScroll）"
-            },
-            "children": []
         }
     ],
     "button": [
@@ -84,11 +94,11 @@
     ],
     "otherPage": [
         {
-            "path": "/Table/Details",
+            "path": "/Demo/Details",
             "meta": {
-                "activeMenu": "/Table",
+                "activeMenu": "/Demo",
                 "showGoBack": true,
-                "title": "表格详情"
+                "title": "测试详情"
             }
         }
     ]
