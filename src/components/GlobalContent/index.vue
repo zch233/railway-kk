@@ -1,65 +1,55 @@
 <template>
     <div class="global-content">
-        <div class="title-content">
-            <div class="left-title">
-                <span class="line" :style="{ backgroundColor: lineColor }"></span>
-                <span class="title">{{ title }}</span>
-            </div>
-            <div class="right-operation">
-                <slot name="rightTitle"></slot>
-            </div>
+        <div class="global-content__title">
+            <div class="title">{{ title }}</div>
+            <slot name="extra"></slot>
         </div>
-        <div class="show-content">
-            <slot name="content"></slot>
+        <div class="global-content__content">
+            <slot></slot>
         </div>
     </div>
 </template>
 
 <script setup>
-/**  @description:公共标题  **/
 defineProps({
     title: {
         type: String,
         default: '',
     },
-    lineColor: {
-        type: String,
-        default: '',
-    },
 });
 </script>
+
 <style lang="less" scoped>
 .global-content {
-    margin-bottom: @space5;
-    background-color: #fff;
+    background: #fff;
 
-    .title-content {
+    &__title {
         display: flex;
+        justify-content: space-between;
+        align-items: center;
         padding: @space4 @space6;
         border-bottom: 1px solid var(--border-color);
-        align-items: center;
-        justify-content: space-between;
 
-        .left-title {
+        .title {
             display: flex;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1;
             align-items: center;
 
-            .title {
-                font-size: var(--font-size-title);
-            }
-
-            .line {
+            &::before {
                 display: inline-block;
-                width: 3px;
-                height: 18px;
+                width: 2px;
+                height: 16px;
                 margin-right: @space2;
-                background-color: var(--master-color);
+                background: var(--ant-primary-color);
+                content: '';
             }
         }
     }
 
-    .show-content {
-        padding: @space5 @space6;
+    &__content {
+        padding: @space6;
     }
 }
 </style>
