@@ -60,6 +60,14 @@
             },
             "children": [
                 {
+                    "path": "/Card",
+                    "meta": {
+                        "icon": "",
+                        "title": "卡片（Card）"
+                    },
+                    "children": []
+                },
+                {
                     "path": "/GoBack",
                     "meta": {
                         "icon": "",
