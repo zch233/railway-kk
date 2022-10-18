@@ -20,12 +20,12 @@
                         </template>
                     </GupoDropdown>
                 </div>
-                <!-- <div class="operation-icon" @click="fullscreenHandle">
+                <div class="operation-icon" @click="fullscreenHandle">
                     <GupoTooltip>
                         <template #title>放大</template>
                         <FullscreenOutlined />
                     </GupoTooltip>
-                </div> -->
+                </div>
                 <div class="operation-icon" @click="refresh(true)">
                     <GupoTooltip>
                         <template #title>刷新</template>
@@ -48,7 +48,6 @@
             </div>
             <div class="selected-right">
                 <span v-if="!hiddenCancelSelected" class="global-master-color" @click="cancelSelected">取消选择</span>
-
                 <!-- cancelSelected: 取消选择； item：选中行-->
                 <slot name="selected-operation" :cancelSelected="cancelSelected" :item="selectedDataSource"></slot>
             </div>
@@ -105,14 +104,12 @@
     </div>
 </template>
 
-<script setup>
-import { GupoTable, GupoDivider, GupoDropdown, GupoMenu, GupoTooltip } from '@src/components/UI/index.js';
-// FullscreenOutlined
-import { ReloadOutlined, ColumnHeightOutlined, InfoCircleFilled } from '@ant-design/icons-vue';
-import ColumnSetting from './ColumnSetting.vue';
-
-import { reactive, ref, computed, toRefs, onMounted } from 'vue';
+<script name="GlobalTable" setup>
 import { cloneDeep } from 'lodash';
+import { reactive, ref, computed, toRefs, onMounted } from 'vue';
+import { FullscreenOutlined, ReloadOutlined, ColumnHeightOutlined, InfoCircleFilled } from '@ant-design/icons-vue';
+import { GupoTable, GupoDivider, GupoDropdown, GupoMenu, GupoTooltip } from '@src/components/UI/index.js';
+import ColumnSetting from './ColumnSetting.vue';
 
 const emits = defineEmits(['change', 'selectChange']);
 const props = defineProps({
@@ -157,7 +154,6 @@ const props = defineProps({
         type: Object,
         default: () => ({ ascend: 'asc', descend: 'desc' }),
     },
-
     // 默认表格尺寸
     size: {
         type: String,
@@ -310,7 +306,7 @@ const changeOption = options => {
 };
 
 // 放大
-/* const fullscreenHandle = () => {
+const fullscreenHandle = () => {
     let element = document.getElementById('global-table');
     if (element.requestFullscreen) {
         element.requestFullscreen();
@@ -322,7 +318,7 @@ const changeOption = options => {
         // IE11
         element.msRequestFullscreen();
     }
-}; */
+};
 
 // 反选框
 const selectedData = reactive({
@@ -408,9 +404,10 @@ const selectedDataSource = computed(() => tableData.dataSource.filter(item => se
 
 defineExpose({ refresh, selectedDataSource, onSelectChange });
 </script>
+
 <style lang="less" scoped>
 .global-table {
-    padding: @globalSpace @space8 @space2;
+    padding: @space4 @space8 @space2;
     background-color: #fff;
     box-shadow: 0px 0px 15px rgba(148, 161, 196, 0.25);
 
@@ -419,6 +416,10 @@ defineExpose({ refresh, selectedDataSource, onSelectChange });
         justify-content: space-between;
         align-items: center;
         margin-bottom: @space4;
+
+        .left {
+            font-size: 16px;
+        }
 
         .right {
             .operation-icon {
