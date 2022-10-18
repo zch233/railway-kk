@@ -44,7 +44,7 @@ const handleLoad2 = () => {
         background: #edf5ff;
     }
 
-    .global-content + .global-content {
+    .gupo-card + .gupo-card {
         margin-top: @space4;
     }
 }

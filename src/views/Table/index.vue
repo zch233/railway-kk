@@ -1,91 +1,95 @@
 <template>
-    <div class="business">
-        <GlobalSearch
-            @search="firstLoad()"
-            :formData="searchData.formData"
-            @update:formData="Object.assign(searchData.formData, $event)"
-            :configItem="searchData.configItem"
-            ref="$globalSearch"
-        />
-        <GlobalTable ref="$globalTable" :columns="columns" bordered :listApi="getList" :rowSelection="false" tableTitle="B超列表">
+    <div class="table container">
+        <GlobalTable tableTitle="应用列表" :columns="columns" :listApi="getList">
             <template #operation>
-                <a-button type="primary" v-permission="'demo'" @click="visible = true">
+                <a-button type="primary">
                     <template #icon><PlusOutlined /></template>
                     新建
                 </a-button>
             </template>
-            <!-- 表格插槽 -->
             <template #bodyCell="{ record, column }">
+                <div v-if="column.key === '4'">
+                    <span class="status" v-if="record['4'] === 0">关闭</span>
+                    <span class="status primary" v-if="record['4'] === 1">运行中</span>
+                    <span class="status success" v-if="record['4'] === 2">已上线</span>
+                    <span class="status error" v-if="record['4'] === 3">异常</span>
+                </div>
                 <div v-if="column.key === 'operation'">
-                    <span class="global-master-color" @click="goPage('Table.Details', record.id)">查看详情</span>
+                    <div class="operate">
+                        <span class="pointer">配置</span>
+                        <span class="pointer error">删除</span>
+                    </div>
                 </div>
             </template>
         </GlobalTable>
-        <a-modal v-model:visible="visible" title="新建" @ok="handelOk" width="550px" :confirmLoading="confirmLoading" @cancel="cancelModal">
-            <GlobalForm
-                :rules="addForm.rules"
-                :configItem="addForm.configItem"
-                :formData="addForm.formData"
-                @update:formData="Object.assign(addForm.formData, $event)"
-                :labelCol="{ span: 4 }"
-                ref="$globalForm"
-            />
-        </a-modal>
     </div>
 </template>
 
-<script setup name="Table">
-/**  @description:列表模板  **/
-import GlobalSearch from '@src/components/GlobalSearch/index.vue';
-import GlobalTable from '@src/components/GlobalTable/index.vue';
+<script setup>
 import { PlusOutlined } from '@ant-design/icons-vue';
+import GlobalTable from '@src/components/GlobalTable/index.vue';
 
-import { columns, configData } from './index.js';
-
-const router = useRouter();
-/* 
-    data
-*/
-
-const searchData = configData().searchData;
-const $globalTable = ref(null);
-
-const addForm = configData().addForm;
-const $globalForm = ref('');
-const visible = ref(false);
-const confirmLoading = ref(false);
-
-/* 
-    methods
-*/
-const firstLoad = flag => {
-    $globalTable.value.refresh(flag);
-};
+const columns = [
+    {
+        title: '规则编号',
+        dataIndex: '1',
+        key: '1',
+    },
+    {
+        title: '描述',
+        dataIndex: '2',
+        key: '2',
+    },
+    {
+        title: '服务调用次数',
+        dataIndex: '3',
+        key: '3',
+    },
+    {
+        title: '状态',
+        dataIndex: '4',
+        key: '4',
+    },
+    {
+        title: '更新时间',
+        dataIndex: '5',
+        key: '5',
+    },
+    {
+        title: '操作',
+        dataIndex: 'operation',
+        key: 'operation',
+        props: {
+            filters: [
+                { text: 'Male', value: 'male' },
+                { text: 'Female', value: 'female' },
+            ],
+        },
+    },
+];
 
 const getList = async listData => {
-    console.log('listData :>> ', listData);
-    // return await orgList({
-    //     ...searchData.formData,
-    //     ...listData,
-    // });
-    return { data: { list: [{}] } };
-};
-
-const goPage = (name, id) => {
-    router.push({
-        name,
-        query: { id },
+    console.log('listData：', listData);
+    const { page, per_page } = listData;
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve({
+                data: {
+                    list: new Array(per_page).fill({}).map((item, i) => {
+                        return {
+                            1: 'TradeCode' + (i + (page - 1) * per_page + 1),
+                            2: '这是一段描述，关于这个应用的描述文字内容',
+                            3: '357 万',
+                            4: parseInt(Math.random() * 4),
+                            5: '2021-10-30  23:12:00',
+                        };
+                    }),
+                    paginate: { total: 99 },
+                },
+            });
+        }, 800);
     });
 };
-
-const handelOk = () => {};
-
-const cancelModal = () => {
-    $globalForm.value.resetFields();
-};
 </script>
-<style lang="less" scoped>
-.business {
-    padding: @space6;
-}
-</style>
+
+<style lang="less" scoped></style>
