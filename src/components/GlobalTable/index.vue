@@ -3,9 +3,9 @@
         <div class="top-area" v-if="isTopOperation">
             <div class="left">{{ tableTitle }}</div>
             <div class="right">
-                <slot name="operation"> </slot>
-                <GupoDivider type="vertical" />
-                <div class="operation-icon">
+                <slot name="operation"></slot>
+                <GupoDivider type="vertical" v-if="operation.length" />
+                <div class="operation-icon" v-if="operation.includes('size')">
                     <GupoDropdown :trigger="['click']" overlayClassName="density">
                         <GupoTooltip>
                             <template #title>密度</template>
@@ -20,20 +20,20 @@
                         </template>
                     </GupoDropdown>
                 </div>
-                <div class="operation-icon" @click="fullscreenHandle">
+                <div class="operation-icon" @click="fullscreenHandle" v-if="operation.includes('fullscreen')">
                     <GupoTooltip>
                         <template #title>放大</template>
                         <FullscreenExitOutlined v-if="isFullScreen" />
                         <FullscreenOutlined v-else />
                     </GupoTooltip>
                 </div>
-                <div class="operation-icon" @click="refresh(true)">
+                <div class="operation-icon" @click="refresh(true)" v-if="operation.includes('reload')">
                     <GupoTooltip>
                         <template #title>刷新</template>
                         <ReloadOutlined />
                     </GupoTooltip>
                 </div>
-                <div class="operation-icon">
+                <div class="operation-icon" v-if="operation.includes('setting')">
                     <ColumnSetting :options="columnSettingOptions" @change="changeOption" />
                 </div>
             </div>
@@ -122,6 +122,10 @@ const props = defineProps({
     tableTitle: {
         type: String,
         default: '应用列表',
+    },
+    operation: {
+        type: Array,
+        default: () => ['size', 'fullscreen', 'reload', 'setting'],
     },
     columns: {
         type: Array,
