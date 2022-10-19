@@ -9,7 +9,7 @@
                     @update:formData="Object.assign(addForm.formData, $event)"
                     :labelCol="{ span: 5 }"
                     ref="$globalForm"
-                    @submit="submit"
+                    @onFinish="onFinish"
                 />
                 <!-- 自定义按钮 -->
                 <a-button type="primary" @click="customSubmit">自定义提交</a-button>
@@ -35,7 +35,7 @@ const customSubmit = () => {
     });
 };
 
-const submit = () => {
+const onFinish = () => {
     console.log('addForm.formData :>> ', addForm.formData);
 };
 
