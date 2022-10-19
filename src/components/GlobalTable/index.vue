@@ -479,6 +479,12 @@ defineExpose({ refresh, selectedDataSource, onSelectChange });
     #global-table {
         background-color: #fff;
     }
+
+    :deep(.ant-table) {
+        .ant-table-thead > tr > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan]):before {
+            display: none;
+        }
+    }
 }
 </style>
 <style lang="less">
