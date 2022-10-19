@@ -1,5 +1,5 @@
 <template>
-    <div class="global-table">
+    <div class="global-table" ref="$globalTable">
         <div class="top-area" v-if="isTopOperation">
             <div class="left">{{ tableTitle }}</div>
             <div class="right">
@@ -23,7 +23,8 @@
                 <div class="operation-icon" @click="fullscreenHandle">
                     <GupoTooltip>
                         <template #title>放大</template>
-                        <FullscreenOutlined />
+                        <FullscreenExitOutlined v-if="isFullScreen" />
+                        <FullscreenOutlined v-else />
                     </GupoTooltip>
                 </div>
                 <div class="operation-icon" @click="refresh(true)">
@@ -105,9 +106,10 @@
 </template>
 
 <script name="GlobalTable" setup>
+import screenfull from 'screenfull';
 import { cloneDeep } from 'lodash';
 import { reactive, ref, computed, toRefs, onMounted } from 'vue';
-import { FullscreenOutlined, ReloadOutlined, ColumnHeightOutlined, InfoCircleFilled } from '@ant-design/icons-vue';
+import { FullscreenOutlined, FullscreenExitOutlined, ReloadOutlined, ColumnHeightOutlined, InfoCircleFilled } from '@ant-design/icons-vue';
 import { GupoTable, GupoDivider, GupoDropdown, GupoMenu, GupoTooltip } from '@src/components/UI/index.js';
 import ColumnSetting from './ColumnSetting.vue';
 
@@ -219,6 +221,8 @@ const props = defineProps({
     },
 });
 
+const $globalTable = ref();
+const isFullScreen = ref(false);
 const { pageNames, sortNames, sortOrder } = toRefs(props);
 
 const defaultMeta = {
@@ -229,6 +233,13 @@ let meta = reactive({ ...defaultMeta });
 
 onMounted(() => {
     getList();
+    if (!screenfull.isEnabled) return;
+    screenfull.on('change', fullscreenChange);
+});
+
+onBeforeUnmount(() => {
+    if (!screenfull.isEnabled) return;
+    screenfull.off('change', fullscreenChange);
 });
 
 const change = (data, filters, sorter) => {
@@ -307,17 +318,10 @@ const changeOption = options => {
 
 // 放大
 const fullscreenHandle = () => {
-    let element = document.getElementById('global-table');
-    if (element.requestFullscreen) {
-        element.requestFullscreen();
-    } else if (element.webkitRequestFullScreen) {
-        element.webkitRequestFullScreen();
-    } else if (element.mozRequestFullScreen) {
-        element.mozRequestFullScreen();
-    } else if (element.msRequestFullscreen) {
-        // IE11
-        element.msRequestFullscreen();
-    }
+    screenfull.toggle($globalTable.value);
+};
+const fullscreenChange = () => {
+    isFullScreen.value = screenfull.isFullscreen;
 };
 
 // 反选框
