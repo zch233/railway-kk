@@ -256,8 +256,8 @@ const change = (data, filters, sorter) => {
 };
 
 // 刷新 传参: 不恢复到默认页码;
-const refresh = flag => {
-    if (!flag) {
+const refresh = noRevertDefaultPage => {
+    if (!noRevertDefaultPage) {
         const { current_page } = defaultMeta;
         meta.current_page = current_page;
     } else if (tableData.dataSource.length === 1 && meta.current_page > 1) {
