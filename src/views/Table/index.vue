@@ -2,7 +2,7 @@
     <div class="table container">
         <GlobalTable tableTitle="应用列表" :columns="columns" :listApi="getList">
             <template #operation>
-                <a-button type="primary">
+                <a-button type="primary" @click="addVisible = true">
                     <template #icon><PlusOutlined /></template>
                     新建
                 </a-button>
@@ -22,12 +22,16 @@
                 </div>
             </template>
         </GlobalTable>
+        <Add v-model:modelVisible="addVisible" />
     </div>
 </template>
 
 <script setup>
 import { PlusOutlined } from '@ant-design/icons-vue';
 import GlobalTable from '@src/components/GlobalTable/index.vue';
+import Add from './component/Add.vue';
+
+const addVisible = ref(false);
 
 const columns = [
     {
