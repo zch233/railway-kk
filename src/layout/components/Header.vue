@@ -18,6 +18,7 @@ const storeUser = useStoreUser();
 const storeSetting = useStoreSetting();
 
 const showSider = computed(() => storeSetting.layoutType === 'top' && storeSetting.showMenu);
+const appTitle = import.meta.env.VITE_APP_TITLE;
 
 const logout = () => {
     Modal.confirm({
@@ -45,7 +46,7 @@ const handelLogoutApi = async () => {
                 <img :src="logo" alt="logo" />
                 <span>萧山</span>
             </div>
-            <div class="header-left__text">标准后台模板</div>
+            <div class="header-left__text">{{ appTitle }}</div>
         </div>
         <div class="header-right">
             <Sider mode="horizontal" v-if="showSider" />

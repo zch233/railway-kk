@@ -1,7 +1,7 @@
 <template>
     <div class="global-table" ref="$globalTable">
         <div class="top-area" v-if="isTopOperation">
-            <div class="left">{{ tableTitle }}</div>
+            <div class="left">{{ tableTitle ? tableTitle : route.meta.title ? route.meta.title + '列表' : '列表' }}</div>
             <div class="right">
                 <slot name="operation"></slot>
                 <GupoDivider type="vertical" v-if="operation.length" />
@@ -121,7 +121,7 @@ const props = defineProps({
     },
     tableTitle: {
         type: String,
-        default: '应用列表',
+        default: '',
     },
     operation: {
         type: Array,
@@ -224,7 +224,7 @@ const props = defineProps({
         default: false,
     },
 });
-
+const route = useRoute();
 const $globalTable = ref();
 const isFullScreen = ref(false);
 const { pageNames, sortNames, sortOrder } = toRefs(props);

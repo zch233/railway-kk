@@ -1,6 +1,6 @@
 <template>
     <div class="table container">
-        <GlobalTable tableTitle="应用列表" :columns="columns" :listApi="getList">
+        <GlobalTable :columns="columns" :listApi="getList">
             <template #operation>
                 <a-button type="primary" @click="addVisible = true">
                     <template #icon><PlusOutlined /></template>
