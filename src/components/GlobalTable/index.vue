@@ -65,6 +65,7 @@
                 :loading="tableData.loading"
                 v-bind="$attrs"
                 :rowKey="rowKey"
+                v-show="hasColumns"
             >
                 <template #headerCell="{ title, column }">
                     <slot name="headerCell" :column="column" :title="title"></slot>
@@ -316,7 +317,10 @@ const defineColumns = computed({
 
 const columnSettingOptions = computed(() => props.columns.map(item => item.title));
 
+const hasColumns = ref(true);
 const changeOption = options => {
+    hasColumns.value = !!options.length;
+    if (!options.length) return;
     defineColumns.value = props.columns.filter(v => options.includes(v.title));
 };
 
