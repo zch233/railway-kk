@@ -113,7 +113,7 @@ import { FullscreenOutlined, FullscreenExitOutlined, ReloadOutlined, ColumnHeigh
 import { GupoTable, GupoDivider, GupoDropdown, GupoMenu, GupoTooltip } from '@src/components/UI/index.js';
 import ColumnSetting from './ColumnSetting.vue';
 
-const emits = defineEmits(['change', 'selectChange']);
+const emits = defineEmits(['change', 'selectChange', 'cancelSelected']);
 const props = defineProps({
     isTopOperation: {
         type: Boolean,
@@ -252,7 +252,6 @@ const change = (data, filters, sorter) => {
     meta.per_page = pageSize;
     getList(sorter, filters);
     emits('change', { data, filters, sorter });
-    selectedData.rowKeys = [];
 };
 
 // 刷新 传参: 不恢复到默认页码;
@@ -265,7 +264,6 @@ const refresh = noRevertDefaultPage => {
         meta.current_page -= 1;
     }
     getList();
-    selectedData.rowKeys = [];
 };
 
 // 密度
@@ -348,6 +346,7 @@ const hasSelected = computed(() => selectedData.rowKeys.length > 0 && !props.hid
 const cancelSelected = () => {
     selectedData.rowKeys = [];
     emits('selectChange', []);
+    emits('cancelSelected');
 };
 
 const tableData = reactive({

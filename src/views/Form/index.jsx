@@ -39,7 +39,6 @@ export const useDataSync = params => {
                 trigger: 'change',
             },
         },
-        // 如果configItem需要响应式同formData加上reactive
         configItem: () => [
             {
                 key: 'name',
