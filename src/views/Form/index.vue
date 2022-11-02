@@ -4,12 +4,12 @@
             <div class="form-content">
                 <GlobalForm
                     :rules="addForm.rules"
-                    :configItem="addForm.configItem"
+                    :configItem="addForm.configItem()"
                     :formData="addForm.formData"
                     @update:formData="Object.assign(addForm.formData, $event)"
                     :labelCol="{ span: 5 }"
                     ref="$globalForm"
-                    @onFinish="onFinish"
+                    @finish="onFinish"
                 />
                 <!-- 自定义按钮 -->
                 <a-button type="primary" @click="customSubmit">自定义提交</a-button>
@@ -20,13 +20,24 @@
 
 <script setup>
 /**  @description:数据同步  **/
+import { message } from 'ant-design-vue';
 import { useDataSync } from './index.jsx';
 
-const addForm = useDataSync().addFrom;
+// 需要用到监听方法，传参选项传参params
+const params = reactive({
+    addressOption: [],
+    uploadChange: info => onChange(info),
+    uploadLoading: false,
+    imageUrl: '',
+});
+
+const addForm = useDataSync(params).addFrom;
+
 const $globalForm = ref('');
 
 onMounted(() => {
     getConfigDetails();
+    getOption();
 });
 
 const customSubmit = () => {
@@ -46,6 +57,37 @@ const getConfigDetails = () => {
 
     const { name } = data;
     Object.assign(addForm.formData, { name });
+};
+
+const getOption = () => {
+    setTimeout(() => {
+        params.addressOption = [
+            {
+                name: '安徽',
+                code: 'anhui',
+            },
+            {
+                name: '浙江',
+                code: 'zhejiang',
+            },
+        ];
+    }, 2000);
+};
+
+const onChange = info => {
+    if (info.file.status === 'uploading') {
+        params.uploadLoading = true;
+        return;
+    }
+    if (info.file.status === 'done') {
+        params.imageUrl = info.file.response.data.url;
+        params.uploadLoading = false;
+    }
+
+    if (info.file.status === 'error') {
+        params.uploadLoading = false;
+        message.error('upload error');
+    }
 };
 </script>
 <style lang="less" scoped>

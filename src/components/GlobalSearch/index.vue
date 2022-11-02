@@ -26,6 +26,17 @@
                                 </template>
                             </GupoSelect>
                         </template>
+                        <!-- 自定义组件 -->
+                        <template v-else-if="item.type == 'custom'">
+                            <div class="common-box">
+                                <component
+                                    :is="item.component"
+                                    :modelValue="props.formData[item.key]"
+                                    @update:modelValue="updateValue(item.key, $event)"
+                                    ref="$customForm"
+                                />
+                            </div>
+                        </template>
                     </GupoForm.Item>
                 </template>
                 <GupoForm.Item>

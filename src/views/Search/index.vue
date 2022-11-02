@@ -25,6 +25,7 @@
 import dayjs from 'dayjs';
 import { message } from 'ant-design-vue';
 import GlobalSearch from '@src/components/GlobalSearch/index.vue';
+import CustomComp from './components/CustomComp.vue';
 
 const searchData1 = reactive({
     formData: {
@@ -75,6 +76,11 @@ const searchData1 = reactive({
                     },
                 ],
             },
+        },
+        {
+            key: 'num',
+            type: 'custom',
+            component: markRaw(CustomComp),
         },
     ],
 });

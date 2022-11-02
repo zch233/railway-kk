@@ -82,6 +82,23 @@
                         :src="previewImage"
                     />
                 </template>
+                <template v-else-if="item.type == 'upload.dragger'">
+                    <Dragger :file-list="props.formData[item.key]" @update:file-list="updateValue(item.key, $event)" v-bind="item?.props || {}">
+                        <slot name="uploadContent">
+                            <template v-if="typeof item?.props?.uploadContent === 'function' || typeof item?.props?.uploadContent === 'string'">
+                                <template v-if="typeof item?.props?.uploadContent === 'function'">
+                                    <component :is="item?.props?.uploadContent()" />
+                                </template>
+                                <template v-else>
+                                    {{ item?.props?.uploadContent }}
+                                </template>
+                            </template>
+                            <template v-else>
+                                <component :is="item?.props?.uploadContent" />
+                            </template>
+                        </slot>
+                    </Dragger>
+                </template>
                 <!-- 自定义组件 -->
                 <template v-else-if="item.type == 'custom'">
                     <component
@@ -126,7 +143,7 @@
     slider,
     cascader, 新增了showSearch（搜索）属性，
     treeSelect,
-    upload
+    upload, upload.dragger
 
     
     props参数除了formItemProps和props.showSearch其余和antd文档相同
@@ -174,6 +191,7 @@ import {
 const { TextArea, Password } = GupoInput;
 const { RangePicker } = GupoDatePicker;
 const { TimeRangePicker } = GupoTimePicker;
+const { Dragger } = GupoUpload;
 
 const components = {
     input: GupoInput,
@@ -199,7 +217,7 @@ const props = defineProps({
         default: () => ({}),
     },
     configItem: {
-        type: Object,
+        type: Array,
         default: () => {
             return [];
         },

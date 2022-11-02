@@ -1,7 +1,8 @@
 import { QuestionCircleOutlined } from '@ant-design/icons-vue';
-import { Tooltip } from 'ant-design-vue';
+import { Tooltip, Button } from 'ant-design-vue';
+import { PlusOutlined, LoadingOutlined, InboxOutlined } from '@ant-design/icons-vue';
 
-export const useDataSync = () => {
+export const useDataSync = params => {
     const addFrom = {
         formData: reactive({
             name: '',
@@ -21,6 +22,10 @@ export const useDataSync = () => {
             cascader: [],
             select: undefined,
             switch: true,
+            uploadList: [],
+            uploadList2: [],
+            uploadList3: [],
+            dragger: [],
         }),
         rules: {
             name: {
@@ -34,8 +39,7 @@ export const useDataSync = () => {
                 trigger: 'change',
             },
         },
-        // 如果configItem需要响应式同formData加上reactive
-        configItem: [
+        configItem: () => [
             {
                 key: 'name',
                 label: '输入框',
@@ -132,16 +136,8 @@ export const useDataSync = () => {
                         label: 'name',
                         value: 'code',
                     },
-                    options: [
-                        {
-                            name: '安徽',
-                            code: 'anhui',
-                        },
-                        {
-                            name: '浙江',
-                            code: 'zhejiang',
-                        },
-                    ],
+
+                    options: params.addressOption,
                 },
             },
             {
@@ -265,12 +261,91 @@ export const useDataSync = () => {
                 label: '开关',
                 type: 'switch',
             },
+            {
+                key: 'uploadList',
+                label: '图片上传',
+                type: 'upload',
+                props: {
+                    // uploadContent: '上传', //方式一
+                    // uploadContent: () => <div>上传</div>, //方式二
+                    uploadContent: (
+                        <div>
+                            <span>自定义样式 </span>
+                            <Button>上传文件</Button>
+                        </div>
+                    ),
+                    name: 'file',
+                    action: 'http://10.123.234.66:20060/api/upload',
+                },
+            },
+            {
+                key: 'uploadList2',
+                label: '头像上传',
+                type: 'upload',
+                props: {
+                    uploadContent: () => {
+                        if (params.imageUrl) {
+                            return <img src={params.imageUrl} alt='avatar' style={{ height: '100%' }} />;
+                        } else {
+                            return (
+                                <div>
+                                    {params.uploadLoading ? <LoadingOutlined /> : <PlusOutlined />}
+                                    <div class='ant-upload-text'>上传图片</div>
+                                </div>
+                            );
+                        }
+                    },
+                    name: 'file',
+                    action: 'http://10.123.234.66:20060/api/upload',
+                    listType: 'picture-card',
+                    showUploadList: false,
+                    accept: 'image/*',
+                    maxCount: 1,
+                    onChange: info => params.uploadChange(info),
+                },
+            },
+            {
+                key: 'uploadList3',
+                label: '多图片上传',
+                type: 'upload',
+                props: {
+                    uploadContent: () => (
+                        <div>
+                            <PlusOutlined />
+                            <div class='ant-upload-text'>上传图片</div>
+                        </div>
+                    ),
+                    name: 'file',
+                    action: 'http://10.123.234.66:20060/api/upload',
+                    listType: 'picture-card',
+                    multiple: true,
+                },
+            },
+            {
+                key: 'dragger',
+                label: '文件拖拽上传',
+                type: 'upload.dragger',
+                props: {
+                    uploadContent: () => (
+                        <div>
+                            <p class='ant-upload-drag-icon'>
+                                <InboxOutlined />
+                            </p>
+                            <p class='ant-upload-text'>单击或将文件拖动到此区域以上传</p>
+                            <p class='ant-upload-hint'>文件提示</p>
+                        </div>
+                    ),
+                    name: 'file',
+                    action: 'http://10.123.234.66:20060/api/upload',
+                    multiple: true,
+                },
+            },
             // 配置按钮
             {
                 type: 'operation',
                 submitButton: {
                     text: '提交',
-                    // type: 'primary',
+                    type: 'primary',
                 },
                 cancelButton: {
                     text: '取消',

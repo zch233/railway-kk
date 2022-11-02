@@ -1,7 +1,7 @@
 <template>
     <div class="global-table" ref="$globalTable">
         <div class="top-area" v-if="isTopOperation">
-            <div class="left">{{ tableTitle }}</div>
+            <div class="left">{{ tableTitle ? tableTitle : route.meta.title ? route.meta.title + '列表' : '列表' }}</div>
             <div class="right">
                 <slot name="operation"></slot>
                 <GupoDivider type="vertical" v-if="operation.length" />
@@ -114,7 +114,7 @@ import { FullscreenOutlined, FullscreenExitOutlined, ReloadOutlined, ColumnHeigh
 import { GupoTable, GupoDivider, GupoDropdown, GupoMenu, GupoTooltip } from '@src/components/UI/index.js';
 import ColumnSetting from './ColumnSetting.vue';
 
-const emits = defineEmits(['change', 'selectChange']);
+const emits = defineEmits(['change', 'selectChange', 'cancelSelected']);
 const props = defineProps({
     isTopOperation: {
         type: Boolean,
@@ -122,7 +122,7 @@ const props = defineProps({
     },
     tableTitle: {
         type: String,
-        default: '应用列表',
+        default: '',
     },
     operation: {
         type: Array,
@@ -225,7 +225,7 @@ const props = defineProps({
         default: false,
     },
 });
-
+const route = useRoute();
 const $globalTable = ref();
 const isFullScreen = ref(false);
 const { pageNames, sortNames, sortOrder } = toRefs(props);
@@ -253,7 +253,6 @@ const change = (data, filters, sorter) => {
     meta.per_page = pageSize;
     getList(sorter, filters);
     emits('change', { data, filters, sorter });
-    selectedData.rowKeys = [];
 };
 
 // 刷新 传参: 不恢复到默认页码;
@@ -266,7 +265,6 @@ const refresh = noRevertDefaultPage => {
         meta.current_page -= 1;
     }
     getList();
-    selectedData.rowKeys = [];
 };
 
 // 密度
@@ -352,6 +350,7 @@ const hasSelected = computed(() => selectedData.rowKeys.length > 0 && !props.hid
 const cancelSelected = () => {
     selectedData.rowKeys = [];
     emits('selectChange', []);
+    emits('cancelSelected');
 };
 
 const tableData = reactive({
