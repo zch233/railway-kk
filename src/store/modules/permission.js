@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import router from '@src/router';
 import Layout from '@src/layout/index.vue';
 import { getRouterPermission } from '@src/api/auth/index';
-import mockData from '@src/utils/mock.json';
+import mockData from '@src/router/mock.json';
 // 驼峰转换
 const transferPascalCase2Kebabcase = str => str && str.replace(/\B([A-Z])/g, '-$1').toLowerCase();
 
