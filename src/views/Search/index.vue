@@ -27,12 +27,12 @@ import { message } from 'ant-design-vue';
 import GlobalSearch from '@src/components/GlobalSearch/index.vue';
 import CustomComp from './components/CustomComp.vue';
 
-const searchData1 = reactive({
-    formData: {
+const searchData1 = {
+    formData: reactive({
         name: undefined,
         algorithm: undefined,
         type: undefined,
-    },
+    }),
     configItem: [
         {
             key: 'name',
@@ -80,18 +80,18 @@ const searchData1 = reactive({
         {
             key: 'num',
             type: 'custom',
-            component: markRaw(CustomComp),
+            component: CustomComp,
         },
     ],
-});
-const searchData2 = reactive({
-    formData: {
+};
+const searchData2 = {
+    formData: reactive({
         name: undefined,
         algorithm: undefined,
         type: undefined,
         time: '',
         time_range: [],
-    },
+    }),
     configItem: [
         {
             key: 'name',
@@ -154,15 +154,15 @@ const searchData2 = reactive({
             },
         },
     ],
-});
-const searchData3 = reactive({
-    formData: {
+};
+const searchData3 = {
+    formData: reactive({
         name: undefined,
         algorithm: undefined,
         type: undefined,
         time: '',
         time_range: [],
-    },
+    }),
     configItem: [
         {
             key: 'name',
@@ -230,7 +230,7 @@ const searchData3 = reactive({
             },
         },
     ],
-});
+};
 </script>
 
 <style lang="less" scoped></style>
