@@ -8,4 +8,6 @@
 
 # 测试和打包目录
 /test/
-/dist/
+/dist/*
+/public/*
+public/*

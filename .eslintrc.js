@@ -6,7 +6,7 @@ module.exports = {
         es6: true,
     },
     parser: 'vue-eslint-parser',
-    extends: ['plugin:vue/vue3-essential', 'eslint:recommended', 'plugin:prettier/recommended', './.eslintrc-auto-import.json'],
+    extends: ['plugin:vue/vue3-essential', 'eslint:recommended', '@vue/prettier', './.eslintrc-auto-import.json'],
     parserOptions: {
         ecmaVersion: 2020,
         sourceType: 'module',
@@ -34,7 +34,7 @@ module.exports = {
             {
                 html: {
                     void: 'always',
-                    normal: 'never',
+                    normal: 'always',
                     component: 'always',
                 },
                 svg: 'always',
@@ -43,8 +43,10 @@ module.exports = {
         ],
     },
     globals: {
-        defineProps: true,
-        defineEmits: true,
-        defineExpose: true,
+        // script setup
+        defineProps: 'readonly',
+        defineEmits: 'readonly',
+        defineExpose: 'readonly',
+        withDefaults: 'readonly',
     },
 };

@@ -2,7 +2,7 @@ module.exports = {
     root: true,
     plugins: ['stylelint-order'],
     extends: ['stylelint-config-standard', 'stylelint-config-prettier'],
-    customSyntax: 'postcss-less',
+    customSyntax: 'postcss-html',
     rules: {
         'selector-pseudo-class-no-unknown': [
             true,
@@ -19,7 +19,7 @@ module.exports = {
         'at-rule-no-unknown': [
             true,
             {
-                ignoreAtRules: ['function', 'if', 'each', 'include', 'mixin'],
+                ignoreAtRules: ['tailwind', 'apply', 'variants', 'responsive', 'screen', 'function', 'if', 'each', 'include', 'mixin'],
             },
         ],
         'no-empty-source': null,
@@ -197,11 +197,11 @@ module.exports = {
         ],
         'custom-property-pattern': '^([a-z][a-zA-Z0-9]*)(-[a-zA-Z0-9]+)*$',
     },
-    ignoreFiles: ['**/*.js', '**/*.ts', '**/*.md'],
+    ignoreFiles: ['**/*.js', '**/*.jsx', '**/*.tsx', '**/*.ts', '**/*.json', '**/*.md'],
     overrides: [
         {
             files: ['*.vue', '**/*.vue', '*.html', '**/*.html'],
-            extends: ['stylelint-config-recommended-vue', 'stylelint-config-html'],
+            extends: ['stylelint-config-recommended', 'stylelint-config-html'],
             customSyntax: 'postcss-html',
             rules: {
                 'selector-pseudo-class-no-unknown': [

@@ -26,23 +26,16 @@ export default configEnv => {
             cssTarget: 'chrome80',
             // 关掉 brotliSize 可略微减少打包时间
             // brotliSize: false,
-            chunkSizeWarningLimit: 2000,
-            minify: 'terser',
-            terserOptions: {
-                compress: {
-                    keep_infinity: true,
-                    drop_debugger: VITE_DROP_DEBUG,
-                    drop_console: VITE_DROP_CONSOLE,
-                },
-            },
+            chunkSizeWarningLimit: 4000,
             rollupOptions: {
-                /**
-                 * 确保外部化处理那些你不想打包进库的依赖
-                 * https://rollupjs.org/guide/en/#big-list-of-options
-                 */
+                // 确保外部化处理那些你不想打包进库的依赖 https://rollupjs.org/guide/en/#big-list-of-options
                 external: [],
+                // 静态资源分类打包
                 output: {
                     manualChunks: {},
+                    chunkFileNames: 'js/[name]-[hash].js',
+                    entryFileNames: 'js/[name]-[hash].js',
+                    assetFileNames: '[ext]/[name]-[hash].[ext]',
                 },
             },
         },
@@ -58,6 +51,8 @@ export default configEnv => {
             https: VITE_LISTEN_HTTPS,
             port: VITE_PORT,
             host: true,
+            // 本地跨域代理 https://cn.vitejs.dev/config/server-options.html#server-proxy
+            proxy: {},
         },
     });
 };

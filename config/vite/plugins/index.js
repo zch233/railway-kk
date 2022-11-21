@@ -5,14 +5,14 @@ import { configSvgIconsPlugin } from './vitePluginSvgIcons';
 import { configPluginLegacy } from './vitePluginLegacy';
 import { configPluginVisualizer } from './rollupPluginVisualizer';
 import { configPluginCompression } from './vitePluginCompression';
-import { configPluginWindicss } from './vitePluginWindicss';
 import { configPluginCertificate } from './vitePluginMkcert';
 import { configPluginUnpluginImport } from './unpluginAutoImport';
 import { configPluginVueSetupExtend } from './vitePluginVueSetupExtend';
 
 export const createVitePlugins = ({ command }, viteEnv) => {
     const isBuild = command === 'build';
-    const { VITE_WINDICSS, VITE_SEE_VISUALIZER, VITE_LEGACY, VITE_LISTEN_HTTPS, VITE_UNPLUGINS_IMPORTS } = viteEnv;
+    const lifecycle = process.env.npm_lifecycle_event;
+    const { VITE_LEGACY, VITE_LISTEN_HTTPS, VITE_UNPLUGINS_IMPORTS } = viteEnv;
     // https://github.com/vitejs/awesome-vite#plugins
     // vite-plugin-pages // 自动根据目录生成路由
     const plugins = [
@@ -27,10 +27,9 @@ export const createVitePlugins = ({ command }, viteEnv) => {
 
     if (VITE_LISTEN_HTTPS) plugins.push(configPluginCertificate());
 
-    if (VITE_WINDICSS) plugins.push(configPluginWindicss());
-
-    if (VITE_SEE_VISUALIZER) plugins.push(configPluginVisualizer());
-
+    if (lifecycle === 'report') {
+        plugins.push(configPluginVisualizer());
+    }
     if (isBuild) {
         plugins.push(configPluginCompression(viteEnv));
         if (VITE_LEGACY) plugins.push(configPluginLegacy());
