@@ -1,6 +1,6 @@
 module.exports = {
     root: true,
-    plugins: ['stylelint-order'],
+    plugins: ['stylelint-order', 'stylelint-less'],
     extends: ['stylelint-config-standard', 'stylelint-config-prettier'],
     customSyntax: 'postcss-html',
     rules: {
@@ -217,6 +217,10 @@ module.exports = {
                     },
                 ],
             },
+        },
+        {
+            files: ['*.less', '**/*.less'],
+            customSyntax: 'postcss-less',
         },
     ],
 };
