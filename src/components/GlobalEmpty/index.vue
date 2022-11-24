@@ -1,6 +1,6 @@
 <template>
     <div class="global-empty">
-        <a-empty :image="image" :image-style="imgageStyle" :description="description" />
+        <a-empty :image="image" :image-style="imageStyle" :description="description" />
     </div>
 </template>
 
@@ -17,7 +17,7 @@ defineProps({
         type: String,
         default: empty,
     },
-    imgageStyle: {
+    imageStyle: {
         type: Object,
         default: () => ({}),
     },
