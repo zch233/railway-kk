@@ -6,12 +6,12 @@
             height: typeof height === 'string' ? height : height + 'px',
         }"
     >
-        <div ref="$eChart" :style="{ width: '100%', height: '100%' }"></div>
+        <div ref="$eChart" :style="{ width: '100%', height: '100%' }" />
     </div>
 </template>
 
 <script setup name="Chart">
-import echarts from '@src/plugins/echarts';
+import echarts from '@src/utils/echarts';
 import { unref } from 'vue';
 import { merge } from 'lodash';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
