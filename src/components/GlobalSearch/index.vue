@@ -12,7 +12,7 @@
                             v-bind="generateProps(item) || {}"
                         />
                         <!-- select -->
-                        <template v-if="item.type == 'select'">
+                        <template v-if="item.type === 'select'">
                             <GupoSelect
                                 :value="props.formData[item.key]"
                                 @update:value="updateValue(item.key, $event)"
@@ -27,7 +27,7 @@
                             </GupoSelect>
                         </template>
                         <!-- 自定义组件 -->
-                        <template v-else-if="item.type == 'custom'">
+                        <template v-else-if="item.type === 'custom'">
                             <div class="common-box">
                                 <component
                                     :is="item.component"
@@ -40,7 +40,7 @@
                     </GupoForm.Item>
                 </template>
                 <GupoForm.Item>
-                    <div class="empty-box"></div>
+                    <div class="empty-box" />
                 </GupoForm.Item>
             </div>
         </div>
@@ -58,8 +58,8 @@
 <script name="GlobalSearch" setup>
 import { GupoButton, GupoInput, GupoSelect, GupoDatePicker, GupoTimePicker, GupoCascader, GupoTreeSelect, GupoForm } from '@src/components/UI/index.js';
 import { DownOutlined } from '@ant-design/icons-vue';
-import { cloneDeep } from 'lodash';
-import { computed, nextTick, onMounted, ref, watch } from 'vue';
+import { cloneDeep } from 'lodash-unified';
+import { computed, nextTick, onMounted, onBeforeUnmount, ref, watch } from 'vue';
 
 const { RangePicker } = GupoDatePicker;
 const { TimeRangePicker } = GupoTimePicker;
@@ -76,20 +76,20 @@ const components = {
 
 // 定义单独配置
 const generateProps = item => {
-    let formatLable = item.label ? item.label : '';
+    let formatLabel = item.label ? item.label : '';
     const componentMap = {
         input: {
-            placeholder: '请输入' + formatLable,
+            placeholder: '请输入' + formatLabel,
         },
         treeSelect: {
-            placeholder: '请选择' + formatLable,
+            placeholder: '请选择' + formatLabel,
         },
         select: {
-            placeholder: '请选择' + formatLable,
+            placeholder: '请选择' + formatLabel,
             filterOption: selectFilterOption,
         },
         cascader: {
-            placeholder: '请选择' + formatLable,
+            placeholder: '请选择' + formatLabel,
             showSearch: item?.props?.showSearch ? cascaderFilterOption : false,
         },
     };
@@ -227,7 +227,7 @@ defineExpose({ insideReset });
     margin-bottom: @space5;
     overflow: hidden;
     background-color: #fff;
-    box-shadow: 0px 0px 15px rgba(148, 161, 196, 0.25);
+    box-shadow: 0 0 15px rgba(148, 161, 196, 0.25);
     justify-content: space-between;
 
     .parent-search {

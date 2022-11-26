@@ -18,8 +18,12 @@ import GupoTopTabs from '@src/components/GupoTopTabs/index.vue';
 const tabsActive1 = ref('layout');
 const tabsList1 = ref([
     {
-        label: '加入到 Layout 中的',
+        label: '加入到 Layout 中的1',
         name: 'layout',
+    },
+    {
+        label: '加入到 Layout 中的2',
+        name: 'layout1',
     },
 ]);
 

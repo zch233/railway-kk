@@ -1,7 +1,7 @@
 <template>
     <div class="footer">
         <div>
-            <img src="../../assets/images/footer_logo.png" />
+            <img src="../../assets/images/footer_logo.png" alt="logo" />
             <span>健康大脑 · 萧山</span>
         </div>
         <div>
@@ -18,8 +18,7 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    padding: @space4 0 0;
-    padding-bottom: 10px;
+    padding: @space4 0 10px;
     font-size: var(--font-size-tips);
     line-height: 18px;
     color: var(--font-color-2);

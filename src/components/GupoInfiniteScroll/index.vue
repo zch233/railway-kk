@@ -8,14 +8,14 @@
         ref="infiniteScrollRef"
     >
         <div class="gupo-infinite-scroll__content">
-            <slot></slot>
+            <slot />
             <!-- loading -->
             <div class="gupo-infinite-scroll__loading" v-if="showLoading && loading">
                 <div class="default-loading" v-if="!slotLoading">加载中<LoadingOutlined /></div>
-                <slot name="loading" v-else></slot>
+                <slot name="loading" v-else />
             </div>
             <!-- append -->
-            <slot name="append"></slot>
+            <slot name="append" />
         </div>
     </div>
 </template>
@@ -30,6 +30,7 @@
  * @param { Function } load        触发方法
  * @param { Boolean }  showLoading 是否展示 loading
  */
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { LoadingOutlined } from '@ant-design/icons-vue';
 
 const props = defineProps({
@@ -70,9 +71,8 @@ const scrollListener = async e => {
         loading.value = true;
         // 设置 loading 可见
         if (props.distance === 0 && props.showLoading) {
-            nextTick(() => {
-                e.target.scrollTop += e.target.querySelector('.gupo-infinite-scroll__loading').clientHeight;
-            });
+            await nextTick();
+            e.target.scrollTop += e.target.querySelector('.gupo-infinite-scroll__loading').clientHeight;
         }
         await props.load();
         loading.value = false;

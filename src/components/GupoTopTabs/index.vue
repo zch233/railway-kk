@@ -1,22 +1,3 @@
-<template>
-    <transition :name="storeSetting.animateType" mode="out-in">
-        <div class="gupo-top-tabs" v-show="display" ref="topTabsRef">
-            <GupoTabs
-                v-model:activeKey="activeKey"
-                v-bind="{
-                    ...$attrs,
-                }"
-            >
-                <GupoTabPane v-for="{ label, name } in options" :key="name" :tab="label" :forceRender="forceRender">
-                    <slot :name="name"></slot>
-                </GupoTabPane>
-            </GupoTabs>
-            <!-- 默认插槽 -->
-            <slot name="defalut"></slot>
-        </div>
-    </transition>
-</template>
-
 <script name="GupoTopTabs" setup>
 /**
  * GupoTopTabs
@@ -26,10 +7,10 @@
  * @param { Boolean } appendToLayout 是否放入 layout
  * @param { Boolean } forceRender    被隐藏时是否渲染 DOM 结构
  */
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { GupoTabs } from '@src/components/UI/index.js';
 import { useStoreSetting } from '@src/store/modules/setting';
-const GupoTabPane = GupoTabs.TabPane;
-const route = useRoute();
+
 const storeSetting = useStoreSetting();
 
 const display = ref(false);
@@ -77,14 +58,30 @@ onMounted(() => {
     document.querySelector('.content-top').appendChild(topTabsRef.value);
 });
 
-watch(
-    () => route.path,
-    () => {
-        if (!props.appendToLayout) return;
-        topTabsRef.value.parentNode.removeChild(topTabsRef.value);
-    }
-);
+onBeforeUnmount(() => {
+    if (!props.appendToLayout) return;
+    topTabsRef.value.parentNode.removeChild(topTabsRef.value);
+});
 </script>
+
+<template>
+    <transition :name="storeSetting.animateType" mode="out-in">
+        <div class="gupo-top-tabs" v-show="display" ref="topTabsRef">
+            <GupoTabs
+                v-model:activeKey="activeKey"
+                v-bind="{
+                    ...$attrs,
+                }"
+            >
+                <GupoTabs.TabPane v-for="{ label, name } in options" :key="name" :tab="label" :forceRender="forceRender">
+                    <slot :name="name" />
+                </GupoTabs.TabPane>
+            </GupoTabs>
+            <!-- 默认插槽 -->
+            <slot name="defalut" />
+        </div>
+    </transition>
+</template>
 
 <style lang="less" scoped>
 .gupo-top-tabs {

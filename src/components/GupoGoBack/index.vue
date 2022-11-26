@@ -5,7 +5,7 @@
                 <arrow-left-outlined />
                 <span>{{ title || route.meta.title }}</span>
             </div>
-            <slot></slot>
+            <slot />
         </div>
     </transition>
 </template>
@@ -17,9 +17,11 @@
  * @param { Boolean } showGoBack     是否展示返回按钮
  * @param { Boolean } appendToLayout 是否放入 layout
  */
+import { ref, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ArrowLeftOutlined } from '@ant-design/icons-vue';
 import { useStoreSetting } from '@src/store/modules/setting';
+
 const route = useRoute();
 const router = useRouter();
 const storeSetting = useStoreSetting();
@@ -53,7 +55,7 @@ const handleGoBack = () => {
 onMounted(() => {
     display.value = true;
     if (!props.appendToLayout) return;
-    document.querySelector('.content-top').appendChild(goBackRef.value);
+    document.querySelector('#contentTop').appendChild(goBackRef.value);
 });
 
 watch(

@@ -18,9 +18,11 @@
 <script setup>
 import { reactive, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { get } from 'lodash';
+import { get } from 'lodash-unified';
 import { useStorePermission } from '@src/store/modules/permission';
+
 const route = useRoute();
+const storePermission = useStorePermission();
 
 const levelList = reactive({
     data: [],
@@ -30,7 +32,6 @@ watch(route, () => {
     if (route.path.startsWith('/redirect/')) return;
     getBreadcrumb();
 });
-let storePermission = useStorePermission();
 
 const getBreadcrumb = () => {
     const { meta, path } = route;

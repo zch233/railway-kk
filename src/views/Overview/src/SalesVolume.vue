@@ -37,7 +37,7 @@ const rangeList = ref([
     },
     {
         label: '全年',
-        value: 3,
+        value: 4,
     },
 ]);
 

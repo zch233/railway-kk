@@ -17,7 +17,7 @@
                 v-for="(item, index) in configItem"
                 :key="index"
                 :name="item.key"
-                :wrapper-col="item.type == 'operation' || !item.label ? fomaterOperationWrapperCol : { ...wrapperCol }"
+                :wrapper-col="item.type === 'operation' || !item.label ? fomaterOperationWrapperCol : { ...wrapperCol }"
                 :label="item?.label"
                 v-bind="item?.formItemProps"
             >
@@ -32,7 +32,7 @@
                     />
                 </template>
                 <!-- select -->
-                <template v-else-if="item.type == 'select'">
+                <template v-else-if="item.type === 'select'">
                     <GupoSelect
                         :value="props.formData[item.key]"
                         @update:value="updateValue(item.key, $event)"
@@ -47,10 +47,10 @@
                     </GupoSelect>
                 </template>
                 <!-- switch -->
-                <template v-else-if="item.type == 'switch'">
+                <template v-else-if="item.type === 'switch'">
                     <GupoSwitch :checked="props.formData[item.key]" @update:checked="updateValue(item.key, $event)" v-bind="item?.props || {}" />
                 </template>
-                <template v-else-if="item.type == 'upload'">
+                <template v-else-if="item.type === 'upload'">
                     <GupoUpload
                         :file-list="props.formData[item.key]"
                         @update:file-list="updateValue(item.key, $event)"
@@ -82,7 +82,7 @@
                         :src="previewImage"
                     />
                 </template>
-                <template v-else-if="item.type == 'upload.dragger'">
+                <template v-else-if="item.type === 'upload.dragger'">
                     <Dragger :file-list="props.formData[item.key]" @update:file-list="updateValue(item.key, $event)" v-bind="item?.props || {}">
                         <slot name="uploadContent">
                             <template v-if="typeof item?.props?.uploadContent === 'function' || typeof item?.props?.uploadContent === 'string'">
@@ -100,7 +100,7 @@
                     </Dragger>
                 </template>
                 <!-- 自定义组件 -->
-                <template v-else-if="item.type == 'custom'">
+                <template v-else-if="item.type === 'custom'">
                     <component
                         :is="item.component"
                         :modelValue="props.formData[item.key]"
@@ -109,20 +109,16 @@
                     />
                 </template>
                 <!-- 提交按钮 -->
-                <template v-else-if="item.type == 'operation'">
-                    <GupoButton
-                        v-if="item.submitButton"
-                        :type="item.submitButton.type ? item.submitButton.type : 'primary'"
-                        html-type="submit"
-                        :loading="loading"
-                        >{{ item.submitButton.text ? item.submitButton.text : '提交' }}</GupoButton
-                    >
-                    <GupoButton v-if="item.cancelButton" :type="item.cancelButton.type ? item.cancelButton.type : ''" @click="cancel">{{
-                        item.cancelButton.text ? item.cancelButton.text : '取消'
+                <template v-else-if="item.type === 'operation'">
+                    <GupoButton v-if="item.submitButton" :type="item.submitButton.type || 'primary'" html-type="submit" :loading="loading">{{
+                        item.submitButton.text || '提交'
+                    }}</GupoButton>
+                    <GupoButton v-if="item.cancelButton" :type="item.cancelButton.type || ''" @click="cancel">{{
+                        item.cancelButton.text || '取消'
                     }}</GupoButton>
                 </template>
             </GupoForm.Item>
-            <slot name="footer" :data="props.formData"></slot>
+            <slot name="footer" :data="props.formData" />
         </GupoForm>
     </div>
 </template>
@@ -169,6 +165,7 @@ tips：
     2、当select和treeSelect自定义后缀失效的时候可能是开了多选或者checkable导致。
     3、触发自己的方法(例如select的change事件),在props传on+事件名(onChange)
  * **/
+import { ref, computed } from 'vue';
 import {
     GupoButton,
     GupoForm,

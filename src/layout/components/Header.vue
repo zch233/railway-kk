@@ -11,7 +11,7 @@ import { useStoreSetting } from '@src/store/modules/setting';
 import defaultAvatar from '@src/assets/images/avatar.png';
 import logo from '@src/assets/logo.png';
 import { isDdOrZzd } from '@src/utils';
-import { logoutApi } from '@src/api/auth/index';
+import { logoutApi } from '@src/api/auth';
 import { message } from 'ant-design-vue';
 
 const storeUser = useStoreUser();

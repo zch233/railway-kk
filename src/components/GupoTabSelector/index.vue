@@ -1,11 +1,3 @@
-<template>
-    <div class="gupo-tab-selector">
-        <span v-for="(item, i) in props.options" :key="i" :class="modelValue === item.value ? 'active' : ''" @click="value = item.value">
-            {{ item.label }}
-        </span>
-    </div>
-</template>
-
 <script setup name="GupoTabSelector">
 import { ref, watch } from 'vue';
 
@@ -23,30 +15,34 @@ const emit = defineEmits(['update:modelValue']);
 /**
  * data
  */
-const value = ref('');
+const current = ref('');
 
 /**
  * watch
  */
 watch(
     () => props.modelValue,
-    val => {
-        value.value = val;
+    () => {
+        current.value = props.modelValue;
     },
     {
         immediate: true,
     }
 );
-watch(
-    () => value.value,
-    val => {
-        emit('update:modelValue', val);
-    },
-    {
-        immediate: true,
-    }
-);
+
+const handleClick = value => {
+    current.value = value;
+    emit('update:modelValue', value);
+};
 </script>
+
+<template>
+    <div class="gupo-tab-selector">
+        <span v-for="(item, i) in props.options" :key="i" :class="{ active: current === item.value }" @click="handleClick(item.value)">
+            {{ item.label }}
+        </span>
+    </div>
+</template>
 
 <style lang="less" scoped>
 .gupo-tab-selector {

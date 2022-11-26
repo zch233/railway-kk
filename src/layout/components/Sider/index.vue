@@ -1,7 +1,7 @@
 <script setup>
 import Menu from './Menu';
 import SwitchOrg from './SwitchOrg.vue';
-import { uniq } from 'lodash';
+import { uniq } from 'lodash-unified';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 import { useStorePermission } from '@src/store/modules/permission';
 import { useStoreSetting } from '@src/store/modules/setting';

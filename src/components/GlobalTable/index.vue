@@ -1,9 +1,9 @@
 <template>
     <div class="global-table" ref="$globalTable">
         <div class="top-area" v-if="isTopOperation">
-            <div class="left">{{ tableTitle ? tableTitle : route.meta.title ? route.meta.title + '列表' : '列表' }}</div>
+            <div class="left">{{ tableTitle || `${route.meta.title || ''}列表` }}</div>
             <div class="right">
-                <slot name="operation"></slot>
+                <slot name="operation" />
                 <GupoDivider type="vertical" v-if="operation.length" />
                 <div class="operation-icon" v-if="operation.includes('size')">
                     <GupoDropdown :trigger="['click']" overlayClassName="density">
@@ -45,12 +45,12 @@
                 <span class="selected-num">
                     已选择 <span class="global-master-color">{{ selectedData.rowKeys.length }}</span> 项
                 </span>
-                <span class="tip"> <slot name="selected-tip"></slot> </span>
+                <span class="tip"> <slot name="selected-tip" /> </span>
             </div>
             <div class="selected-right">
                 <span v-if="!hiddenCancelSelected" class="global-master-color" @click="cancelSelected">取消选择</span>
                 <!-- cancelSelected: 取消选择； item：选中行-->
-                <slot name="selected-operation" :cancelSelected="cancelSelected" :item="selectedDataSource"></slot>
+                <slot name="selected-operation" :cancelSelected="cancelSelected" :item="selectedDataSource" />
             </div>
         </div>
         <!-- 表格区域-->
@@ -68,25 +68,25 @@
                 v-show="hasColumns"
             >
                 <template #headerCell="{ title, column }">
-                    <slot name="headerCell" :column="column" :title="title"></slot>
+                    <slot name="headerCell" :column="column" :title="title" />
                 </template>
                 <template #bodyCell="{ text, record, index, column }">
-                    <slot name="bodyCell" :column="column" :text="text" :index="index" :record="record"></slot>
+                    <slot name="bodyCell" :column="column" :text="text" :index="index" :record="record" />
                 </template>
                 <template #title v-if="title">
-                    <slot name="title"></slot>
+                    <slot name="title" />
                 </template>
                 <template #footer v-if="footer">
-                    <slot name="footer"></slot>
+                    <slot name="footer" />
                 </template>
                 <template #summary v-if="summary">
-                    <slot name="summary"></slot>
+                    <slot name="summary" />
                 </template>
                 <template #emptyText v-if="emptyText">
-                    <slot name="emptyText"></slot>
+                    <slot name="emptyText" />
                 </template>
                 <template #expandedRowRender v-if="expandedRowRender">
-                    <slot name="expandedRowRender"></slot>
+                    <slot name="expandedRowRender" />
                 </template>
                 <template #customFilterDropdown="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }" v-if="customFilterDropdown">
                     <slot
@@ -96,10 +96,10 @@
                         :confirm="confirm"
                         :clearFilters="clearFilters"
                         :column="column"
-                    ></slot>
+                    />
                 </template>
                 <template #customFilterIcon="{ filtered, column }" v-if="customFilterIcon">
-                    <slot name="customFilterIcon" :filtered="filtered" :column="column"></slot>
+                    <slot name="customFilterIcon" :filtered="filtered" :column="column" />
                 </template>
             </GupoTable>
         </div>
@@ -108,7 +108,7 @@
 
 <script name="GlobalTable" setup>
 import screenfull from 'screenfull';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-unified';
 import { reactive, ref, computed, toRefs, onMounted } from 'vue';
 import { FullscreenOutlined, FullscreenExitOutlined, ReloadOutlined, ColumnHeightOutlined, InfoCircleFilled } from '@ant-design/icons-vue';
 import { GupoTable, GupoDivider, GupoDropdown, GupoMenu, GupoTooltip } from '@src/components/UI/index.js';

@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
+
 const handleReload = () => {
     router.push({
         path: '/redirect' + unref(route).path,

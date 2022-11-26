@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { useLocalStorage } from '@src/utils/storage';
 import { ConfigProvider } from 'ant-design-vue';
-import { camelCase } from 'lodash';
+import { camelCase } from 'lodash-unified';
 import insertCss from '@src/utils/insert-css';
 
 const initTheme = {

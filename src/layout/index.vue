@@ -23,7 +23,7 @@ const include = computed(() => {
             <Sider v-if="storeSetting.layoutType === 'left' && storeSetting.showMenu" />
             <ALayout>
                 <Breadcrumb v-if="storeSetting.shwoBreadcrumb" />
-                <div class="content-top"></div>
+                <div class="content-top" id="contentTop" />
                 <ALayoutContent class="content">
                     <div class="main">
                         <RouterView>

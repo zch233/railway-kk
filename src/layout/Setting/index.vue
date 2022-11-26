@@ -1,4 +1,5 @@
 <script setup name="Setting">
+import { ref, computed } from 'vue';
 import { SettingOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons-vue';
 import { useStoreSetting } from '@src/store/modules/setting';
 import { animates, themes } from './libs/index';
@@ -26,7 +27,7 @@ const changeState = (state, value) => {
             <div class="setting-item__title">主题色</div>
             <div class="setting-item__content">
                 <div class="theme-color">
-                    <span :style="{ backgroundColor: colorMaster }" @click="colorRef.click()"></span>
+                    <span :style="{ backgroundColor: colorMaster }" @click="colorRef.click()" />
                     <input type="color" ref="colorRef" :value="storeSetting" @change="e => storeSetting.setTheme({ '--color-master': e.target.value })" />
                     <AInput :value="colorMaster" @change="e => storeSetting.setTheme({ '--color-master': e.target.value })" placeholder="请输入颜色值" />
                 </div>

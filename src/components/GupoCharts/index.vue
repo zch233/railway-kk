@@ -13,7 +13,7 @@
 <script setup name="Chart">
 import echarts from '@src/utils/echarts';
 import { unref } from 'vue';
-import { merge } from 'lodash';
+import { merge } from 'lodash-unified';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 const props = defineProps({
