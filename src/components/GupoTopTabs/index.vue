@@ -78,7 +78,7 @@ onBeforeUnmount(() => {
                 </GupoTabs.TabPane>
             </GupoTabs>
             <!-- 默认插槽 -->
-            <slot name="defalut" />
+            <slot />
         </div>
     </transition>
 </template>
