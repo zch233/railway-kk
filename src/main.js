@@ -6,8 +6,10 @@ import '@src/router/routerGuard';
 import store from '@src/store';
 import 'ant-design-vue/dist/antd.variable.min.css';
 import '@src/styles/global.less';
-import { permissionDirective } from '@src/utils/directives.js';
+import { setupDirectives } from '@src/directives';
 
-export const app = createApp(App);
-permissionDirective(app);
+const app = createApp(App);
+
+setupDirectives(app);
+
 app.use(router).use(store).mount('#app');

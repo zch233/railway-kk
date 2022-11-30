@@ -1,6 +1,6 @@
 import { useStorePermission } from '@src/store/modules/permission.js';
 
-export const permissionDirective = app => {
+export const permission = app => {
     app.directive('permission', {
         mounted(el, binding) {
             const storePermission = useStorePermission();
