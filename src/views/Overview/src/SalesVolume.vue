@@ -3,10 +3,10 @@
         <GupoTabSelector v-model="rangeValue" :options="rangeList" />
         <a-tabs v-model:activeKey="activeKey">
             <a-tab-pane :key="1" tab="销售额">
-                <GupoCharts v-bind="salesChartOption" :key="activeKey" />
+                <GupoCharts v-bind="salesChartOption" v-if="activeKey === 1" />
             </a-tab-pane>
             <a-tab-pane :key="2" tab="访问量">
-                <GupoCharts v-bind="salesChartOption" :key="activeKey" />
+                <GupoCharts v-bind="salesChartOption" v-if="activeKey === 2" />
             </a-tab-pane>
         </a-tabs>
     </div>

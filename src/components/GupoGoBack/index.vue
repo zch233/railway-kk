@@ -1,15 +1,3 @@
-<template>
-    <transition :name="storeSetting.animateType" mode="out-in">
-        <div class="gupo-go-back" v-show="display" ref="goBackRef">
-            <div class="gupo-go-back__item" @click="handleGoBack" v-if="showGoBack">
-                <arrow-left-outlined />
-                <span>{{ title || route.meta.title }}</span>
-            </div>
-            <slot />
-        </div>
-    </transition>
-</template>
-
 <script name="GupoGoBack" setup>
 /**
  * GupoGoBack
@@ -27,6 +15,7 @@ const router = useRouter();
 const storeSetting = useStoreSetting();
 
 const display = ref(false);
+const goBackRef = ref();
 
 const props = defineProps({
     title: {
@@ -46,7 +35,6 @@ const props = defineProps({
     },
 });
 
-const goBackRef = ref();
 const handleGoBack = () => {
     if (props.goBack) return props.goBack();
     router.go(-1);
@@ -54,18 +42,32 @@ const handleGoBack = () => {
 
 onMounted(() => {
     display.value = true;
-    if (!props.appendToLayout) return;
-    document.querySelector('#contentTop').appendChild(goBackRef.value);
+    if (props.appendToLayout) {
+        document.querySelector('#contentTop').appendChild(goBackRef.value);
+    }
 });
 
 watch(
     () => route.path,
     () => {
-        if (!props.appendToLayout) return;
-        goBackRef.value.parentNode.removeChild(goBackRef.value);
+        if (props.appendToLayout) {
+            goBackRef.value.parentNode.removeChild(goBackRef.value);
+        }
     }
 );
 </script>
+
+<template>
+    <Transition :name="storeSetting.animateType" mode="out-in">
+        <div class="gupo-go-back" v-show="display" ref="goBackRef">
+            <div v-if="showGoBack" class="gupo-go-back__item" @click="handleGoBack">
+                <ArrowLeftOutlined />
+                <span>{{ title || route.meta.title }}</span>
+            </div>
+            <slot />
+        </div>
+    </Transition>
+</template>
 
 <style lang="less" scoped>
 .gupo-go-back {
@@ -76,14 +78,14 @@ watch(
     &__item {
         display: inline-block;
         height: 60px;
-        padding: 0 @space6;
+        padding: 0 calc(var(--base-space) * 6);
         font-size: 18px;
         line-height: 60px;
         color: var(--font-color-1);
         cursor: pointer;
 
         span:last-child {
-            margin-left: @space2;
+            margin-left: calc(var(--base-space) * 2);
         }
     }
 }

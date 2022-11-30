@@ -1,7 +1,11 @@
+<script setup>
+import FooterLogo from '@src/assets/images/footer_logo.png';
+</script>
+
 <template>
     <div class="footer">
         <div>
-            <img src="../../assets/images/footer_logo.png" alt="logo" />
+            <img :src="FooterLogo" alt="logo" />
             <span>健康大脑 · 萧山</span>
         </div>
         <div>
@@ -10,23 +14,21 @@
     </div>
 </template>
 
-<script setup></script>
-
 <style lang="less" scoped>
 .footer {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    padding: @space4 0 10px;
+    padding: var(--base-space) 0 10px;
     font-size: var(--font-size-tips);
-    line-height: 18px;
+    line-height: 1.5;
     color: var(--font-color-2);
     text-align: center;
 
     img {
         width: 15px;
-        margin-right: 4px;
+        margin-right: var(--base-space);
     }
 
     div:first-child {

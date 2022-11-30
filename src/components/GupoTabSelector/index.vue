@@ -12,14 +12,8 @@ const props = defineProps({
 });
 const emit = defineEmits(['update:modelValue']);
 
-/**
- * data
- */
 const current = ref('');
 
-/**
- * watch
- */
 watch(
     () => props.modelValue,
     () => {
@@ -47,13 +41,13 @@ const handleClick = value => {
 <style lang="less" scoped>
 .gupo-tab-selector {
     display: flex;
-    margin-right: 12px;
+    margin-right: calc(var(--base-space) * 3);
 
     span {
         display: inline-block;
-        padding: 0 8px;
-        font-size: 14px;
-        line-height: 32px;
+        padding: 0 calc(var(--base-space) * 2);
+        font-size: var(--font-size-content);
+        line-height: 2.43;
         cursor: pointer;
         transition: color 0.3s ease;
         user-select: none;

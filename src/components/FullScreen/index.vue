@@ -1,4 +1,4 @@
-<script setup>
+<script setup name="FullScreen">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { message } from 'ant-design-vue';
 import { FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons-vue';
@@ -17,13 +17,15 @@ const handleChange = () => {
 };
 
 onMounted(() => {
-    if (!screenfull.isEnabled) return;
-    screenfull.on('change', handleChange);
+    if (screenfull.isEnabled) {
+        screenfull.on('change', handleChange);
+    }
 });
 
 onBeforeUnmount(() => {
-    if (!screenfull.isEnabled) return;
-    screenfull.off('change', handleChange);
+    if (screenfull.isEnabled) {
+        screenfull.off('change', handleChange);
+    }
 });
 </script>
 

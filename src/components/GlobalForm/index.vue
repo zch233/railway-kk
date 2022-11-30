@@ -17,7 +17,7 @@
                 v-for="(item, index) in configItem"
                 :key="index"
                 :name="item.key"
-                :wrapper-col="item.type === 'operation' || !item.label ? fomaterOperationWrapperCol : { ...wrapperCol }"
+                :wrapper-col="item.type === 'operation' || !item.label ? formatterOperationWrapperCol : { ...wrapperCol }"
                 :label="item?.label"
                 v-bind="item?.formItemProps"
             >
@@ -266,7 +266,7 @@ const emits = defineEmits([
 ]);
 
 // 操作按钮区域 wrapperCol
-const fomaterOperationWrapperCol = computed(() =>
+const formatterOperationWrapperCol = computed(() =>
     Object.values(props.operationWrapperCol).length ? props.operationWrapperCol : { offset: props.labelCol.span, span: props.wrapperCol.span }
 );
 

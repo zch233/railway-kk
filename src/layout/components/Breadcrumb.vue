@@ -1,25 +1,9 @@
-<template>
-    <transition-group name="breadcrumb" tag="div" class="ant-breadcrumb breadcrumb box-shadow">
-        <a-breadcrumb-item v-for="(item, index) in levelList.data" :key="item.name">
-            <span v-if="index === 0">当前位置：</span>
-            <span
-                v-if="item.redirect === 'noRedirect' || index === levelList.data.length - 1 || !item.path || !item.component"
-                :class="{ 'last-item': index === levelList.data.length - 1 }"
-            >
-                {{ item.title || item.meta?.title }}
-            </span>
-            <router-link v-else :to="item.path">
-                {{ item.meta?.title }}
-            </router-link>
-        </a-breadcrumb-item>
-    </transition-group>
-</template>
-
 <script setup>
 import { reactive, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { get } from 'lodash-unified';
 import { useStorePermission } from '@src/store/modules/permission';
+import { GupoBreadcrumbItem } from '@src/components/UI';
 
 const route = useRoute();
 const storePermission = useStorePermission();
@@ -70,12 +54,29 @@ const loopMenu = (_menuList, _activeMenu) => {
 getBreadcrumb();
 </script>
 
+<template>
+    <TransitionGroup name="breadcrumb" tag="div" class="ant-breadcrumb breadcrumb box-shadow">
+        <GupoBreadcrumbItem v-for="(item, index) in levelList.data" :key="item.name">
+            <span v-if="index === 0">当前位置：</span>
+            <span
+                v-if="item.redirect === 'noRedirect' || index === levelList.data.length - 1 || !item.path || !item.component"
+                :class="{ 'last-item': index === levelList.data.length - 1 }"
+            >
+                {{ item.title || item.meta?.title }}
+            </span>
+            <RouterLink v-else :to="item.path">
+                {{ item.meta?.title }}
+            </RouterLink>
+        </GupoBreadcrumbItem>
+    </TransitionGroup>
+</template>
+
 <style lang="less" scoped>
 .breadcrumb {
     z-index: 2;
     width: 100%;
     height: 45px;
-    padding: 0 @space6;
+    padding: 0 calc(var(--base-space) * 6);
     line-height: 45px;
     background: #fff;
     box-shadow: 0 3px 3px rgba(148, 161, 196, 0.1);

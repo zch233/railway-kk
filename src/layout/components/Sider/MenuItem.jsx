@@ -3,7 +3,7 @@ import Icon from '@ant-design/icons-vue';
 import GlobalIcon from '@src/components/GlobalIcon';
 
 export default defineComponent({
-    name: 'MenuItem',
+    name: 'LayoutMenuItem',
     props: {
         data: {
             type: Object,

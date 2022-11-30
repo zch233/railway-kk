@@ -4,20 +4,21 @@ import { SettingOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons
 import { useStoreSetting } from '@src/store/modules/setting';
 import { animates, themes } from './libs/index';
 import SettingCopy from '@src/layout/Setting/components/SettingCopy.vue';
+import { GupoDrawer, GupoInput, GupoSelect, GupoSwitch, GupoTooltip } from '@src/components/UI';
 
 const visible = ref(false);
 const colorRef = ref();
 const storeSetting = useStoreSetting();
 const colorMaster = computed(() => storeSetting.theme['--color-master']);
 
-const changeState = (state, value) => {
-    storeSetting.setState(state, state === 'themeColor' ? value.target.value : value);
+const changeSetting = (state, value) => {
+    storeSetting[value === undefined ? 'setTheme' : 'setSettings'](state, value);
 };
 </script>
 
 <template>
     <div class="setting">
-        <ADrawer :width="300" placement="right" v-model:visible="visible" :closable="false" class="setting-drawer">
+        <GupoDrawer :width="300" placement="right" v-model:visible="visible" :closable="false" class="setting-drawer">
             <template #handle>
                 <div class="setting-button" @click="visible = !visible" :style="{ backgroundColor: colorMaster }">
                     <CloseOutlined v-if="visible" />
@@ -28,8 +29,8 @@ const changeState = (state, value) => {
             <div class="setting-item__content">
                 <div class="theme-color">
                     <span :style="{ backgroundColor: colorMaster }" @click="colorRef.click()" />
-                    <input type="color" ref="colorRef" :value="storeSetting" @change="e => storeSetting.setTheme({ '--color-master': e.target.value })" />
-                    <AInput :value="colorMaster" @change="e => storeSetting.setTheme({ '--color-master': e.target.value })" placeholder="请输入颜色值" />
+                    <input type="color" ref="colorRef" :value="storeSetting" @change="e => changeSetting({ '--color-master': e.target.value })" />
+                    <GupoInput :value="colorMaster" @change="e => changeSetting({ '--color-master': e.target.value })" placeholder="请输入颜色值" />
                 </div>
                 <ul class="theme-list">
                     <li
@@ -37,7 +38,7 @@ const changeState = (state, value) => {
                         :key="backgroundColor"
                         :style="{ backgroundColor }"
                         :class="{ active: colorMaster === backgroundColor }"
-                        @click="storeSetting.setTheme({ '--color-master': backgroundColor })"
+                        @click="changeSetting({ '--color-master': backgroundColor })"
                     >
                         ✓
                     </li>
@@ -46,99 +47,85 @@ const changeState = (state, value) => {
             <div class="setting-item__title">导航模式</div>
             <div class="setting-item__content">
                 <div class="checkbox-layout">
-                    <ATooltip placement="top">
+                    <GupoTooltip
+                        placement="top"
+                        v-for="item in [
+                            { key: 'left', label: '左侧菜单模式' },
+                            { key: 'top', label: '顶部菜单模式' },
+                        ]"
+                        :key="item.key"
+                    >
                         <template #title>
-                            <span>左侧菜单模式</span>
+                            <span>{{ item.label }}</span>
                         </template>
-                        <div class="checkbox-layout-item" @click="changeState('layoutType', 'left')">
-                            <CheckOutlined v-if="storeSetting.layoutType === 'left'" />
+                        <div class="checkbox-layout-item" @click="changeSetting('layoutType', item.key)">
+                            <CheckOutlined v-if="storeSetting.layoutType === item.key" />
                         </div>
-                    </ATooltip>
-                    <ATooltip placement="top">
-                        <template #title>
-                            <span>顶部菜单模式</span>
-                        </template>
-                        <div class="checkbox-layout-item" @click="changeState('layoutType', 'top')">
-                            <CheckOutlined v-if="storeSetting.layoutType === 'top'" />
-                        </div>
-                    </ATooltip>
+                    </GupoTooltip>
                 </div>
             </div>
             <div class="setting-item__title">导航栏风格</div>
             <div class="setting-item__content">
                 <div class="checkbox-layout sider">
-                    <ATooltip placement="top">
+                    <GupoTooltip
+                        placement="top"
+                        v-for="item in [
+                            { key: 'whiteSider', label: '白色侧边栏' },
+                            { key: 'darkSider', label: '暗色侧边栏' },
+                            { key: 'darkTop', label: '暗色顶栏' },
+                        ]"
+                        :key="item.key"
+                    >
                         <template #title>
-                            <span>白色侧边栏</span>
+                            <span>{{ item.label }}</span>
                         </template>
-                        <div class="checkbox-layout-item" @click="changeState('siderType', 'whiteSider')">
-                            <CheckOutlined v-if="storeSetting.siderType === 'whiteSider'" />
+                        <div class="checkbox-layout-item" @click="changeSetting('siderType', item.key)">
+                            <CheckOutlined v-if="storeSetting.siderType === item.key" />
                         </div>
-                    </ATooltip>
-                    <ATooltip placement="top">
-                        <template #title>
-                            <span>暗色侧边栏</span>
-                        </template>
-                        <div class="checkbox-layout-item" @click="changeState('siderType', 'darkSider')">
-                            <CheckOutlined v-if="storeSetting.siderType === 'darkSider'" />
-                        </div>
-                    </ATooltip>
-                    <ATooltip placement="top">
-                        <template #title>
-                            <span>暗色顶栏</span>
-                        </template>
-                        <div class="checkbox-layout-item" @click="changeState('siderType', 'darkTop')">
-                            <CheckOutlined v-if="storeSetting.siderType === 'darkTop'" />
-                        </div>
-                    </ATooltip>
+                    </GupoTooltip>
                 </div>
             </div>
             <div class="setting-item__title">界面显示</div>
             <div class="setting-item__content">
-                <div class="setting-group">
-                    <div class="setting-group__title">显示头部栏</div>
-                    <ASwitch :checked="storeSetting.showHeader" @change="val => changeState('showHeader', val)" />
-                </div>
-                <div class="setting-group">
-                    <div class="setting-group__title">显示侧边栏</div>
-                    <ASwitch :checked="storeSetting.showMenu" @change="val => changeState('showMenu', val)" />
-                </div>
-                <div class="setting-group">
-                    <div class="setting-group__title">显示面包屑导航</div>
-                    <ASwitch :checked="storeSetting.shwoBreadcrumb" @change="val => changeState('shwoBreadcrumb', val)" />
-                </div>
-                <div class="setting-group">
-                    <div class="setting-group__title">显示刷新按钮</div>
-                    <ASwitch :checked="storeSetting.shwoReloadView" @change="val => changeState('shwoReloadView', val)" />
-                </div>
-                <div class="setting-group">
-                    <div class="setting-group__title">显示机构切换</div>
-                    <ASwitch :checked="storeSetting.shwoSwitchOrg" @change="val => changeState('shwoSwitchOrg', val)" />
+                <div
+                    class="setting-group"
+                    v-for="item in [
+                        { key: 'showHeader', label: '显示头部栏' },
+                        { key: 'showMenu', label: '显示侧边栏' },
+                        { key: 'showBreadcrumb', label: '显示面包屑导航' },
+                        { key: 'showReloadView', label: '显示刷新按钮' },
+                        { key: 'showSwitchOrg', label: '显示机构切换' },
+                    ]"
+                    :key="item.key"
+                >
+                    <div class="setting-group__title">{{ item.label }}</div>
+                    <GupoSwitch :checked="storeSetting[item.key]" @change="val => changeSetting(item.key, val)" />
                 </div>
             </div>
             <div class="setting-item__title">动画</div>
             <div class="setting-item__content">
                 <div class="setting-group">
                     <div class="setting-group__title">动画类型</div>
-                    <ASelect :value="storeSetting.animateType" :options="animates" @change="val => changeState('animateType', val)" />
+                    <GupoSelect :value="storeSetting.animateType" :options="animates" @change="val => changeSetting('animateType', val)" />
                 </div>
             </div>
             <!-- 复制配置 -->
             <SettingCopy />
-        </ADrawer>
+        </GupoDrawer>
     </div>
 </template>
 
 <style lang="less" scoped>
 .setting-button {
+    @shape: 48px;
     position: absolute;
     top: 30%;
     right: 0;
-    z-index: 99;
+    z-index: 10;
     display: flex;
-    width: 48px;
-    height: 48px;
-    font-size: 20px;
+    width: @shape;
+    height: @shape;
+    font-size: var(--font-size-headline);
     color: #fff;
     text-align: center;
     pointer-events: auto;
@@ -156,9 +143,9 @@ const changeState = (state, value) => {
 
 .setting-item__title {
     position: relative;
-    margin-bottom: 24px;
-    font-size: 15px;
-    line-height: 22px;
+    margin-bottom: calc(var(--base-space) * 6);
+    font-size: calc(var(--font-size-subtitle) - 1px);
+    line-height: 1.48;
     color: rgba(0, 0, 0, 0.85);
     text-align: center;
 
@@ -181,7 +168,7 @@ const changeState = (state, value) => {
 }
 
 .setting-item__content {
-    margin-bottom: 36px;
+    margin-bottom: calc(var(--base-space) * 9);
 }
 
 .theme-color {
@@ -207,13 +194,15 @@ const changeState = (state, value) => {
 .theme-list {
     display: flex;
     flex-wrap: wrap;
-    margin: 18px 0 0;
+    margin: calc(var(--base-space) * 5 - 2px) 0 0;
 
     li {
+        @shape: 20px;
+        @space: calc(var(--base-space) + 1px);
         display: flex;
-        width: 20px;
-        height: 20px;
-        margin: 0 5px 5px 3px;
+        width: @shape;
+        height: @shape;
+        margin: 0 @space @space calc(var(--base-space) - 1px);
         color: transparent;
         cursor: pointer;
         transition: all 0.25s;
@@ -233,7 +222,7 @@ const changeState = (state, value) => {
         position: relative;
         width: 45px;
         height: 35px;
-        margin-right: 16px;
+        margin-right: calc(var(--base-space) * 4);
         overflow: hidden;
         cursor: pointer;
         background-color: #f0f2f5;

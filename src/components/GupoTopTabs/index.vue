@@ -7,13 +7,9 @@
  * @param { Boolean } appendToLayout 是否放入 layout
  * @param { Boolean } forceRender    被隐藏时是否渲染 DOM 结构
  */
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { GupoTabs } from '@src/components/UI/index.js';
 import { useStoreSetting } from '@src/store/modules/setting';
-
-const storeSetting = useStoreSetting();
-
-const display = ref(false);
 
 const props = defineProps({
     modelValue: {
@@ -33,42 +29,32 @@ const props = defineProps({
     },
 });
 
-const emits = defineEmits(['update:modelValue']);
+defineEmits(['update:modelValue']);
 
-/**
- * data
- */
+const storeSetting = useStoreSetting();
 const topTabsRef = ref();
-
-/**
- * computed
- */
-const activeKey = computed({
-    get() {
-        return props.modelValue;
-    },
-    set(newVal) {
-        emits('update:modelValue', newVal);
-    },
-});
+const display = ref(false);
 
 onMounted(() => {
     display.value = true;
-    if (!props.appendToLayout) return;
-    document.querySelector('.content-top').appendChild(topTabsRef.value);
+    if (props.appendToLayout) {
+        document.querySelector('.content-top').appendChild(topTabsRef.value);
+    }
 });
 
 onBeforeUnmount(() => {
-    if (!props.appendToLayout) return;
-    topTabsRef.value.parentNode.removeChild(topTabsRef.value);
+    if (props.appendToLayout) {
+        topTabsRef.value.parentNode.removeChild(topTabsRef.value);
+    }
 });
 </script>
 
 <template>
-    <transition :name="storeSetting.animateType" mode="out-in">
+    <Transition :name="storeSetting.animateType" mode="out-in">
         <div class="gupo-top-tabs" v-show="display" ref="topTabsRef">
             <GupoTabs
-                v-model:activeKey="activeKey"
+                :activeKey="props.modelValue"
+                @update:activeKey="$emit('update:modelValue', $event)"
                 v-bind="{
                     ...$attrs,
                 }"
@@ -80,7 +66,7 @@ onBeforeUnmount(() => {
             <!-- 默认插槽 -->
             <slot />
         </div>
-    </transition>
+    </Transition>
 </template>
 
 <style lang="less" scoped>
@@ -102,7 +88,7 @@ onBeforeUnmount(() => {
         }
 
         .ant-tabs-tab {
-            padding: 16px 10px 10px;
+            padding: calc(var(--base-space) * 4) 10px 10px;
         }
     }
 }

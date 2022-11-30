@@ -2,6 +2,7 @@
 import copy from 'copy-to-clipboard';
 import { message } from 'ant-design-vue';
 import { useStoreSetting } from '@src/store/modules/setting';
+import { GupoAlert } from '@src/components/UI';
 
 const storeSetting = useStoreSetting();
 
@@ -13,7 +14,7 @@ const handleCopy = () => {
 
 <template>
     <div class="setting-copy">
-        <AAlert message="点击复制配置，需覆盖到 src\store\modules\setting.js 中 initTheme、settings 变量中" type="warning" @click="handleCopy" />
+        <GupoAlert message="点击复制配置，需覆盖到 src\store\modules\setting.js 中 initTheme、settings 变量中" type="warning" @click="handleCopy" />
     </div>
 </template>
 

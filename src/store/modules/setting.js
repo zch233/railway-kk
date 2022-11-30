@@ -36,11 +36,12 @@ const initSettings = {
     layoutType: 'left',
     siderType: 'whiteSider',
     animateType: 'fade-slide',
-    shwoBreadcrumb: true,
-    shwoReloadView: true,
-    shwoSwitchOrg: true,
+    showBreadcrumb: true,
+    showReloadView: true,
+    showSwitchOrg: true,
     showMenu: true,
     showHeader: true,
+    showSetting: true,
 };
 
 // 设置样式变量
@@ -62,7 +63,7 @@ ${Object.keys(data)
 };
 
 export const useStoreSetting = defineStore('settings', () => {
-    const settings = reactive(initSettings);
+    const settings = useLocalStorage('settings', initSettings);
     const theme = useLocalStorage('theme', { ...initTheme });
     const setTheme = data => {
         theme.value = { ...theme.value, ...data };
@@ -84,17 +85,17 @@ export const useStoreSetting = defineStore('settings', () => {
         }
         setCssVariable(theme.value);
     };
-    const setState = (key, value) => {
-        settings[key] = value;
+    const setSettings = (key, value) => {
+        settings.value[key] = value;
     };
     onMounted(() => {
         setTheme(theme.value);
     });
     return {
-        ...toRefs(settings),
+        ...toRefs(settings.value),
         theme,
         initSettings,
         setTheme,
-        setState,
+        setSettings,
     };
 });

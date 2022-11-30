@@ -28,12 +28,11 @@ defineProps({
         position: absolute;
         top: -6px;
         right: -6px;
-        display: inline-block;
         width: 18px;
         height: 18px;
-        font-size: 13px;
+        font-size: calc(var(--font-size-content) - 1px);
         font-style: normal;
-        line-height: 18px;
+        line-height: 1.4;
         color: #fff;
         text-align: center;
         background: var(--color-error);

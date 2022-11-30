@@ -1,12 +1,14 @@
 <script setup>
-import Menu from './Menu';
-import SwitchOrg from './SwitchOrg.vue';
+import { ref, computed, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import Menu from '@src/layout/components/Sider/Menu';
+import SwitchOrg from '@src/layout/components/Sider/SwitchOrg.vue';
 import { uniq } from 'lodash-unified';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 import { useStorePermission } from '@src/store/modules/permission';
 import { useStoreSetting } from '@src/store/modules/setting';
 import { useStoreUser } from '@src/store/modules/user';
-import { message } from 'ant-design-vue';
+import { GupoLayoutSider, GupoMenu, gupoMessage } from '@src/components/UI';
 
 const route = useRoute();
 const router = useRouter();
@@ -59,7 +61,7 @@ const findParentValue = (array, value, valueName = 'path', childrenName = 'child
 
 const onChange = async params => {
     if (params.key !== orgValue.value) {
-        message.loading('正在切换，请稍后...');
+        gupoMessage.loading('正在切换，请稍后...');
         storeUser.setOrgId(params.key);
         if (route.name !== 'Overview') {
             await router.push({ name: 'Overview' });
@@ -88,19 +90,19 @@ watch(
 </script>
 
 <template>
-    <ALayoutSider width="208" v-model:collapsed="collapsed" :theme="siderTheme" class="layout-sider box-shadow" collapsible v-if="mode === 'inline'">
+    <GupoLayoutSider v-if="mode === 'inline'" width="208" v-model:collapsed="collapsed" :theme="siderTheme" class="layout-sider box-shadow" collapsible>
         <SwitchOrg
+            v-if="storeSetting.showSwitchOrg"
             :collapsed="collapsed"
             :list="storeUser.orgListMenu"
             :modelValue="orgValue"
             :theme="siderTheme"
             valueKey="id"
             @onChange="onChange"
-            v-if="storeSetting.shwoSwitchOrg"
         />
-        <AMenu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :theme="siderTheme" mode="inline">
+        <GupoMenu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :theme="siderTheme" mode="inline">
             <Menu v-for="sider in storePermission.menuList" :key="sider.path" :data="sider" />
-        </AMenu>
+        </GupoMenu>
         <template #trigger>
             <div class="trigger">
                 <MenuUnfoldOutlined v-if="collapsed" />
@@ -108,11 +110,11 @@ watch(
                 <span>收起菜单</span>
             </div>
         </template>
-    </ALayoutSider>
+    </GupoLayoutSider>
     <div class="horizontal-header" v-if="mode === 'horizontal'">
-        <AMenu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :theme="siderHorizontalTheme" mode="horizontal">
+        <GupoMenu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :theme="siderHorizontalTheme" mode="horizontal">
             <Menu v-for="sider in storePermission.menuList" :key="sider.path" :data="sider" />
-        </AMenu>
+        </GupoMenu>
     </div>
 </template>
 

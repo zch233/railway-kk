@@ -1,16 +1,4 @@
-<template>
-    <div class="gupo-card">
-        <div class="gupo-card__title">
-            <div class="title">{{ title }}</div>
-            <slot name="extra"></slot>
-        </div>
-        <div class="gupo-card__content">
-            <slot></slot>
-        </div>
-    </div>
-</template>
-
-<script setup>
+<script setup name="GlobalCard">
 defineProps({
     title: {
         type: String,
@@ -18,6 +6,18 @@ defineProps({
     },
 });
 </script>
+
+<template>
+    <div class="gupo-card">
+        <div class="gupo-card__title">
+            <div class="title">{{ title }}</div>
+            <slot name="extra" />
+        </div>
+        <div class="gupo-card__content">
+            <slot />
+        </div>
+    </div>
+</template>
 
 <style lang="less" scoped>
 .gupo-card {
@@ -27,12 +27,12 @@ defineProps({
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: @space4 @space6;
+        padding: calc(var(--base-space) * 4) calc(var(--base-space) * 6);
         border-bottom: 1px solid var(--border-color);
 
         .title {
             display: flex;
-            font-size: 16px;
+            font-size: var(--font-size-subtitle);
             font-weight: bold;
             line-height: 1;
             align-items: center;
@@ -41,15 +41,15 @@ defineProps({
                 display: inline-block;
                 width: 2px;
                 height: 16px;
-                margin-right: @space2;
-                background: var(--ant-primary-color);
+                margin-right: calc(var(--base-space) * 2);
+                background: var(--color-master);
                 content: '';
             }
         }
     }
 
     &__content {
-        padding: @space6;
+        padding: calc(var(--base-space) * 6);
     }
 }
 </style>

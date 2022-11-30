@@ -1,25 +1,3 @@
-<template>
-    <div
-        class="gupo-infinite-scroll global-scrollbar"
-        :style="{
-            width: typeof width === 'string' ? width : width + 'px',
-            height: typeof height === 'string' ? height : height + 'px',
-        }"
-        ref="infiniteScrollRef"
-    >
-        <div class="gupo-infinite-scroll__content">
-            <slot />
-            <!-- loading -->
-            <div class="gupo-infinite-scroll__loading" v-if="showLoading && loading">
-                <div class="default-loading" v-if="!slotLoading">加载中<LoadingOutlined /></div>
-                <slot name="loading" v-else />
-            </div>
-            <!-- append -->
-            <slot name="append" />
-        </div>
-    </div>
-</template>
-
 <script name="GupoInfiniteScroll" setup>
 /**
  * GupoInfiniteScroll
@@ -93,6 +71,28 @@ onBeforeUnmount(() => {
 });
 </script>
 
+<template>
+    <div
+        class="gupo-infinite-scroll global-scrollbar"
+        :style="{
+            width: typeof width === 'string' ? width : width + 'px',
+            height: typeof height === 'string' ? height : height + 'px',
+        }"
+        ref="infiniteScrollRef"
+    >
+        <div class="gupo-infinite-scroll__content">
+            <slot />
+            <!-- loading -->
+            <div v-if="showLoading && loading" class="gupo-infinite-scroll__loading">
+                <div class="default-loading" v-if="!slotLoading">加载中<LoadingOutlined /></div>
+                <slot name="loading" v-else />
+            </div>
+            <!-- append -->
+            <slot name="append" />
+        </div>
+    </div>
+</template>
+
 <style lang="less" scoped>
 .gupo-infinite-scroll {
     &__loading {
@@ -103,7 +103,7 @@ onBeforeUnmount(() => {
             line-height: 1.5;
 
             :deep(.anticon.anticon-loading) {
-                margin-left: 8px;
+                margin-left: calc(var(--base-space) * 2);
             }
         }
     }

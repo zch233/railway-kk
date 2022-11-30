@@ -1,12 +1,7 @@
-<template>
-    <div class="global-empty">
-        <a-empty :image="image" :image-style="imageStyle" :description="description" />
-    </div>
-</template>
-
 <script setup>
 /**  @description:空状态  **/
 import empty from '@src/assets/images/empty.png';
+import { GupoEmpty } from '@src/components/UI';
 
 defineProps({
     description: {
@@ -23,9 +18,16 @@ defineProps({
     },
 });
 </script>
+
+<template>
+    <div class="global-empty">
+        <GupoEmpty :image="image" :image-style="imageStyle" :description="description" />
+    </div>
+</template>
+
 <style lang="less" scoped>
 .global-empty {
-    margin: @space8 0;
+    margin: calc(var(--base-space) * 8) 0;
 
     :deep(.ant-empty-description) {
         color: var(--font-color-2);

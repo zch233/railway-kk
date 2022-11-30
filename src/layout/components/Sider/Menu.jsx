@@ -1,10 +1,10 @@
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
-import { SubMenu as ASubMenu, MenuItem as AMenuItem } from 'ant-design-vue';
-import MenuItem from './MenuItem.jsx';
+import LayoutMenuItem from './MenuItem.jsx';
+import { GupoMenuItem, GupoSubMenu } from '@src/components/UI';
 
 export default defineComponent({
-    name: 'Menu',
+    name: 'LayoutMenu',
     props: {
         data: {
             type: Object,
@@ -16,15 +16,15 @@ export default defineComponent({
 
         return () =>
             props.data.children?.length ? (
-                <ASubMenu key={props.data.path} title={<MenuItem data={props.data?.meta} />}>
+                <GupoSubMenu key={props.data.path} title={<LayoutMenuItem data={props.data?.meta} />}>
                     {props.data.children.map(item => (
-                        <Menu data={item} />
+                        <LayoutMenu data={item} />
                     ))}
-                </ASubMenu>
+                </GupoSubMenu>
             ) : (
-                <AMenuItem key={props.data.path} onClick={() => router.push(props.data.path)}>
-                    <MenuItem data={props.data?.meta} />
-                </AMenuItem>
+                <GupoMenuItem key={props.data.path} onClick={() => router.push(props.data.path)}>
+                    <LayoutMenuItem data={props.data?.meta} />
+                </GupoMenuItem>
             );
     },
 });

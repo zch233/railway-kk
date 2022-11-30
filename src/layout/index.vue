@@ -7,6 +7,7 @@ import Footer from './components/Footer.vue';
 import Breadcrumb from './components/Breadcrumb.vue';
 import Sider from './components/Sider/index.vue';
 import Setting from './Setting/index.vue';
+import { GupoLayout, GupoLayoutContent } from '@src/components/UI';
 
 const storeSetting = useStoreSetting();
 const storePermission = useStorePermission();
@@ -17,14 +18,14 @@ const include = computed(() => {
 </script>
 
 <template>
-    <ALayout class="layout">
+    <GupoLayout class="layout">
         <Header v-if="storeSetting.showHeader" />
-        <ALayout>
+        <GupoLayout>
             <Sider v-if="storeSetting.layoutType === 'left' && storeSetting.showMenu" />
-            <ALayout>
-                <Breadcrumb v-if="storeSetting.shwoBreadcrumb" />
+            <GupoLayout>
+                <Breadcrumb v-if="storeSetting.showBreadcrumb" />
                 <div class="content-top" id="contentTop" />
-                <ALayoutContent class="content">
+                <GupoLayoutContent class="content">
                     <div class="main">
                         <RouterView>
                             <template #default="{ Component }">
@@ -37,11 +38,11 @@ const include = computed(() => {
                         </RouterView>
                         <Footer />
                     </div>
-                </ALayoutContent>
-            </ALayout>
-        </ALayout>
-        <Setting />
-    </ALayout>
+                </GupoLayoutContent>
+            </GupoLayout>
+        </GupoLayout>
+        <Setting v-if="storeSetting.showSetting" />
+    </GupoLayout>
 </template>
 
 <style lang="less" scoped>

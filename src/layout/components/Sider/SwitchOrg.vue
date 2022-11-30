@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from 'vue';
 import { HomeFilled, SwapOutlined } from '@ant-design/icons-vue';
 
 const props = defineProps({
@@ -44,7 +45,7 @@ const currentItem = computed(() => {
     <div class="switch-org" :class="{ 'is-dark': theme === 'dark' }">
         <ATooltip placement="right">
             <template #title>{{ title }}</template>
-            <div class="switch-org__name">
+            <div class="switch-org__name iconWrapper">
                 <HomeFilled />
                 <div>{{ title }}</div>
             </div>
@@ -93,8 +94,8 @@ const currentItem = computed(() => {
             transition: opacity 0.3s ease;
         }
 
-        :deep(.anticon.anticon-home) {
-            font-size: 18px !important;
+        &.iconWrapper :deep(.anticon.anticon-home) {
+            font-size: 18px;
         }
     }
 
@@ -109,16 +110,16 @@ const currentItem = computed(() => {
         transition: opacity 0.3s ease;
         align-items: center;
 
-        :deep(.anticon.anticon-swap) {
+        &.ant-dropdown-trigger :deep(.anticon.anticon-swap) {
             margin-left: 6px;
-            font-size: 14px !important;
+            font-size: 14px;
         }
     }
 }
 
 .ant-layout-sider-collapsed .switch-org {
     height: 52px;
-    padding: 0 calc(50% - 9px) !important;
+    padding: 0 calc(50% - 9px);
     line-height: 52px;
 
     &__name > div,

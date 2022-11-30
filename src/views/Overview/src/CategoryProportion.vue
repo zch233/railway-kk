@@ -106,19 +106,17 @@ const categoryProportionOption = computed(() => {
                     center: ['30%', '50%'],
                     radius: ['60%', '80%'],
                     label: {
-                        normal: {
-                            show: true,
-                            position: 'center',
-                            formatter: '{a|销售额}\n{b|¥ 123,224}',
-                            rich: {
-                                a: {
-                                    fontSize: 16,
-                                    color: '#8c8c8c',
-                                    padding: [0, 0, 15, 0],
-                                },
-                                b: {
-                                    fontSize: 30,
-                                },
+                        show: true,
+                        position: 'center',
+                        formatter: '{a|销售额}\n{b|¥ 123,224}',
+                        rich: {
+                            a: {
+                                fontSize: 16,
+                                color: '#8c8c8c',
+                                padding: [0, 0, 15, 0],
+                            },
+                            b: {
+                                fontSize: 30,
                             },
                         },
                     },

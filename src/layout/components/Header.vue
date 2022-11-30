@@ -9,10 +9,11 @@ import Sider from './Sider/index.vue';
 import { useStoreUser } from '@src/store/modules/user';
 import { useStoreSetting } from '@src/store/modules/setting';
 import defaultAvatar from '@src/assets/images/avatar.png';
-import logo from '@src/assets/logo.png';
+import logo from '@src/assets/images/logo.png';
 import { isDdOrZzd } from '@src/utils';
 import { logoutApi } from '@src/api/auth';
 import { message } from 'ant-design-vue';
+import { GupoAvatar, GupoDropdown, GupoLayoutHeader } from '@src/components/UI';
 
 const storeUser = useStoreUser();
 const storeSetting = useStoreSetting();
@@ -40,7 +41,7 @@ const handelLogoutApi = async () => {
 </script>
 
 <template>
-    <ALayoutHeader class="header box-shadow" :class="{ dark: storeSetting.siderType === 'darkTop' }">
+    <GupoLayoutHeader class="header box-shadow" :class="{ dark: storeSetting.siderType === 'darkTop' }">
         <div class="header-left">
             <div class="header-left__logo">
                 <img :src="logo" alt="logo" />
@@ -50,23 +51,23 @@ const handelLogoutApi = async () => {
         </div>
         <div class="header-right">
             <Sider mode="horizontal" v-if="showSider" />
-            <ReloadView v-if="storeSetting.shwoReloadView" />
+            <ReloadView v-if="storeSetting.showReloadView" />
             <FullScreen />
             <NotifyBadge />
-            <ADropdown :trigger="['click']">
-                <AAvatar :size="36">
+            <GupoDropdown :trigger="['click']">
+                <GupoAvatar :size="36">
                     <template #icon>
                         <img :src="storeUser.userInfo.img || defaultAvatar" alt="" />
                     </template>
-                </AAvatar>
+                </GupoAvatar>
                 <template #overlay>
                     <div class="user-info box-shadow">
                         <div class="user-info-desc">
-                            <AAvatar :size="36">
+                            <GupoAvatar :size="36">
                                 <template #icon>
                                     <img :src="storeUser.userInfo.img || defaultAvatar" alt="" />
                                 </template>
-                            </AAvatar>
+                            </GupoAvatar>
                             <div>{{ storeUser.userInfo?.name || '—' }}<br />{{ storeUser.userInfo?.phone || '—' }}</div>
                         </div>
                         <div class="user-info-menu">
@@ -75,9 +76,9 @@ const handelLogoutApi = async () => {
                         </div>
                     </div>
                 </template>
-            </ADropdown>
+            </GupoDropdown>
         </div>
-    </ALayoutHeader>
+    </GupoLayoutHeader>
 </template>
 
 <style lang="less" scoped>
