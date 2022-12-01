@@ -1,14 +1,13 @@
 <script setup name="SettingCopy">
 import copy from 'copy-to-clipboard';
-import { message } from 'ant-design-vue';
 import { useStoreSetting } from '@src/store/modules/setting';
-import { GupoAlert } from '@src/components/UI';
+import { GupoAlert, gupoMessage } from '@src/components/UI';
 
 const storeSetting = useStoreSetting();
 
 const handleCopy = () => {
     copy(`${JSON.stringify(storeSetting.theme, null, 4)}\n${JSON.stringify(storeSetting.initSettings, null, 4)}`);
-    message.success('复制成功');
+    gupoMessage.success('复制成功');
 };
 </script>
 

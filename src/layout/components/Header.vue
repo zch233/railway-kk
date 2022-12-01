@@ -1,6 +1,5 @@
 <script setup>
 import { computed, h } from 'vue';
-import Modal from 'ant-design-vue/lib/modal'; // ant-design-vue bug，不得已这么写
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 import FullScreen from '@src/components/FullScreen/index.vue';
 import NotifyBadge from '@src/components/NotifyBadge/index.vue';
@@ -12,8 +11,7 @@ import defaultAvatar from '@src/assets/images/avatar.png';
 import logo from '@src/assets/images/logo.png';
 import { isDdOrZzd } from '@src/utils';
 import { logoutApi } from '@src/api/auth';
-import { message } from 'ant-design-vue';
-import { GupoAvatar, GupoDropdown, GupoLayoutHeader } from '@src/components/UI';
+import { GupoAvatar, GupoDropdown, GupoLayoutHeader, gupoMessage, GupoModal } from '@src/components/UI';
 
 const storeUser = useStoreUser();
 const storeSetting = useStoreSetting();
@@ -22,7 +20,7 @@ const showSider = computed(() => storeSetting.layoutType === 'top' && storeSetti
 const appTitle = import.meta.env.VITE_APP_TITLE;
 
 const logout = () => {
-    Modal.confirm({
+    GupoModal.confirm({
         title: '是否确认退出登录？',
         icon: h(ExclamationCircleOutlined),
         okText: '确定',
@@ -35,7 +33,7 @@ const logout = () => {
 
 const handelLogoutApi = async () => {
     const data = await logoutApi();
-    message.success(data.message);
+    gupoMessage.success(data.message);
     storeUser.logout();
 };
 </script>

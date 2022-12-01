@@ -1,14 +1,14 @@
 <script setup name="FullScreen">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { message } from 'ant-design-vue';
 import { FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons-vue';
 import screenfull from 'screenfull';
+import { gupoMessage } from '@src/components/UI';
 
 const isFullScreen = ref(false);
 
 const handleClick = () => {
     if (!screenfull.isEnabled) {
-        return message.error('您的浏览器不支持全屏');
+        return gupoMessage.error('您的浏览器不支持全屏');
     }
     screenfull.toggle();
 };

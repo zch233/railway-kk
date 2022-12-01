@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { useStoreUser } from '@src/store/modules/user';
 import { downloadFile } from '@src/utils/index';
-import { message } from 'ant-design-vue';
 import { isDdOrZzd } from '@src/utils/index.js';
 import router from '@src/router';
+import { gupoMessage } from '@src/components/UI';
 
 export const request = axios.create({
     baseURL: import.meta.env.VITE_APP_API_URL,
@@ -109,7 +109,7 @@ request.interceptors.response.use(
                         },
                     });
                 } else {
-                    message.error(data.message || '无权限或登录失效，请重新登录');
+                    gupoMessage.error(data.message || '无权限或登录失效，请重新登录');
                     setTimeout(() => {
                         storeUser.logout();
                     }, 2000);

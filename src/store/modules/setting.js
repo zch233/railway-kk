@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 import { useLocalStorage } from '@src/utils/storage';
-import { ConfigProvider } from 'ant-design-vue';
 import { camelCase } from 'lodash-unified';
 import insertCss from '@src/utils/insert-css';
+import { GupoConfigProvider } from '@src/components/UI';
 
 const initTheme = {
     // 更改初始值如果发现没有生效，请清空 LocalStorage
@@ -77,7 +77,7 @@ export const useStoreSetting = defineStore('settings', () => {
         };
         const configColor = Object.keys(themeColors);
         if (configColor.find(v => Object.keys(data).includes(v))) {
-            ConfigProvider.config({
+            GupoConfigProvider.config({
                 theme: Object.keys(theme.value)
                     .filter(v => configColor.includes(v))
                     .reduce((res, key) => (res[camelCase(themeColors[key].replace('ant', ''))] = theme.value[key]) && res, {}),
