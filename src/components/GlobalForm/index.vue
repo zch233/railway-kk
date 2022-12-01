@@ -3,18 +3,18 @@
         <GupoForm
             ref="$formRef"
             :labelWrap="true"
-            :model="props.formData"
+            :model="formDataValue"
             :rules="rules"
             :label-col="labelCol"
             :wrapper-col="wrapperCol"
-            v-bind="$attrs"
             @finish="onFinish"
             @finishFailed="onFinishFailed"
             @submit="submit"
             @validate="validate"
+            v-bind="$attrs"
         >
             <GupoForm.Item
-                v-for="(item, index) in configItem"
+                v-for="(item, index) in itemConfigs"
                 :key="index"
                 :name="item.key"
                 :wrapper-col="item.type === 'operation' || !item.label ? formatterOperationWrapperCol : { ...wrapperCol }"
@@ -22,10 +22,10 @@
                 v-bind="item?.formItemProps"
             >
                 <!-- 下面定义的component类型 -->
-                <template v-if="Object.keys(components).includes(item.type)">
+                <template v-if="Object.keys(normalComponents).includes(item.type)">
                     <component
-                        :is="components[item.type]"
-                        :value="props.formData[item.key]"
+                        :is="normalComponents[item.type]"
+                        :value="formDataValue[item.key]"
                         @update:value="updateValue(item.key, $event)"
                         :allowClear="allowClear"
                         v-bind="generateProps(item) || {}"
@@ -33,119 +33,120 @@
                 </template>
                 <!-- select -->
                 <template v-else-if="item.type === 'select'">
-                    <GupoSelect
-                        :value="props.formData[item.key]"
+                    <component
+                        :is="compositeComponents.select"
+                        :value="formDataValue[item.key]"
                         @update:value="updateValue(item.key, $event)"
                         :allowClear="allowClear"
                         v-bind="generateProps(item) || {}"
-                    >
-                        <template #option="option" v-if="item?.props?.option">
-                            <slot name="option" :option="option">
+                        ><template #option="option" v-if="item?.props?.option">
+                            <slot name="option" :option="option" :data="formDataValue">
                                 <component :is="item?.props?.option?.(option)" />
-                            </slot>
-                        </template>
-                    </GupoSelect>
+                            </slot> </template
+                    ></component>
                 </template>
                 <!-- switch -->
                 <template v-else-if="item.type === 'switch'">
-                    <GupoSwitch :checked="props.formData[item.key]" @update:checked="updateValue(item.key, $event)" v-bind="item?.props || {}" />
+                    <component
+                        :is="compositeComponents.switch"
+                        :checked="formDataValue[item.key]"
+                        @update:checked="updateValue(item.key, $event)"
+                        v-bind="item?.props || {}"
+                    />
                 </template>
                 <template v-else-if="item.type === 'upload'">
-                    <GupoUpload
-                        :file-list="props.formData[item.key]"
+                    <component
+                        :is="compositeComponents.upload"
+                        :file-list="formDataValue[item.key]"
                         @update:file-list="updateValue(item.key, $event)"
                         v-on="{
-                            preview: item?.props?.onPreview ? item.props.onPreview : handlePreview,
+                            preview: item.props?.onPreview || handlePreview,
                         }"
                         v-bind="item?.props || {}"
                     >
-                        <slot name="uploadContent">
-                            <template v-if="typeof item?.props?.uploadContent === 'function' || typeof item?.props?.uploadContent === 'string'">
-                                <template v-if="typeof item?.props?.uploadContent === 'function'">
-                                    <component :is="item?.props?.uploadContent()" />
-                                </template>
-                                <template v-else>
-                                    {{ item?.props?.uploadContent }}
-                                </template>
+                        <slot name="uploadContent" :data="formDataValue">
+                            <template v-if="typeof item.props?.uploadContent === 'string'">
+                                {{ item?.props?.uploadContent }}
                             </template>
                             <template v-else>
-                                <component :is="item?.props?.uploadContent" />
+                                <component :is="item.props?.uploadContent" v-bind="item.props?.uploadContentProps || {}" />
                             </template>
                         </slot>
-                    </GupoUpload>
-                    <GupoImage
-                        :style="{ display: 'none' }"
-                        :preview="{
-                            visible: previewVisible,
-                            onVisibleChange: setVisible,
-                        }"
-                        :src="previewImage"
-                    />
+                        <GupoImage
+                            :style="{ display: 'none' }"
+                            :preview="{
+                                visible: previewVisible,
+                                onVisibleChange: setVisible,
+                            }"
+                            :src="previewImage"
+                        />
+                    </component>
                 </template>
                 <template v-else-if="item.type === 'upload.dragger'">
-                    <Dragger :file-list="props.formData[item.key]" @update:file-list="updateValue(item.key, $event)" v-bind="item?.props || {}">
-                        <slot name="uploadContent">
-                            <template v-if="typeof item?.props?.uploadContent === 'function' || typeof item?.props?.uploadContent === 'string'">
-                                <template v-if="typeof item?.props?.uploadContent === 'function'">
-                                    <component :is="item?.props?.uploadContent()" />
-                                </template>
-                                <template v-else>
-                                    {{ item?.props?.uploadContent }}
-                                </template>
+                    <component
+                        :is="compositeComponents['upload.dragger']"
+                        :file-list="formDataValue[item.key]"
+                        @update:file-list="updateValue(item.key, $event)"
+                        v-bind="item?.props || {}"
+                    >
+                        <slot name="uploadContent" :data="formDataValue">
+                            <template v-if="typeof item.props?.uploadContent === 'string'">
+                                {{ item?.props?.uploadContent }}
                             </template>
                             <template v-else>
-                                <component :is="item?.props?.uploadContent" />
+                                <component :is="item.props?.uploadContent" v-bind="item.props?.uploadContentProps || {}" />
                             </template>
                         </slot>
-                    </Dragger>
+                    </component>
                 </template>
                 <!-- 自定义组件 -->
                 <template v-else-if="item.type === 'custom'">
                     <component
                         :is="item.component"
-                        :modelValue="props.formData[item.key]"
-                        @update:modelValue="updateValue(item.key, $event)"
-                        ref="$customForm"
+                        :value="formDataValue[item.key]"
+                        @update:value="updateValue(item.key, $event)"
+                        v-bind="item?.props || {}"
+                        ref="$customFormItem"
                     />
                 </template>
                 <!-- 提交按钮 -->
                 <template v-else-if="item.type === 'operation'">
-                    <GupoButton v-if="item.submitButton" :type="item.submitButton.type || 'primary'" html-type="submit" :loading="loading">{{
-                        item.submitButton.text || '提交'
-                    }}</GupoButton>
-                    <GupoButton v-if="item.cancelButton" :type="item.cancelButton.type || ''" @click="cancel">{{
-                        item.cancelButton.text || '取消'
-                    }}</GupoButton>
+                    <GupoButton v-if="item.submitButton" type="primary" html-type="submit" :loading="loading" v-bind="item.submitButton.props">
+                        {{ item.submitButton.text || '提交' }}
+                    </GupoButton>
+                    <GupoButton v-if="item.cancelButton" @click="cancel" v-bind="item.cancelButton.props">
+                        {{ item.cancelButton.text || '取消' }}
+                    </GupoButton>
                 </template>
             </GupoForm.Item>
-            <slot name="footer" :data="props.formData" />
+            <slot name="footer" :data="formDataValue" />
         </GupoForm>
     </div>
 </template>
 
 <script setup>
-/**  @description:form封装  
+/**  @description:form封装
 
-支持类型
-    input, input.password, input.textarea,
-    inputNumber, 它不属于antd input组件下，是单独的一个组件，所以不写成input.number
-    select, 新增了showSearch（搜索）属性，
-    checkbox,
-    radio,
-    switch,
-    datePicker, datePicker.rangePicker,
-    timePicker, timePicker.timeRangePicker,
-    rate,
-    slider,
-    cascader, 新增了showSearch（搜索）属性，
-    treeSelect,
-    upload, upload.dragger
+ 支持类型
+ input, input.password, input.textarea,
+ inputNumber, 它不属于antd input组件下，是单独的一个组件，所以不写成input.number
+ select, 新增了showSearch（搜索）属性，
+ checkbox,
+ radio,
+ switch,
+ datePicker, datePicker.rangePicker,
+ timePicker, timePicker.timeRangePicker,
+ rate,
+ slider,
+ cascader, 新增了showSearch（搜索）属性，
+ treeSelect,
+ upload, upload.dragger
 
-    
-    props参数除了formItemProps和props.showSearch其余和antd文档相同
-    举例配置项：
-    configItem:[
-        {
+
+ props参数除了formItemProps和props.showSearch其余和antd文档相同
+ 举例配置项：
+ itemConfigs:[
+ {
             key: 'key',
             label: '输入框',
             type: 'select',
@@ -158,12 +159,12 @@
                 labelAlign: 'right',
             },
         },
-    ]
+ ]
 
-tips：
-    1、select和treeSelect 在单选的时候定义参数写成undefined,否则placeholder不显示。
-    2、当select和treeSelect自定义后缀失效的时候可能是开了多选或者checkable导致。
-    3、触发自己的方法(例如select的change事件),在props传on+事件名(onChange)
+ tips：
+ 1、select和treeSelect 在单选的时候定义参数写成undefined,否则placeholder不显示。
+ 2、当select和treeSelect自定义后缀失效的时候可能是开了多选或者checkable导致。
+ 3、触发自己的方法(例如select的change事件),在props传on+事件名(onChange)
  * **/
 import { ref, computed } from 'vue';
 import {
@@ -185,27 +186,28 @@ import {
     GupoImage,
 } from '@src/components/UI';
 
-const { TextArea, Password } = GupoInput;
-const { RangePicker } = GupoDatePicker;
-const { TimeRangePicker } = GupoTimePicker;
-const { Dragger } = GupoUpload;
-
-const components = {
+const normalComponents = {
     input: GupoInput,
-    'input.password': Password,
-    'input.textarea': TextArea,
+    'input.password': GupoInput.Password,
+    'input.textarea': GupoInput.TextArea,
     inputNumber: GupoInputNumber,
     datePicker: GupoDatePicker,
-    'datePicker.rangePicker': RangePicker,
+    'datePicker.rangePicker': GupoDatePicker.RangePicker,
     timePicker: GupoTimePicker,
-    'timePicker.timeRangePicker': TimeRangePicker,
+    'timePicker.timeRangePicker': GupoTimePicker.TimeRangePicker,
     rate: GupoRate,
     slider: GupoSlider,
     treeSelect: GupoTreeSelect,
     checkbox: GupoCheckbox.Group,
     radio: GupoRadio.Group,
-    // select: GupoSelect,
     cascader: GupoCascader,
+};
+
+const compositeComponents = {
+    select: GupoSelect,
+    switch: GupoSwitch,
+    upload: GupoUpload,
+    'upload.dragger': GupoUpload.Dragger,
 };
 
 const props = defineProps({
@@ -213,7 +215,7 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
-    configItem: {
+    itemConfigs: {
         type: Array,
         default: () => {
             return [];
@@ -221,7 +223,6 @@ const props = defineProps({
     },
     formData: {
         type: Object,
-        default: () => ({}),
     },
     // 左侧label展示所占col
     labelCol: {
@@ -270,8 +271,25 @@ const formatterOperationWrapperCol = computed(() =>
     Object.values(props.operationWrapperCol).length ? props.operationWrapperCol : { offset: props.labelCol.span, span: props.wrapperCol.span }
 );
 
+const _formData = reactive(
+    props.itemConfigs.reduce((res, cur) => {
+        res[cur.key] = undefined;
+        return res;
+    }, {})
+);
+
+const formDataValue = computed(() => props.formData || _formData);
+
+const updateValue = (key, value) => {
+    if (props.formData) {
+        emits('update:formData', { ...props.formData, [key]: value });
+    } else {
+        _formData[key] = value;
+    }
+};
+
 const $formRef = ref();
-const $customForm = ref('');
+const $customFormItem = ref('');
 
 // select筛选选项
 const selectFilterOption = (input, option) => {
@@ -284,30 +302,31 @@ const cascaderFilterOption = (inputValue, path) => {
 
 // 定义单独配置
 const generateProps = item => {
-    let formatLable = item.label ? item.label : '';
+    const formatLabel = typeof item.label === 'string' ? item.label : '';
+    // 部分特殊的组件需要提前加一些额外的配置
     const componentMap = {
         input: {
-            placeholder: '请输入' + formatLable,
+            placeholder: '请输入' + formatLabel,
         },
         inputNumber: {
-            placeholder: '请输入' + formatLable,
+            placeholder: '请输入' + formatLabel,
         },
         'input.password': {
-            placeholder: '请输入' + formatLable,
+            placeholder: '请输入' + formatLabel,
             autocomplete: 'off',
         },
         'input.textarea': {
-            placeholder: '请输入' + formatLable,
+            placeholder: '请输入' + formatLabel,
         },
         treeSelect: {
-            placeholder: '请选择' + formatLable,
+            placeholder: '请选择' + formatLabel,
         },
         select: {
-            placeholder: '请选择' + formatLable,
+            placeholder: '请选择' + formatLabel,
             filterOption: selectFilterOption,
         },
         cascader: {
-            placeholder: '请选择' + formatLable,
+            placeholder: '请选择' + formatLabel,
             showSearch: item?.props?.showSearch ? cascaderFilterOption : false,
         },
     };
@@ -340,7 +359,6 @@ const validate = (name, status, errorMsgs) => {
 // 图片预览
 const previewVisible = ref(false);
 const previewImage = ref('');
-
 const handlePreview = async file => {
     if (!file.url && !file.preview) {
         file.preview = await getBase64(file.originFileObj);
@@ -348,25 +366,16 @@ const handlePreview = async file => {
     previewImage.value = file.url || file.preview;
     setVisible(true);
 };
-
 const getBase64 = file => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
-
         reader.onload = () => resolve(reader.result);
-
         reader.onerror = error => reject(error);
     });
 };
-
 const setVisible = value => {
     previewVisible.value = value;
-};
-
-const updateValue = (key, e) => {
-    // emits('update:value', e);
-    emits('update:formData', { ...props.formData, [key]: e });
 };
 
 // 内置方法导出
@@ -375,6 +384,6 @@ const resetFields = e => $formRef.value.resetFields(e);
 const scrollToField = e => $formRef.value.scrollToField(e);
 const validateFields = e => $formRef.value.validateFields(e);
 
-defineExpose({ validateFields, scrollToField, clearValidate, resetFields, $customForm });
+defineExpose({ validateFields, scrollToField, clearValidate, resetFields, $customFormItem });
 </script>
 <style lang="less" scoped></style>
