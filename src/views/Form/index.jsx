@@ -26,6 +26,7 @@ export const useDataSync = params => {
             uploadList2: [],
             uploadList3: [],
             dragger: [],
+            custom1: '',
         }),
         rules: {
             name: {
@@ -39,7 +40,7 @@ export const useDataSync = params => {
                 trigger: 'change',
             },
         },
-        configItem: () => [
+        itemConfigs: () => [
             {
                 key: 'name',
                 label: '输入框',
@@ -340,15 +341,25 @@ export const useDataSync = params => {
                     multiple: true,
                 },
             },
+            {
+                key: 'custom1',
+                type: 'custom',
+                label: '自定义',
+                component: props => (
+                    <input type='text' value={props.modelValue} onChange={e => props['onUpdate:modelValue'](e.target.value)} placeholder={'我是自定义的'} />
+                ),
+            },
             // 配置按钮
             {
                 type: 'operation',
                 submitButton: {
                     text: '提交',
-                    type: 'primary',
                 },
                 cancelButton: {
                     text: '取消',
+                    props: {
+                        type: 'danger',
+                    },
                 },
             },
         ],

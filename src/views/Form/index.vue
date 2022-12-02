@@ -4,12 +4,14 @@
             <div class="form-content">
                 <GlobalForm
                     :rules="addForm.rules"
-                    :configItem="addForm.configItem()"
+                    :itemConfigs="addForm.itemConfigs()"
                     :formData="addForm.formData"
                     @update:formData="Object.assign(addForm.formData, $event)"
                     :labelCol="{ span: 5 }"
                     ref="$globalForm"
                     @finish="onFinish"
+                    @cancel="onCancel"
+                    @validate="validate"
                 />
                 <!-- 自定义按钮 -->
                 <a-button type="primary" @click="customSubmit">自定义提交</a-button>
@@ -39,7 +41,9 @@ onMounted(() => {
     getConfigDetails();
     getOption();
 });
-
+const validate = (...e) => {
+    console.log('addForm.validate :>> ', ...e);
+};
 const customSubmit = () => {
     $globalForm.value.validateFields().then(() => {
         console.log('addForm.formData :>> ', addForm.formData);
@@ -48,6 +52,10 @@ const customSubmit = () => {
 
 const onFinish = () => {
     console.log('addForm.formData :>> ', addForm.formData);
+};
+
+const onCancel = () => {
+    console.log('已取消');
 };
 
 // 获取详情赋值
@@ -100,7 +108,7 @@ const onChange = info => {
         .form-content {
             width: 500px;
             padding: @space6 0;
-            margin: 0px auto;
+            margin: 0 auto;
         }
     }
 }
