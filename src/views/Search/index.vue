@@ -2,38 +2,35 @@
     <div class="search container">
         <GlobalSearch
             :formData="searchData1.formData"
-            :configItem="searchData1.configItem"
+            :itemConfigs="searchData1.itemConfigs"
             @update:formData="Object.assign(searchData1.formData, $event)"
-            @search="() => message.info('当前参数：' + JSON.stringify(searchData1.formData))"
+            @search="gupoMessage.info('当前参数：' + JSON.stringify(searchData1.formData))"
         />
+        <GlobalSearch :itemConfigs="searchData2.itemConfigs" @search="gupoMessage.info('当前参数：' + JSON.stringify($event))" />
         <GlobalSearch
-            :formData="searchData2.formData"
-            :configItem="searchData2.configItem"
-            @update:formData="Object.assign(searchData2.formData, $event)"
-            @search="() => message.info('当前参数：' + JSON.stringify(searchData2.formData))"
-        />
-        <GlobalSearch
+            defaultOpen
             :formData="searchData3.formData"
-            :configItem="searchData3.configItem"
+            :itemConfigs="searchData3.itemConfigs"
             @update:formData="Object.assign(searchData3.formData, $event)"
-            @search="() => message.info('当前参数：' + JSON.stringify(searchData3.formData))"
+            @search="gupoMessage.info('当前参数：' + JSON.stringify(searchData3.formData))"
         />
     </div>
 </template>
 
 <script setup>
 import dayjs from 'dayjs';
-import { message } from 'ant-design-vue';
 import GlobalSearch from '@src/components/GlobalSearch/index.vue';
 import CustomComp from './components/CustomComp.vue';
+import { gupoMessage } from '@src/components/UI';
 
 const searchData1 = {
     formData: reactive({
         name: undefined,
-        algorithm: undefined,
+        algorithm: 'lru',
         type: undefined,
+        num: [],
     }),
-    configItem: [
+    itemConfigs: [
         {
             key: 'name',
             type: 'input',
@@ -85,14 +82,7 @@ const searchData1 = {
     ],
 };
 const searchData2 = {
-    formData: reactive({
-        name: undefined,
-        algorithm: undefined,
-        type: undefined,
-        time: '',
-        time_range: [],
-    }),
-    configItem: [
+    itemConfigs: [
         {
             key: 'name',
             type: 'input',
@@ -163,7 +153,7 @@ const searchData3 = {
         time: '',
         time_range: [],
     }),
-    configItem: [
+    itemConfigs: [
         {
             key: 'name',
             type: 'input',
