@@ -1,53 +1,137 @@
+<script name="GlobalSearch" setup>
+import { GupoButton } from '@src/components/UI/index.js';
+import { DownOutlined } from '@ant-design/icons-vue';
+import { cloneDeep } from 'lodash-unified';
+import { computed, nextTick, onMounted, onBeforeUnmount, ref, watch, h } from 'vue';
+import GlobalFormItem from '@src/components/GlobalForm/Item.vue';
+import { formItemProps } from '@src/components/GlobalForm/utils';
+
+const props = defineProps({
+    ...formItemProps,
+    // 默认高度
+    defaultHeight: {
+        type: Number,
+        default: 50, // 输入框高 + 上下padding：9px
+    },
+    // 默认是否展开
+    defaultOpen: {
+        type: Boolean,
+        default: false,
+    },
+    defaultFormData: {
+        type: Object,
+    },
+    // 配置项,支持类型:input, select, datePicker, datePicker.rangePicker, timePicker, timePicker.timeRangePicker, cascader, treeSelect
+    itemConfigs: {
+        type: Object,
+        default: () => {
+            return [];
+        },
+    },
+    // 左侧label展示所占col
+    labelCol: {
+        type: Object,
+        default: () => ({}),
+    },
+});
+const emits = defineEmits(['reset', 'search', 'update:formData']);
+
+let defaultFormData = {};
+const isOpen = ref(props.defaultOpen);
+const $searchBox = ref();
+const searchBoxHeight = ref('');
+
+const _formData = reactive(
+    // 初始化 formItem 每一项数据，默认值为 undefined
+    props.itemConfigs.reduce((res, cur) => {
+        res[cur.key] = undefined;
+        return res;
+    }, {})
+);
+const formDataValue = computed(() => props.formData || _formData);
+const updateValue = data => {
+    if (props.formData) {
+        emits('update:formData', { ...props.formData, ...data });
+    } else {
+        Object.assign(_formData, data);
+    }
+};
+
+const handleReset = () => {
+    updateValue(defaultFormData);
+    emits('reset');
+};
+const handleSearch = () => {
+    emits('search', formDataValue.value);
+};
+
+watch(
+    () => props.defaultFormData,
+    () => {
+        defaultFormData = props.defaultFormData || cloneDeep(formDataValue.value);
+    },
+    { immediate: true }
+);
+
+// 计算高度样式
+const boxHeightStyle = computed(() => ({
+    height: `${isOpen.value ? searchBoxHeight.value : props.defaultHeight}px`,
+}));
+// 是否换行了
+const isLinefeed = computed(() => searchBoxHeight.value > props.defaultHeight);
+// 是否有label
+const isLabelMode = computed(() => props.itemConfigs.find(item => item.label));
+
+// 设置 box 的高度
+const setSearchBoxHeight = () => {
+    searchBoxHeight.value = $searchBox.value.offsetHeight;
+};
+watch(
+    [() => isOpen.value, () => props.itemConfigs],
+    () => {
+        nextTick(() => {
+            setSearchBoxHeight();
+        });
+    },
+    { immediate: true }
+);
+onMounted(() => {
+    window.addEventListener('resize', setSearchBoxHeight);
+});
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', setSearchBoxHeight);
+});
+
+defineExpose({ reset: () => updateValue(defaultFormData) });
+</script>
+
 <template>
-    <div class="global-search" :class="{ active: isFeedLine }">
-        <div class="parent-search" :style="boxHeight">
-            <div :class="{ label: isLabel, 'search-box': true }" ref="searchBox">
-                <template v-for="(item, index) in configItem" :key="index">
-                    <GupoForm.Item :label="item?.label" :labelWrap="true" :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="item?.formItemProps">
-                        <component
-                            :is="components[item.type]"
-                            :allowClear="allowClear"
-                            :value="props.formData[item.key]"
-                            @update:value="updateValue(item.key, $event)"
-                            v-bind="generateProps(item) || {}"
-                        />
-                        <!-- select -->
-                        <template v-if="item.type === 'select'">
-                            <GupoSelect
-                                :value="props.formData[item.key]"
-                                @update:value="updateValue(item.key, $event)"
-                                :allowClear="allowClear"
-                                v-bind="generateProps(item) || {}"
-                            >
-                                <template #option="option" v-if="item?.props?.option">
-                                    <slot name="option" :option="option">
-                                        <component :is="item?.props?.option?.(option)" />
-                                    </slot>
-                                </template>
-                            </GupoSelect>
-                        </template>
-                        <!-- 自定义组件 -->
-                        <template v-else-if="item.type === 'custom'">
-                            <div class="common-box">
-                                <component
-                                    :is="item.component"
-                                    :modelValue="props.formData[item.key]"
-                                    @update:modelValue="updateValue(item.key, $event)"
-                                    ref="$customForm"
-                                />
-                            </div>
-                        </template>
-                    </GupoForm.Item>
-                </template>
-                <GupoForm.Item>
-                    <div class="empty-box" />
-                </GupoForm.Item>
+    <div class="global-search" :class="{ active: isLinefeed }">
+        <div class="parent-search" :style="boxHeightStyle">
+            <div :class="{ label: isLabelMode, 'search-box': true }" ref="$searchBox">
+                <GlobalFormItem
+                    v-for="(item, index) in itemConfigs"
+                    :key="index"
+                    :item="item"
+                    :label="item?.label"
+                    :labelWrap="true"
+                    :labelCol="labelCol"
+                    :wrapperCol="wrapperCol"
+                    :formData="formDataValue"
+                    @updateValue="updateValue($event)"
+                />
+                <GlobalFormItem
+                    :item="{
+                        type: 'custom',
+                        component: h('div', { class: 'empty-box' }, []),
+                    }"
+                />
             </div>
         </div>
-        <div class="btn-box" :class="{ isOpen: isOpen, label: isLabel }">
-            <GupoButton @click="reset">重置</GupoButton>
-            <GupoButton type="primary" @click="search">查询</GupoButton>
-            <span class="operation" @click="isOpen = !isOpen" v-if="isFeedLine">
+        <div class="btn-box" :class="{ isOpen: isOpen, label: isLabelMode }">
+            <GupoButton @click="handleReset">重置</GupoButton>
+            <GupoButton type="primary" @click="handleSearch">查询</GupoButton>
+            <span class="operation" @click="isOpen = !isOpen" v-if="isLinefeed">
                 {{ isOpen ? '收起' : '展开' }}
                 <DownOutlined :class="{ active: isOpen }" />
             </span>
@@ -55,169 +139,6 @@
     </div>
 </template>
 
-<script name="GlobalSearch" setup>
-import { GupoButton, GupoInput, GupoSelect, GupoDatePicker, GupoTimePicker, GupoCascader, GupoTreeSelect, GupoForm } from '@src/components/UI/index.js';
-import { DownOutlined } from '@ant-design/icons-vue';
-import { cloneDeep } from 'lodash-unified';
-import { computed, nextTick, onMounted, onBeforeUnmount, ref, watch } from 'vue';
-
-const { RangePicker } = GupoDatePicker;
-const { TimeRangePicker } = GupoTimePicker;
-
-const components = {
-    input: GupoInput,
-    datePicker: GupoDatePicker,
-    'datePicker.rangePicker': RangePicker,
-    timePicker: GupoTimePicker,
-    'timePicker.timeRangePicker': TimeRangePicker,
-    treeSelect: GupoTreeSelect,
-    cascader: GupoCascader,
-};
-
-// 定义单独配置
-const generateProps = item => {
-    let formatLabel = item.label ? item.label : '';
-    const componentMap = {
-        input: {
-            placeholder: '请输入' + formatLabel,
-        },
-        treeSelect: {
-            placeholder: '请选择' + formatLabel,
-        },
-        select: {
-            placeholder: '请选择' + formatLabel,
-            filterOption: selectFilterOption,
-        },
-        cascader: {
-            placeholder: '请选择' + formatLabel,
-            showSearch: item?.props?.showSearch ? cascaderFilterOption : false,
-        },
-    };
-    return {
-        ...componentMap[item.type],
-        ...item?.props,
-    };
-};
-
-const props = defineProps({
-    // 默认高度
-    defaultHeight: {
-        type: Number,
-        default: 50, // 输入框高 + 上下padding：9px
-    },
-    // 是否展开
-    isOpenRow: {
-        type: Boolean,
-        default: false,
-    },
-    // 配置项,支持类型:input, select, datePicker, datePicker.rangePicker, timePicker, timePicker.timeRangePicker, cascader, treeSelect
-    configItem: {
-        type: Object,
-        default: () => {
-            return [];
-        },
-    },
-    formData: {
-        type: Object,
-        default: () => ({}),
-    },
-    // 左侧label展示所占col
-    labelCol: {
-        type: Object,
-        default: () => ({}),
-    },
-    // 右侧input展示所占col
-    wrapperCol: {
-        type: Object,
-        default: () => ({}),
-    },
-    // 是否全部需要allowClear
-    allowClear: {
-        type: Boolean,
-        default: true,
-    },
-});
-const emits = defineEmits(['reset', 'search', 'update:formData']);
-
-/**
- * data
- */
-const defaultFormData = ref({});
-const isOpen = ref(props.isOpenRow);
-const searchBox = ref('');
-const searhBoxHeight = ref('');
-
-/**
- * methods
- */
-const reset = () => {
-    emits('update:formData', defaultFormData.value);
-    emits('reset');
-};
-const insideReset = () => {
-    emits('update:formData', defaultFormData.value);
-};
-const search = () => {
-    emits('search');
-};
-const updateValue = (key, e) => {
-    emits('update:formData', { ...props.formData, [key]: e });
-};
-const getSearhBoxHeight = () => {
-    searhBoxHeight.value = searchBox.value.offsetHeight;
-};
-
-/**
- * watch
- */
-watch(
-    () => props.configItem,
-    () => {
-        const { formData } = props;
-        defaultFormData.value = cloneDeep(formData);
-    },
-    {
-        immediate: true,
-    }
-);
-watch([() => isOpen.value, () => props.configItem], () => {
-    nextTick(() => {
-        getSearhBoxHeight();
-    });
-});
-
-/**
- * computed
- */
-
-// 获取高度
-const boxHeight = computed(() => ({
-    height: isOpen.value ? `${searhBoxHeight.value}px` : `${props.defaultHeight}px`,
-}));
-// 是否换行了
-const isFeedLine = computed(() => searhBoxHeight.value > props.defaultHeight);
-// 是否有label
-const isLabel = computed(() => props.configItem.find(item => item.label));
-// select筛选选项
-const selectFilterOption = (input, option) => {
-    return Object.values(option).join().toLowerCase().indexOf(input.toLowerCase()) >= 0;
-};
-// cascader筛选
-const cascaderFilterOption = (inputValue, path) => {
-    return path.some(option => Object.values(option).join().toLowerCase().indexOf(inputValue.toLowerCase()) > -1);
-};
-
-onMounted(() => {
-    getSearhBoxHeight();
-    window.addEventListener('resize', getSearhBoxHeight);
-});
-
-onBeforeUnmount(() => {
-    window.removeEventListener('resize', getSearhBoxHeight);
-});
-
-defineExpose({ insideReset });
-</script>
 <style lang="less" scoped>
 .global-search {
     position: relative;
