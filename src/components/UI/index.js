@@ -36,4 +36,5 @@ export {
     Empty as GupoEmpty,
     ConfigProvider as GupoConfigProvider,
     Modal as GupoModal,
+    Tag as GupoTag,
 } from 'ant-design-vue';

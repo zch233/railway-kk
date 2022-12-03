@@ -1,7 +1,7 @@
 <script lang="jsx">
 import GlobalTable from '@src/components/GlobalTable/index.vue';
 import * as XLSX from 'xlsx';
-import { GupoButton, GupoModal } from '@src/components/UI';
+import { GupoButton, gupoMessage, GupoModal, GupoTag } from '@src/components/UI';
 import { InboxOutlined } from '@ant-design/icons-vue';
 import GlobalFormItem from '@src/components/GlobalForm/Item.vue';
 import dayjs from 'dayjs';
@@ -10,18 +10,14 @@ import { useLocalStorage } from '@src/utils/storage';
 export default defineComponent({
     name: 'List',
     setup() {
+        const places = useLocalStorage('places', []);
+        const ways = useLocalStorage('ways', []);
         const columns = useLocalStorage('columns', []);
         const dataSource = useLocalStorage('dataSource', {
             list: [],
             paginate: { total: 0 },
         });
-        const getList = async () => {
-            return new Promise(resolve => {
-                resolve({
-                    data: dataSource.value,
-                });
-            });
-        };
+        const filterDataSource = ref();
         const modal = reactive({
             visible: false,
             loading: false,
@@ -36,30 +32,91 @@ export default defineComponent({
                 const bytes = new Uint8Array(e.target.result);
                 const wb = XLSX.read(bytes, { cellDates: true });
                 const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, range: 1 });
-                columns.value = data[0].map((title, key) => ({ key, title }));
-                dataSource.value.list = data.slice(1).map(arr =>
-                    arr.reduce((res, cur, index) => {
+                columns.value = data[0]
+                    .map((title, key) => ({ key, title }))
+                    .concat({
+                        key: 'status',
+                        title: '状态',
+                        customRender: ({ text }) => (text ? <GupoTag color='green'>正常</GupoTag> : <GupoTag color='red'>停运</GupoTag>),
+                    });
+                dataSource.value.list = data.slice(1).map(arr => {
+                    const item = arr.reduce((res, cur, index) => {
                         res[index] = typeof cur === 'object' ? dayjs(cur).format('HH:mm') : cur;
                         return res;
-                    }, {})
-                );
+                    }, {});
+                    item.status = true;
+                    return item;
+                });
                 dataSource.value.paginate.total = dataSource.value.list.length;
+                places.value = [...new Set(dataSource.value.list.map(v => v[1]))];
+                ways.value = [...new Set(dataSource.value.list.map(v => v[6]))];
                 $globalTable.value.refresh();
                 modal.visible = false;
+                gupoMessage.success('导入成功');
             };
             reader.readAsArrayBuffer(file);
         };
         const $globalTable = ref();
+        const itemConfigs = computed(() => [
+            {
+                key: 'time',
+                type: 'datePicker',
+                props: {
+                    valueFormat: 'YYYY-MM-DD',
+                    placeholder: '请选择日期',
+                },
+            },
+            {
+                key: '1',
+                type: 'select',
+                props: {
+                    placeholder: '请选择办客站',
+                    showSearch: true,
+                    options: places.value.map(value => ({ label: value, value })),
+                },
+            },
+            {
+                key: '6',
+                type: 'select',
+                props: {
+                    placeholder: '请选择线路',
+                    showSearch: true,
+                    options: ways.value.map(value => ({ label: value, value })),
+                },
+            },
+        ]);
         return () => (
             <div class='container'>
+                <GlobalSearch
+                    itemConfigs={itemConfigs.value}
+                    onSearch={e => {
+                        const list = dataSource.value.list.filter(v => (e[1] ? v[1] === e[1] : true)).filter(v => (e[6] ? v[6] === e[6] : true));
+                        filterDataSource.value = {
+                            list,
+                            total: list.length,
+                        };
+                        $globalTable.value.refresh();
+                    }}
+                />
                 <GlobalTable
                     ref={$globalTable}
                     columns={columns.value}
-                    listApi={getList}
+                    listApi={async () => {
+                        return new Promise(resolve => {
+                            resolve({
+                                data: filterDataSource.value || dataSource.value,
+                            });
+                        });
+                    }}
                     operationRender={() => (
-                        <GupoButton type='primary' onClick={() => (modal.visible = true)}>
-                            导入
-                        </GupoButton>
+                        <>
+                            <GupoButton type='primary' onClick={() => (modal.visible = true)}>
+                                导入
+                            </GupoButton>
+                            <GupoButton type='primary'>重看统计</GupoButton>
+                            <GupoButton type='primary'>停运调令</GupoButton>
+                            <GupoButton type='primary'>恢复调令</GupoButton>
+                        </>
                     )}
                 />
                 <GupoModal
