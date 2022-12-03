@@ -33,4 +33,4 @@ export const formItemProps = {
 
 export const formInheritEvents = ['finish', 'finishFailed', 'submit', 'validate'];
 
-export const formItemEmits = ['cancel'];
+export const formItemEmits = ['cancel', 'update:formData'];

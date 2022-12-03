@@ -58,7 +58,7 @@ const props = defineProps({
         default: () => ({}),
     },
 });
-const emits = defineEmits([...formInheritEvents, ...formItemEmits, 'update:formData']);
+const emits = defineEmits([...formInheritEvents, ...formItemEmits]);
 
 const $formRef = ref();
 
@@ -111,7 +111,7 @@ defineExpose({ clearValidate, getFieldsValue, resetFields, scrollToField, valida
                 :wrapper-col="wrapperCol"
                 :loading="loading"
                 :allowClear="allowClear"
-                @updateValue="updateValue"
+                @update:formData="updateValue"
                 @cancel="$emit('cancel', formDataValue)"
             />
             <slot name="footer" :data="formDataValue" />

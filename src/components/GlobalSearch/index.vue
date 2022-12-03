@@ -115,7 +115,7 @@ defineExpose({ reset: () => updateValue(defaultFormData) });
                     :labelCol="labelCol"
                     :wrapperCol="wrapperCol"
                     :formData="formDataValue"
-                    @updateValue="updateValue($event)"
+                    @update:formData="updateValue($event)"
                 />
                 <GlobalFormItem
                     :item="{

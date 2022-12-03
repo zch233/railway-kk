@@ -94,6 +94,9 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    operationRender: {
+        type: [Object, Function],
+    },
 });
 const route = useRoute();
 const $globalTable = ref();
@@ -131,6 +134,12 @@ const refresh = noRevertDefaultPage => {
 
 // 设置
 const _columns = ref(cloneDeep(props.columns));
+watch(
+    () => props.columns,
+    () => {
+        _columns.value = cloneDeep(props.columns);
+    }
+);
 const defineColumns = computed({
     get() {
         return _columns.value.map(item => {
@@ -145,7 +154,8 @@ const defineColumns = computed({
                         //判断值若为 空 则返回 '-'
                         //否则判断值若 自定义格式化 则返回自己的 setValue() 方法的返回值
                         //否则返回 prop
-                        return isEmpty(val) ? '—' : item.setValue ? item.setValue(val, row) : val;
+                        const isEmptyValue = typeof val === 'object' ? isEmpty(val) : val === '';
+                        return isEmptyValue ? '—' : item.setValue ? item.setValue(val, row) : val;
                     }),
             };
         });
@@ -237,7 +247,9 @@ defineExpose({ refresh, selectedDataSource, selectedChange });
         <div class="top-area" v-if="isTopOperation">
             <div class="left">{{ tableTitle || `${route.meta.title || ''}列表` }}</div>
             <div class="right">
-                <slot name="operation" />
+                <slot name="operation">
+                    <component :is="props.operationRender" />
+                </slot>
                 <GupoDivider type="vertical" v-if="operation.length" />
                 <GlobalTableOptions
                     v-bind="Object.keys(tableOptionsProps).reduce((res, key) => (res[key] = props[key]) && res, {})"
@@ -253,7 +265,7 @@ defineExpose({ refresh, selectedDataSource, selectedChange });
             <div class="selected-left">
                 <InfoCircleFilled />
                 <span class="selected-num">
-                    已选择 <span class="global-master-color">{{ formatRowSelection.selectedRowKeys?.length }}</span> 项
+                    已选择 <span class="global-master-color">{{ formatRowSelection?.selectedRowKeys?.length }}</span> 项
                 </span>
                 <span class="tip"> <slot name="selected-tip" /> </span>
             </div>

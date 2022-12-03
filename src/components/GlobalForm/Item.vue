@@ -34,7 +34,7 @@ const props = defineProps({
     },
 });
 
-const emits = defineEmits([...formItemEmits, 'updateValue']);
+const emits = defineEmits([...formItemEmits]);
 
 const normalComponents = {
     input: GupoInput,
@@ -66,7 +66,7 @@ const formatterOperationWrapperCol = computed(() =>
 );
 
 const updateValue = value => {
-    emits('updateValue', value);
+    emits('update:formData', value);
 };
 
 // 定义单独配置
@@ -211,6 +211,7 @@ const setVisible = value => {
                 :file-list="formData[item.key]"
                 @update:file-list="updateValue({ [item.key]: $event })"
                 v-bind="item?.props || {}"
+                :maxCount="1"
             >
                 <slot name="uploadContent" :data="formData">
                     <template v-if="typeof item.props?.uploadContent === 'string'">
