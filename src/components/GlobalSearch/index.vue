@@ -84,18 +84,15 @@ const isLabelMode = computed(() => props.itemConfigs.find(item => item.label));
 
 // 设置 box 的高度
 const setSearchBoxHeight = () => {
-    searchBoxHeight.value = $searchBox.value.offsetHeight;
+    searchBoxHeight.value = $searchBox.value?.offsetHeight;
 };
-watch(
-    [() => isOpen.value, () => props.itemConfigs],
-    () => {
-        nextTick(() => {
-            setSearchBoxHeight();
-        });
-    },
-    { immediate: true }
-);
+watch([() => isOpen.value, () => props.itemConfigs], () => {
+    nextTick(() => {
+        setSearchBoxHeight();
+    });
+});
 onMounted(() => {
+    setSearchBoxHeight();
     window.addEventListener('resize', setSearchBoxHeight);
 });
 onBeforeUnmount(() => {
