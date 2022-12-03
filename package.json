@@ -36,7 +36,8 @@
         "pinia": "2.0.24",
         "screenfull": "6.0.2",
         "vue": "3.2.45",
-        "vue-router": "4.1.6"
+        "vue-router": "4.1.6",
+        "xlsx": "0.18.5"
     },
     "devDependencies": {
         "@commitlint/cli": "16.2.3",

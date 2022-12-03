@@ -1,97 +1,12 @@
 {
     "router": [
         {
-            "path": "/Overview",
-            "meta": {
-                "icon": "overview",
-                "title": "概览"
-            },
-            "children": []
-        },
-        {
-            "path": "/DataEntry",
-            "meta": {
-                "icon": "data-entry",
-                "title": "数据录入"
-            },
-            "children": [
-                {
-                    "path": "/Form",
-                    "meta": {
-                        "icon": "",
-                        "title": "表单（Form）",
-                        "keepAlive": true
-                    },
-                    "children": []
-                }
-            ]
-        },
-        {
-            "path": "/DataDisplay",
+            "path": "/List",
             "meta": {
                 "icon": "data-display",
-                "title": "数据展示"
+                "title": "车次表"
             },
-            "children": [
-                {
-                    "path": "/Search",
-                    "meta": {
-                        "icon": "",
-                        "title": "搜索（Search）"
-                    },
-                    "children": []
-                },
-                {
-                    "path": "/Table",
-                    "meta": {
-                        "icon": "",
-                        "title": "表格（Table）",
-                        "keepAlive": true
-                    },
-                    "children": []
-                }
-            ]
-        },
-        {
-            "path": "/PageLayout",
-            "meta": {
-                "icon": "page-layout",
-                "title": "页面布局"
-            },
-            "children": [
-                {
-                    "path": "/Card",
-                    "meta": {
-                        "icon": "",
-                        "title": "卡片（Card）"
-                    },
-                    "children": []
-                },
-                {
-                    "path": "/GoBack",
-                    "meta": {
-                        "icon": "",
-                        "title": "顶部返回（GoBack）"
-                    },
-                    "children": []
-                },
-                {
-                    "path": "/TopTabs",
-                    "meta": {
-                        "icon": "",
-                        "title": "顶部标签（TopTabs）"
-                    },
-                    "children": []
-                },
-                {
-                    "path": "/InfiniteScroll",
-                    "meta": {
-                        "icon": "",
-                        "title": "无限滚动（InfiniteScroll）"
-                    },
-                    "children": []
-                }
-            ]
+            "children": []
         }
     ],
     "button": [
