@@ -26,7 +26,7 @@ const include = computed(() => {
                 <Breadcrumb v-if="storeSetting.showBreadcrumb" />
                 <div class="content-top" id="contentTop" />
                 <GupoLayoutContent class="content">
-                    <div class="main">
+                    <div class="main" id="main">
                         <RouterView>
                             <template #default="{ Component }">
                                 <transition :name="storeSetting.animateType" mode="out-in">
@@ -58,6 +58,7 @@ const include = computed(() => {
             position: relative;
             min-height: 100%;
             padding-bottom: 72px;
+            background-color: #f0f2f5;
 
             > div:not(.footer) {
                 width: 100%;

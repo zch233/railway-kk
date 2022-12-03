@@ -1,31 +1,4 @@
-<template>
-    <div class="column-setting">
-        <GupoPopover trigger="click" placement="bottomRight">
-            <template #title>
-                <div class="column-setting-popover-title">
-                    <GupoCheckbox v-model:checked="state.checkAll" :indeterminate="state.indeterminate" @change="onCheckAllChange"> 列展示 </GupoCheckbox>
-                    <span class="global-master-color" @click="reset">重置</span>
-                </div>
-            </template>
-            <template #content>
-                <div class="column-setting-popover-group-box">
-                    <GupoCheckbox.Group v-model:value="state.checkedList">
-                        <div class="check-option" v-for="(item, index) in plainOptions" :key="index">
-                            <GupoCheckbox :value="item">{{ item }}</GupoCheckbox>
-                        </div>
-                    </GupoCheckbox.Group>
-                </div>
-            </template>
-            <GupoTooltip>
-                <template #title>列设置</template>
-                <SettingOutlined />
-            </GupoTooltip>
-        </GupoPopover>
-    </div>
-</template>
-
 <script setup>
-/**  @description:列设置  **/
 import { GupoTooltip, GupoPopover, GupoCheckbox } from '@src/components/UI';
 import { SettingOutlined } from '@ant-design/icons-vue';
 import { computed, reactive, watch } from 'vue';
@@ -78,6 +51,33 @@ watch(
     }
 );
 </script>
+
+<template>
+    <div class="column-setting">
+        <GupoPopover trigger="click" placement="bottomRight">
+            <template #title>
+                <div class="column-setting-popover-title">
+                    <GupoCheckbox v-model:checked="state.checkAll" :indeterminate="state.indeterminate" @change="onCheckAllChange"> 列展示 </GupoCheckbox>
+                    <span class="global-master-color" @click="reset">重置</span>
+                </div>
+            </template>
+            <template #content>
+                <div class="column-setting-popover-group-box">
+                    <GupoCheckbox.Group v-model:value="state.checkedList">
+                        <div class="check-option" v-for="(item, index) in plainOptions" :key="index">
+                            <GupoCheckbox :value="item">{{ item }}</GupoCheckbox>
+                        </div>
+                    </GupoCheckbox.Group>
+                </div>
+            </template>
+            <GupoTooltip>
+                <template #title>列设置</template>
+                <SettingOutlined />
+            </GupoTooltip>
+        </GupoPopover>
+    </div>
+</template>
+
 <style lang="less">
 .column-setting-popover-title {
     display: flex;
