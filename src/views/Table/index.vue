@@ -1,6 +1,6 @@
 <template>
     <div class="table container">
-        <GlobalTable :columns="columns" :listApi="getList">
+        <GlobalTable :columns="columns" :listApi="getList" :rowSelection="true" rowKey="rowKey">
             <template #operation>
                 <a-button type="primary" @click="addVisible = true">
                     <template #icon><PlusOutlined /></template>
@@ -36,32 +36,26 @@ const addVisible = ref(false);
 const columns = [
     {
         title: '规则编号',
-        dataIndex: '1',
         key: '1',
     },
     {
         title: '描述',
-        dataIndex: '2',
         key: '2',
     },
     {
         title: '服务调用次数',
-        dataIndex: '3',
         key: '3',
     },
     {
         title: '状态',
-        dataIndex: '4',
         key: '4',
     },
     {
         title: '更新时间',
-        dataIndex: '5',
         key: '5',
     },
     {
         title: '操作',
-        dataIndex: 'operation',
         key: 'operation',
         props: {
             filters: [
@@ -71,7 +65,6 @@ const columns = [
         },
     },
 ];
-
 const getList = async listData => {
     console.log('listData：', listData);
     const { page, per_page } = listData;
@@ -81,6 +74,7 @@ const getList = async listData => {
                 data: {
                     list: new Array(per_page).fill({}).map((item, i) => {
                         return {
+                            rowKey: i,
                             1: 'TradeCode' + (i + (page - 1) * per_page + 1),
                             2: '这是一段描述，关于这个应用的描述文字内容',
                             3: '357 万',
