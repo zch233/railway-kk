@@ -1,8 +1,7 @@
 <script setup>
-import { computed } from 'vue';
-import { HomeFilled, SwapOutlined } from '@ant-design/icons-vue';
+import { HomeFilled } from '@ant-design/icons-vue';
 
-const props = defineProps({
+defineProps({
     modelValue: {
         required: true,
     },
@@ -27,42 +26,18 @@ const props = defineProps({
         default: 'light',
     },
 });
-const emit = defineEmits(['update:modelValue', 'onChange']);
-
-const handleMenuClick = e => {
-    emit('update:modelValue', e.key);
-    emit('onChange', e);
-};
-const title = computed(() => {
-    return currentItem.value[props.labelKey];
-});
-const currentItem = computed(() => {
-    return props.list.find(v => v[props.valueKey] === props.modelValue);
-});
+defineEmits(['update:modelValue', 'onChange']);
 </script>
 
 <template>
     <div class="switch-org" :class="{ 'is-dark': theme === 'dark' }">
         <ATooltip placement="right">
-            <template #title>{{ title }}</template>
+            <template #title>铁路之家</template>
             <div class="switch-org__name iconWrapper">
                 <HomeFilled />
-                <div>{{ title }}</div>
+                <div>铁路之家</div>
             </div>
         </ATooltip>
-        <ADropdown>
-            <div class="switch-org__change">
-                切换机构
-                <SwapOutlined />
-            </div>
-            <template #overlay>
-                <AMenu @click="handleMenuClick" :theme="theme">
-                    <AMenuItem v-for="item in list" :key="item[valueKey]" :disabled="item[valueKey] === props.modelValue">
-                        <span>{{ item[labelKey] }}</span>
-                    </AMenuItem>
-                </AMenu>
-            </template>
-        </ADropdown>
     </div>
 </template>
 

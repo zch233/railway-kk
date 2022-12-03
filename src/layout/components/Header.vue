@@ -10,7 +10,6 @@ import { useStoreSetting } from '@src/store/modules/setting';
 import defaultAvatar from '@src/assets/images/avatar.png';
 import logo from '@src/assets/images/logo.png';
 import { isDdOrZzd } from '@src/utils';
-import { logoutApi } from '@src/api/auth';
 import { GupoAvatar, GupoDropdown, GupoLayoutHeader, gupoMessage, GupoModal } from '@src/components/UI';
 
 const storeUser = useStoreUser();
@@ -32,9 +31,7 @@ const logout = () => {
 };
 
 const handelLogoutApi = async () => {
-    const data = await logoutApi();
-    gupoMessage.success(data.message);
-    storeUser.logout();
+    gupoMessage.warning('没有退出功能');
 };
 </script>
 
