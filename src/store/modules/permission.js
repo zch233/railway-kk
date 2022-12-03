@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import router from '@src/router';
 import Layout from '@src/layout/index.vue';
-import { getRouterPermission } from '@src/api/auth';
 import mockData from '@src/router/mock.json';
 // 驼峰转换
 const transferPascalCase2Kebabcase = str => str && str.replace(/\B([A-Z])/g, '-$1').toLowerCase();
@@ -79,15 +78,8 @@ export const useStorePermission = defineStore('permission', () => {
     const initRoutes = async () => {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async resolve => {
-            if (process.env.NODE_ENV === 'development') {
-                setPermission(mockData?.button.map(item => item.path));
-                setRoutes(mockData);
-            } else {
-                // 有接口则替换为接口返回 data 即可
-                const { data } = await getRouterPermission();
-                setPermission(data?.button);
-                setRoutes(data);
-            }
+            setPermission(mockData?.button.map(item => item.path));
+            setRoutes(mockData);
 
             // 返回登录成功后前往的页面地址
             resolve({ redirectRoute: menuList.value[0]?.children?.[0]?.path || menuList.value[0]?.path || '/' });
