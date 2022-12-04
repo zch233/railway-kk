@@ -33,9 +33,9 @@ export default configEnv => {
                 // 静态资源分类打包
                 output: {
                     manualChunks: {},
-                    chunkFileNames: 'js/[name]-[hash].js',
-                    entryFileNames: 'js/[name]-[hash].js',
-                    assetFileNames: '[ext]/[name]-[hash].[ext]',
+                    chunkFileNames: 'js/[hash].js',
+                    entryFileNames: 'js/[hash].js',
+                    assetFileNames: '[ext]/[hash].[ext]',
                 },
             },
         },
