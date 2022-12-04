@@ -47,6 +47,9 @@ import GlobalFormItem from '@src/components/GlobalForm/Item.vue';
 
 const props = defineProps({
     ...formItemProps,
+    defaultFormData: {
+        type: Object,
+    },
     itemConfigs: {
         type: Array,
         default: () => {
@@ -63,11 +66,12 @@ const emits = defineEmits([...formInheritEvents, ...formItemEmits]);
 const $formRef = ref();
 
 const _formData = reactive(
-    // 初始化 formItem 每一项数据，默认值为 undefined
-    props.itemConfigs.reduce((res, cur) => {
-        res[cur.key] = undefined;
-        return res;
-    }, {})
+    props.defaultFormData ||
+        // 初始化 formItem 每一项数据，默认值为 undefined
+        props.itemConfigs.reduce((res, cur) => {
+            res[cur.key] = undefined;
+            return res;
+        }, {})
 );
 const formDataValue = computed(() => props.formData || _formData);
 const updateValue = data => {
