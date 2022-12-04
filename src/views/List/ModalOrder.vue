@@ -8,6 +8,7 @@ export default defineComponent({
     emits: ['success'],
     expose: ['showModal', 'init'],
     setup(props, context) {
+        const $globalForm = ref();
         const appStore = useStoreApp();
         const modal = reactive({
             visible: false,
@@ -32,6 +33,7 @@ export default defineComponent({
             ]);
             gupoMessage.success('添加成功');
             modal.visible = false;
+            $globalForm.value.resetFields();
             context.emit('success');
         };
         const Modal = () => (
@@ -55,13 +57,14 @@ export default defineComponent({
                 </ABadgeRibbon>
                 <ADivider />
                 <GlobalForm
+                    ref={$globalForm}
                     rules={{
-                        select: {
+                        type: {
                             required: true,
                             message: '请输入类型',
                             trigger: 'change',
                         },
-                        rangePicker: {
+                        time: {
                             required: true,
                             message: '请选择生效日期',
                             trigger: 'change',

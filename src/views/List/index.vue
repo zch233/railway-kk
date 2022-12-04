@@ -113,7 +113,13 @@ export default defineComponent({
                     onUpdatePlaces={e => (places.value = e)}
                     onUpdateWays={e => (ways.value = e)}
                 />
-                <ModalOrder ref={$modalOrder} onSuccess={() => $globalTable.value.refresh()} />
+                <ModalOrder
+                    ref={$modalOrder}
+                    onSuccess={() => {
+                        $globalTable.value.refresh();
+                        selectedRowKeys.value = [];
+                    }}
+                />
             </div>
         );
     },
