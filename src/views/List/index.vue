@@ -32,13 +32,7 @@ export default defineComponent({
                 const bytes = new Uint8Array(e.target.result);
                 const wb = XLSX.read(bytes, { cellDates: true });
                 const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, range: 1 });
-                columns.value = data[0]
-                    .map((title, key) => ({ key, title }))
-                    .concat({
-                        key: 'status',
-                        title: '状态',
-                        customRender: ({ text }) => (text ? <GupoTag color='green'>正常</GupoTag> : <GupoTag color='red'>停运</GupoTag>),
-                    });
+                columns.value = data[0].map((title, key) => ({ key, title }));
                 dataSource.value.list = data.slice(1).map(arr => {
                     const item = arr.reduce((res, cur, index) => {
                         res[index] = typeof cur === 'object' ? dayjs(cur).format('HH:mm') : cur;
@@ -100,7 +94,11 @@ export default defineComponent({
                 />
                 <GlobalTable
                     ref={$globalTable}
-                    columns={columns.value}
+                    columns={columns.value.concat({
+                        key: 'status',
+                        title: '状态',
+                        customRender: ({ text }) => (text ? <GupoTag color='green'>正常</GupoTag> : <GupoTag color='red'>停运</GupoTag>),
+                    })}
                     listApi={async () => {
                         return new Promise(resolve => {
                             resolve({
