@@ -1,13 +1,25 @@
 <script lang="jsx">
 import { useStoreApp } from '@src/store/modules/app';
 import { GupoTag, GupoModal, gupoMessage } from '@src/components/UI';
+import ModalOrder from '@src/views/List/ModalOrder.vue';
+import dayjs from 'dayjs';
 
 export default defineComponent({
     name: 'OrderList',
     setup() {
+        const $modalOrder = ref();
         const $globalTable = ref();
         const appStore = useStoreApp();
-        const filterList = ref();
+        const filterData = ref({});
+        const filterList = computed(() => {
+            const list = appStore.orderList
+                .filter(v => (filterData.value.type ? v.type === filterData.value.type : true))
+                .filter(v => (filterData.value.day ? dayjs(v.day).format('YYYY-MM-DD') === filterData.value.day : true));
+            return {
+                list,
+                total: list.length,
+            };
+        });
         const itemConfigs = computed(() => [
             {
                 key: 'day',
@@ -35,11 +47,7 @@ export default defineComponent({
                 <GlobalSearch
                     itemConfigs={itemConfigs.value}
                     onSearch={e => {
-                        const list = appStore.orderList.filter(v => (e.type ? v.type === e.type : true)).filter(v => (e.day ? v.day === e.day : true));
-                        filterList.value = {
-                            list,
-                            total: list.length,
-                        };
+                        filterData.value = e;
                         $globalTable.value.refresh();
                     }}
                 />
@@ -47,7 +55,7 @@ export default defineComponent({
                     ref={$globalTable}
                     tableTitle='调令记录'
                     columns={[
-                        { key: 'day', title: '操作日期' },
+                        { key: 'day', title: '操作日期', customRender: ({ text }) => dayjs(text).format('YYYY-MM-DD') },
                         {
                             key: 'type',
                             title: '类型',
@@ -60,22 +68,17 @@ export default defineComponent({
                             title: '操作',
                             customRender: ({ record }) => (
                                 <div class='operate'>
-                                    <span class='pointer'>编辑</span>
+                                    <span class='pointer' onClick={() => $modalOrder.value.init(record)}>
+                                        编辑
+                                    </span>
                                     <span
                                         class='pointer error'
-                                        onClick={async () => {
-                                            await GupoModal.confirm({
+                                        onClick={() => {
+                                            GupoModal.confirm({
                                                 title: '提示',
                                                 content: '确认要删除吗？',
                                                 onOk: () => {
-                                                    appStore.setOrderList(appStore.orderList.filter(v => v.id !== record.id));
-                                                    if (filterList.value) {
-                                                        const list = filterList.value.list.filter(v => v.id !== record.id);
-                                                        filterList.value = {
-                                                            list,
-                                                            total: list.length,
-                                                        };
-                                                    }
+                                                    appStore.setOrderList(appStore.orderList.filter(v => v.day !== record.day));
                                                     $globalTable.value.refresh();
                                                     gupoMessage.success('删除成功');
                                                 },
@@ -88,7 +91,13 @@ export default defineComponent({
                             ),
                         },
                     ]}
-                    listApi={async () => ({ data: filterList.value || appStore.dataSource })}
+                    listApi={async () => ({ data: filterList.value })}
+                />
+                <ModalOrder
+                    ref={$modalOrder}
+                    onSuccess={() => {
+                        $globalTable.value.refresh();
+                    }}
                 />
             </div>
         );

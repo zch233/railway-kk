@@ -1,7 +1,6 @@
 <script lang="jsx">
 import { gupoMessage, GupoModal } from '@src/components/UI';
 import { useStoreApp } from '@src/store/modules/app';
-import dayjs from 'dayjs';
 
 export default defineComponent({
     name: 'ModalOrder',
@@ -14,24 +13,38 @@ export default defineComponent({
             visible: false,
             loading: false,
         });
-        const list = ref([]);
+        const formData = reactive({});
+        const params = ref({});
         const init = value => {
-            console.log(value);
-            list.value = value;
+            params.value = value;
+            if (value.day) {
+                Object.assign(formData, value);
+            }
             showModal();
         };
         const showModal = () => (modal.visible = true);
         const onFinish = e => {
-            appStore.setOrderList([
-                ...appStore.orderList,
-                {
-                    ...e,
-                    id: Date.now(),
-                    day: dayjs().format('YYYY-MM-DD'),
-                    list: list.value,
-                },
-            ]);
-            gupoMessage.success('添加成功');
+            if (params.value.day) {
+                const index = appStore.orderList.findIndex(v => v.day === formData.day);
+                // eslint-disable-next-line no-unused-vars
+                const { key, ...data } = formData;
+                appStore.setOrderList(
+                    appStore.orderList
+                        .slice(0, index)
+                        .concat(data)
+                        .concat(appStore.orderList.slice(index + 1))
+                );
+            } else {
+                appStore.setOrderList([
+                    ...appStore.orderList,
+                    {
+                        ...e,
+                        day: Date.now(),
+                        list: params.value.list,
+                    },
+                ]);
+            }
+            gupoMessage.success('操作成功');
             modal.visible = false;
             $globalForm.value.resetFields();
             context.emit('success');
@@ -49,7 +62,7 @@ export default defineComponent({
                 <ABadgeRibbon
                     text={
                         <span>
-                            总计：<b>{list.value.length}</b> 车次
+                            总计：<b>{params.value.list?.length}</b> 车次
                         </span>
                     }
                 >
@@ -57,6 +70,8 @@ export default defineComponent({
                 </ABadgeRibbon>
                 <ADivider />
                 <GlobalForm
+                    formData={formData}
+                    onUpdate:formData={e => Object.assign(formData, e)}
                     ref={$globalForm}
                     rules={{
                         type: {

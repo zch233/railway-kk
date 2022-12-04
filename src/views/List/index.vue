@@ -98,7 +98,7 @@ export default defineComponent({
                             <GupoButton
                                 type='primary'
                                 disabled={selectedRowKeys.value.length === 0}
-                                onClick={() => $modalOrder.value.init(selectedRowKeys.value)}
+                                onClick={() => $modalOrder.value.init({ list: selectedRowKeys.value })}
                             >
                                 添加调令
                             </GupoButton>
