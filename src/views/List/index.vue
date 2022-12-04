@@ -1,8 +1,8 @@
 <script lang="jsx">
-import GlobalTable from '@src/components/GlobalTable/index.vue';
 import { GupoButton, GupoTag } from '@src/components/UI';
 import { useLocalStorage } from '@src/utils/storage';
 import ModalImport from '@src/views/List/ModalImport.vue';
+import ModalOrder from '@src/views/List/ModalOrder.vue';
 
 export default defineComponent({
     name: 'List',
@@ -60,12 +60,9 @@ export default defineComponent({
         const places = useLocalStorage('places', []);
         const ways = useLocalStorage('ways', []);
         const columns = useLocalStorage('columns', []);
-        const dataSource = useLocalStorage('dataSource', {
-            list: [],
-            paginate: { total: 0 },
-        });
+        const dataSource = useLocalStorage('dataSource', { list: [], total: 0 });
         const filterDataSource = ref();
-
+        const selectedRowKeys = ref([]);
         return () => (
             <div class='container'>
                 <GlobalSearch
@@ -84,27 +81,26 @@ export default defineComponent({
                     }}
                 />
                 <GlobalTable
+                    rowSelection={{ selectedRowKeys: selectedRowKeys.value, onChange: e => (selectedRowKeys.value = e) }}
                     ref={$globalTable}
                     columns={columns.value.concat({
                         key: 'status',
                         title: '状态',
                         customRender: ({ text }) => (text === '1' ? <GupoTag color='green'>正常</GupoTag> : <GupoTag color='red'>停运</GupoTag>),
                     })}
-                    listApi={async () => {
-                        return new Promise(resolve => {
-                            resolve({
-                                data: filterDataSource.value || dataSource.value,
-                            });
-                        });
-                    }}
+                    listApi={async () => ({ data: filterDataSource.value || dataSource.value })}
                     operationRender={() => (
                         <>
                             <GupoButton type='primary' onClick={() => $modalImport.value.showModal()}>
                                 导入
                             </GupoButton>
                             <GupoButton type='primary'>重看当日统计</GupoButton>
-                            <GupoButton type='primary' onClick={() => $modalOrder.value.showModal()}>
-                                调令
+                            <GupoButton
+                                type='primary'
+                                disabled={selectedRowKeys.value.length === 0}
+                                onClick={() => $modalOrder.value.init(selectedRowKeys.value)}
+                            >
+                                添加调令
                             </GupoButton>
                         </>
                     )}
@@ -117,6 +113,7 @@ export default defineComponent({
                     onUpdatePlaces={e => (places.value = e)}
                     onUpdateWays={e => (ways.value = e)}
                 />
+                <ModalOrder ref={$modalOrder} onSuccess={() => $globalTable.value.refresh()} />
             </div>
         );
     },

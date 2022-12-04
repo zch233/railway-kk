@@ -220,6 +220,7 @@ const formatPagination = computed(() => {
               showTotal: total => `总计${total}条`,
               'show-quick-jumper': true,
               ...props.pagination,
+              pageSizeOptions: ['10', '20', '50', '100', '9999'],
           }
         : props.pagination;
 });

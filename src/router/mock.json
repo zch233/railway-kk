@@ -7,6 +7,14 @@
                 "title": "车次表"
             },
             "children": []
+        },
+        {
+            "path": "/OrderList",
+            "meta": {
+                "icon": "overview",
+                "title": "调令记录"
+            },
+            "children": []
         }
     ],
     "button": [

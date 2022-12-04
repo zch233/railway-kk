@@ -36,7 +36,7 @@ export default defineComponent({
                     item.status = '1';
                     return item;
                 });
-                context.emit('updateDataSource', { list, paginate: { total: list.length } });
+                context.emit('updateDataSource', { list, total: list.length });
                 context.emit('updatePlaces', [...new Set(list.map(v => v[1]))]);
                 context.emit('updateWays', [...new Set(list.map(v => v[6]))]);
                 context.emit('success');
