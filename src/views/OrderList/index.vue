@@ -14,7 +14,8 @@ export default defineComponent({
         const filterList = computed(() => {
             const list = appStore.orderList
                 .filter(v => (filterData.value.type ? v.type === filterData.value.type : true))
-                .filter(v => (filterData.value.day ? dayjs(v.day).format('YYYY-MM-DD') === filterData.value.day : true));
+                .filter(v => (filterData.value.day ? dayjs(v.day).format('YYYY-MM-DD') === filterData.value.day : true))
+                .reverse();
             return {
                 list,
                 total: list.length,

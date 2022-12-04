@@ -3,13 +3,22 @@ import { GupoButton, GupoTag } from '@src/components/UI';
 import { useLocalStorage } from '@src/utils/storage';
 import ModalImport from '@src/views/List/ModalImport.vue';
 import ModalOrder from '@src/views/List/ModalOrder.vue';
+import dayjs from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween';
+dayjs.extend(isBetween);
+import { useStoreApp } from '@src/store/modules/app';
 
+const initFormData = () => ({
+    time: dayjs().add(1, 'day').format('YYYY-MM-DD'),
+});
 export default defineComponent({
     name: 'List',
     setup() {
         const $globalTable = ref();
         const $modalImport = ref();
         const $modalOrder = ref();
+        const appStore = useStoreApp();
+        const filterOptions = reactive(initFormData());
         const itemConfigs = computed(() => [
             {
                 key: 'time',
@@ -66,13 +75,15 @@ export default defineComponent({
         return () => (
             <div class='container'>
                 <GlobalSearch
+                    defaultFormData={initFormData()}
                     itemConfigs={itemConfigs.value}
                     onSearch={e => {
+                        Object.assign(filterOptions, e);
                         const list = dataSource.value.list
-                            .filter(v => (e[1] ? v[1] === e[1] : true))
-                            .filter(v => (e[6] ? v[6] === e[6] : true))
-                            .filter(v => (e[2] ? v[2].includes(e[2]) : true))
-                            .filter(v => (e['status'] ? e['status'] === v['status'] : true));
+                            .filter(v => (e[1] ? v[1] === e[1] : true)) // 筛选办客站
+                            .filter(v => (e[6] ? v[6] === e[6] : true)) // 筛选线路
+                            .filter(v => (e[2] ? v[2].includes(e[2]) : true)) // 筛选车次
+                            .filter(v => (e['status'] ? e['status'] === v['status'] : true)); // 筛选状态
                         filterDataSource.value = {
                             list,
                             total: list.length,
@@ -81,12 +92,23 @@ export default defineComponent({
                     }}
                 />
                 <GlobalTable
+                    rowKey='0'
                     rowSelection={{ selectedRowKeys: selectedRowKeys.value, onChange: e => (selectedRowKeys.value = e) }}
                     ref={$globalTable}
                     columns={columns.value.concat({
                         key: 'status',
                         title: '状态',
-                        customRender: ({ text }) => (text === '1' ? <GupoTag color='green'>正常</GupoTag> : <GupoTag color='red'>停运</GupoTag>),
+                        customRender: ({ record }) => {
+                            let status = true;
+                            appStore.orderList.map(v => {
+                                if (v.list.includes(record[0])) {
+                                    if (dayjs(filterOptions.time).isBetween(dayjs(v.time[0]).add(-1, 'day'), dayjs(v.time[1]).add(1, 'day'))) {
+                                        status = v.type === '1';
+                                    }
+                                }
+                            });
+                            return status ? <GupoTag color='green'>正常</GupoTag> : <GupoTag color='red'>停运</GupoTag>;
+                        },
                     })}
                     listApi={async () => ({ data: filterDataSource.value || dataSource.value })}
                     operationRender={() => (
