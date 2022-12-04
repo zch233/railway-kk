@@ -109,11 +109,10 @@ defineExpose({ reset: () => updateValue(defaultFormData) });
                 <GlobalFormItem
                     v-for="(item, index) in itemConfigs"
                     :key="index"
+                    v-bind="Object.keys(formItemProps).reduce((res, key) => Object.assign(res, { [key]: props[key] }), {})"
                     :item="item"
                     :label="item?.label"
                     :labelWrap="true"
-                    :labelCol="labelCol"
-                    :wrapperCol="wrapperCol"
                     :formData="formDataValue"
                     @update:formData="updateValue($event)"
                 />

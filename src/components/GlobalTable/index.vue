@@ -140,30 +140,28 @@ watch(
         _columns.value = cloneDeep(props.columns);
     }
 );
-const defineColumns = computed({
-    get() {
-        return _columns.value.map(item => {
-            return {
-                ...item,
-                // 兼容部分人只想传 key 的情况
-                dataIndex: item?.dataIndex || item.key,
-                customRender:
-                    item.customRender ||
-                    (({ text: val, record: row }) => {
-                        //当前单元格值 是否为 空 值
-                        //判断值若为 空 则返回 '-'
-                        //否则判断值若 自定义格式化 则返回自己的 setValue() 方法的返回值
-                        //否则返回 prop
-                        const isEmptyValue = typeof val === 'object' ? isEmpty(val) : val === '';
-                        return isEmptyValue ? '—' : item.setValue ? item.setValue(val, row) : val;
-                    }),
-            };
-        });
-    },
-    set(val) {
-        _columns.value = val;
-    },
-});
+const defineColumns = computed(() =>
+    _columns.value.map(item => {
+        return {
+            ...item,
+            // 兼容部分人只想传 key 的情况
+            dataIndex: item?.dataIndex || item.key,
+            customRender:
+                item.customRender ||
+                (({ text: val, record: row }) => {
+                    //当前单元格值 是否为 空 值
+                    //判断值若为 空 则返回 '-'
+                    //否则判断值若 自定义格式化 则返回自己的 setValue() 方法的返回值
+                    //否则返回 prop
+                    const isEmptyValue = typeof val === 'object' ? isEmpty(val) : val === '';
+                    return isEmptyValue ? '—' : item.setValue ? item.setValue(val, row) : val;
+                }),
+        };
+    })
+);
+const updateDefineColumns = val => {
+    _columns.value = val;
+};
 
 // 反选框
 const selectedData = reactive({
@@ -252,10 +250,10 @@ defineExpose({ refresh, selectedDataSource, selectedChange });
                 </slot>
                 <GupoDivider type="vertical" v-if="operation.length" />
                 <GlobalTableOptions
-                    v-bind="Object.keys(tableOptionsProps).reduce((res, key) => (res[key] = props[key]) && res, {})"
+                    v-bind="Object.keys(tableOptionsProps).reduce((res, key) => Object.assign(res, { [key]: props[key] }), {})"
                     ref="$globalTableOptions"
                     :fullscreenEl="fullscreenEl || $globalTable"
-                    @setDefineColumns="defineColumns = $event"
+                    @setDefineColumns="updateDefineColumns($event)"
                     @refresh="refresh(true)"
                 />
             </div>
