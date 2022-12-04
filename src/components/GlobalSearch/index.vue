@@ -36,7 +36,7 @@ const props = defineProps({
 });
 const emits = defineEmits(['reset', 'search', 'update:formData']);
 
-let defaultFormData = {};
+let _defaultFormData = {};
 const isOpen = ref(props.defaultOpen);
 const $searchBox = ref();
 const searchBoxHeight = ref('');
@@ -58,7 +58,7 @@ const updateValue = data => {
 };
 
 const handleReset = () => {
-    updateValue(defaultFormData);
+    updateValue(_defaultFormData);
     emits('reset');
 };
 const handleSearch = () => {
@@ -68,9 +68,9 @@ const handleSearch = () => {
 watch(
     () => props.defaultFormData,
     () => {
-        defaultFormData = props.defaultFormData || cloneDeep(formDataValue.value);
-    },
-    { immediate: true }
+        _defaultFormData = props.defaultFormData || cloneDeep(formDataValue.value);
+        Object.assign(_formData, props.defaultFormData);
+    }
 );
 
 // 计算高度样式
@@ -99,7 +99,7 @@ onBeforeUnmount(() => {
     window.removeEventListener('resize', setSearchBoxHeight);
 });
 
-defineExpose({ reset: () => updateValue(defaultFormData) });
+defineExpose({ reset: () => updateValue(_defaultFormData) });
 </script>
 
 <template>
