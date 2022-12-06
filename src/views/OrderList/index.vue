@@ -3,6 +3,7 @@ import { useStoreApp } from '@src/store/modules/app';
 import { GupoTag, GupoModal, gupoMessage, GupoButton } from '@src/components/UI';
 import ModalOrder from '@src/views/List/ModalOrder.vue';
 import dayjs from 'dayjs';
+import { workbook2blob } from '@src/views/OrderList/utils';
 
 export default defineComponent({
     name: 'OrderList',
@@ -110,6 +111,20 @@ export default defineComponent({
                                 }}
                             >
                                 清空
+                            </GupoButton>
+                            <GupoButton
+                                type='primary'
+                                onClick={() => {
+                                    const link = document.createElement('a');
+                                    link.href = URL.createObjectURL(workbook2blob(document.querySelector('.ant-table-content > table')));
+                                    link.download = `调令记录${dayjs().format('YYYY-MM-DD HH-mm-ss')}.xlsx`;
+                                    document.body.appendChild(link);
+                                    link.click();
+                                    link.remove();
+                                    gupoMessage.success('导出成功');
+                                }}
+                            >
+                                导出
                             </GupoButton>
                         </>
                     )}
