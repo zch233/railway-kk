@@ -1,6 +1,6 @@
 <script lang="jsx">
 import { useStoreApp } from '@src/store/modules/app';
-import { GupoTag, GupoModal, gupoMessage } from '@src/components/UI';
+import { GupoTag, GupoModal, gupoMessage, GupoButton } from '@src/components/UI';
 import ModalOrder from '@src/views/List/ModalOrder.vue';
 import dayjs from 'dayjs';
 
@@ -92,6 +92,27 @@ export default defineComponent({
                             ),
                         },
                     ]}
+                    operationRender={() => (
+                        <>
+                            <GupoButton
+                                type='primary'
+                                danger
+                                onClick={() => {
+                                    GupoModal.confirm({
+                                        title: '提示',
+                                        content: '确认要删除吗？',
+                                        onOk: () => {
+                                            appStore.setOrderList([]);
+                                            $globalTable.value.refresh();
+                                            gupoMessage.success('清空成功');
+                                        },
+                                    });
+                                }}
+                            >
+                                清空
+                            </GupoButton>
+                        </>
+                    )}
                     listApi={async () => ({ data: filterList.value })}
                 />
                 <ModalOrder

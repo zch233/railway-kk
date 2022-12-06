@@ -4,17 +4,20 @@ import dayjs from 'dayjs';
 import { gupoMessage, GupoModal } from '@src/components/UI';
 import GlobalFormItem from '@src/components/GlobalForm/Item.vue';
 import { InboxOutlined } from '@ant-design/icons-vue';
+import { useStoreApp } from '@src/store/modules/app';
 
 export default defineComponent({
     name: 'ModalImport',
     emits: ['updateColumns', 'updateDataSource', 'updatePlaces', 'updateWays', 'success'],
     expose: ['showModal'],
     setup(props, context) {
+        const appStore = useStoreApp();
         const modal = reactive({
             visible: false,
             loading: false,
             formData: {
                 file: [],
+                clear: '0',
             },
         });
         const handelOk = () => {
@@ -44,6 +47,9 @@ export default defineComponent({
                 gupoMessage.success('导入成功');
             };
             reader.readAsArrayBuffer(file);
+            if (modal.formData.clear === '1') {
+                appStore.setOrderList([]);
+            }
         };
         const showModal = () => (modal.visible = true);
         const Modal = () => (
@@ -73,6 +79,28 @@ export default defineComponent({
                                 </div>
                             ),
                             name: 'file',
+                        },
+                    }}
+                />
+                <GlobalFormItem
+                    labelCol={{ span: 0 }}
+                    formData={modal.formData}
+                    onUpdate:formData={e => (modal.formData = e)}
+                    item={{
+                        key: 'clear',
+                        label: '是否清空调令',
+                        type: 'radio',
+                        props: {
+                            options: [
+                                {
+                                    label: '是的，我要清空',
+                                    value: '1',
+                                },
+                                {
+                                    label: '别，我暂时不想',
+                                    value: '0',
+                                },
+                            ],
                         },
                     }}
                 />
