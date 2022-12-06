@@ -213,8 +213,11 @@ const defaultOption = computed(() => lineOption.value);
  * watch
  */
 watch(
-    () => props.dataset,
-    () => defaultOption.value && myChart.setOption(unref(merge(defaultOption, props.option)), props.notMerge),
+    [() => props.dataset, () => props.option],
+    () => {
+        defaultOption.value && myChart.setOption(unref(merge(defaultOption, props.option)), props.notMerge);
+        defaultOption.value && myChart.setOption(props.option);
+    },
     {
         deep: true,
     }
