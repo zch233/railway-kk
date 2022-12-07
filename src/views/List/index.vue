@@ -1,12 +1,13 @@
 <script lang="jsx">
-import { GupoButton, GupoTag } from '@src/components/UI';
+import { GupoButton, GupoTag, gupoMessage } from '@src/components/UI';
 import { useLocalStorage } from '@src/utils/storage';
 import ModalImport from '@src/views/List/ModalImport.vue';
 import ModalOrder from '@src/views/List/ModalOrder.vue';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 dayjs.extend(isBetween);
-import { useStoreApp } from '@src/store/modules/app';
+import ModalExport from '@src/views/List/ModalExport.vue';
+import { getStatus } from '@src/views/List/utils';
 
 const initFormData = () => ({
     time: dayjs().add(1, 'day').format('YYYY-MM-DD'),
@@ -17,7 +18,7 @@ export default defineComponent({
         const $globalTable = ref();
         const $modalImport = ref();
         const $modalOrder = ref();
-        const appStore = useStoreApp();
+        const $modalExport = ref();
         const filterOptions = reactive(initFormData());
         const itemConfigs = computed(() => [
             {
@@ -26,6 +27,7 @@ export default defineComponent({
                 props: {
                     valueFormat: 'YYYY-MM-DD',
                     placeholder: '请选择日期',
+                    allowClear: false,
                 },
             },
             {
@@ -99,15 +101,7 @@ export default defineComponent({
                         key: 'status',
                         title: '状态',
                         customRender: ({ record }) => {
-                            let status = true;
-                            appStore.orderList.map(v => {
-                                if (v.list.includes(record[0])) {
-                                    if (dayjs(filterOptions.time).isBetween(dayjs(v.time[0]).add(-1, 'day'), dayjs(v.time[1]).add(1, 'day'))) {
-                                        status = v.type === '1';
-                                    }
-                                }
-                            });
-                            return status ? <GupoTag color='green'>正常</GupoTag> : <GupoTag color='red'>停运</GupoTag>;
+                            return getStatus(record, filterOptions.time) ? <GupoTag color='green'>正常</GupoTag> : <GupoTag color='red'>停运</GupoTag>;
                         },
                     })}
                     listApi={async () => ({ data: filterDataSource.value || dataSource.value })}
@@ -116,7 +110,23 @@ export default defineComponent({
                             <GupoButton type='primary' onClick={() => $modalImport.value.showModal()}>
                                 导入
                             </GupoButton>
-                            <GupoButton type='primary'>重看当日统计</GupoButton>
+                            <GupoButton
+                                type='primary'
+                                onClick={() => {
+                                    const data = filterDataSource.value || dataSource.value;
+                                    if (data.list.length === 0) {
+                                        gupoMessage.error('无效数据');
+                                        return;
+                                    }
+                                    $modalExport.value.showModal({
+                                        data,
+                                        dom: document.querySelector('.ant-table-content > table'),
+                                        day: filterOptions.time,
+                                    });
+                                }}
+                            >
+                                重看当日统计
+                            </GupoButton>
                             <GupoButton
                                 type='primary'
                                 disabled={selectedRowKeys.value.length === 0}
@@ -142,6 +152,7 @@ export default defineComponent({
                         selectedRowKeys.value = [];
                     }}
                 />
+                <ModalExport ref={$modalExport} />
             </div>
         );
     },
