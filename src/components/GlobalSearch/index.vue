@@ -66,11 +66,12 @@ const handleSearch = () => {
 };
 
 watch(
-    () => props.defaultFormData,
+    () => props.itemConfigs,
     () => {
         _defaultFormData = props.defaultFormData || cloneDeep(formDataValue.value);
         Object.assign(_formData, props.defaultFormData);
-    }
+    },
+    { immediate: true }
 );
 
 // 计算高度样式
