@@ -1,5 +1,5 @@
 <script lang="jsx">
-import { gupoMessage, GupoModal, GupoButton } from '@src/components/UI';
+import { gupoMessage, GupoModal, GupoButton, GupoAlert, GupoDivider } from '@src/components/UI';
 import GupoCharts from '@src/components/GupoCharts/index.vue';
 import { workbook2blob } from '@src/views/OrderList/utils';
 import { getStatus, timeSlot } from '@src/views/List/utils';
@@ -19,8 +19,12 @@ export default defineComponent({
         const formData = ref({ timeStep: 60 });
         const params = ref({});
         const chartDataOption = ref({});
+        const dataMap = ref({
+            normal: {},
+            abnormal: {},
+        });
         const setChartDataOption = () => {
-            const dataMap = {
+            dataMap.value = {
                 normal: {},
                 abnormal: {},
             };
@@ -28,30 +32,50 @@ export default defineComponent({
             params.value.data?.list.map(v => {
                 for (let i = 0; i < dateArr.length; i++) {
                     const section = [dateArr[i - 1] || '00:00', dateArr[i]];
-                    dataMap.normal[section.join('-')] = dataMap.normal[section.join('-')] || 0;
-                    dataMap.abnormal[section.join('-')] = dataMap.abnormal[section.join('-')] || 0;
+                    dataMap.value.normal[section.join('-')] = dataMap.value.normal[section.join('-')] || 0;
+                    dataMap.value.abnormal[section.join('-')] = dataMap.value.abnormal[section.join('-')] || 0;
                     if (
-                        dayjs(`${params.value.day} ${v[4] === '=' ? v[5] : v[4]}`).isBetween(
-                            dayjs(`${params.value.day} ${section[0]}`).add(-1, 'second'),
-                            dayjs(`${params.value.day} ${section[1]}`)
+                        dayjs(`${params.value.filterOptions?.time} ${v[4] === '=' ? v[5] : v[4]}`).isBetween(
+                            dayjs(`${params.value.filterOptions?.time} ${section[0]}`).add(-1, 'second'),
+                            dayjs(`${params.value.filterOptions?.time} ${section[1]}`)
                         )
                     ) {
-                        dataMap[getStatus(v, params.value.day) ? 'normal' : 'abnormal'][section.join('-')] += 1;
+                        const status = getStatus(v, params.value.filterOptions?.time);
+                        v.typeDefinition = status ? '正常' : '停运';
+                        dataMap.value[status ? 'normal' : 'abnormal'][section.join('-')] += 1;
                     }
                 }
             });
-            return {
-                height: 450,
+            chartDataOption.value = {
+                height: 550,
                 colors: ['#91cc75', '#ee6666'],
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        // Use axis to trigger tooltip
-                        type: 'shadow', // 'shadow' as default; can also be 'line' or 'shadow'
-                    },
-                },
                 option: {
-                    legend: {},
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {
+                                show: true,
+                                title: '保存图片',
+                            },
+                        },
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            // Use axis to trigger tooltip
+                            type: 'shadow', // 'shadow' as default; can also be 'line' or 'shadow'
+                        },
+                    },
+                    legend: {
+                        left: 'center',
+                        bottom: '2%',
+                    },
+                    title: {
+                        top: '2%',
+                        left: 'center',
+                        text: `${params.value.filterOptions?.[1] ? `${params.value.filterOptions?.[1]}站` : ''}${dayjs(params.value.filterOptions?.time).format(
+                            'YYYY年MM月DD日'
+                        )}${params.value.filterOptions?.[6] ? `${params.value.filterOptions?.[6]}线` : ''}运行图`,
+                    },
                     xAxis: {
                         type: 'category',
                         data: dateArr,
@@ -60,9 +84,10 @@ export default defineComponent({
                         type: 'value',
                     },
                     grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
+                        left: '1%',
+                        right: '1%',
+                        bottom: '9%',
+                        top: '10%',
                         containLabel: true,
                     },
                     series: [
@@ -77,7 +102,7 @@ export default defineComponent({
                             emphasis: {
                                 focus: 'series',
                             },
-                            data: Object.values(dataMap.normal),
+                            data: Object.values(dataMap.value.normal),
                         },
                         {
                             name: '停运',
@@ -90,7 +115,20 @@ export default defineComponent({
                             emphasis: {
                                 focus: 'series',
                             },
-                            data: Object.values(dataMap.abnormal),
+                            data: Object.values(dataMap.value.abnormal),
+                        },
+                        {
+                            name: '正常-折线',
+                            type: 'line',
+                            smooth: true,
+                            label: {
+                                show: true,
+                                formatter: val => (val.value === 0 ? '' : val.value),
+                            },
+                            emphasis: {
+                                focus: 'series',
+                            },
+                            data: Object.values(dataMap.value.normal),
                         },
                     ],
                 },
@@ -99,7 +137,7 @@ export default defineComponent({
         const showModal = data => {
             modal.visible = true;
             params.value = data;
-            chartDataOption.value = setChartDataOption();
+            setChartDataOption();
         };
         const Modal = () => (
             <GupoModal
@@ -109,12 +147,21 @@ export default defineComponent({
                 onOk={() => (modal.visible = false)}
                 onCancel={() => (modal.visible = false)}
                 confirmLoading={modal.loading}
-                title={`今日统计(${params.value.day})`}
+                title={`今日统计(${params.value.filterOptions?.time})`}
             >
+                <GupoAlert
+                    message={`图定开行 ${params.value.data?.list.length} 趟，实际开行 ${Object.values(dataMap.value.normal).reduce((a, b) => a + b, 0)} 趟`}
+                    type='warning'
+                    show-icon
+                />
+                <GupoDivider />
                 <GlobalFormItem
                     labelCol={{ span: 0 }}
                     formData={formData.value}
-                    onUpdate:formData={e => (formData.value = e)}
+                    onUpdate:formData={e => {
+                        formData.value = e;
+                        setChartDataOption();
+                    }}
                     item={{
                         key: 'timeStep',
                         label: '间隔时长',
