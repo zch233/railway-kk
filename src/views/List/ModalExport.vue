@@ -176,8 +176,21 @@ export default defineComponent({
                     type='primary'
                     onClick={() => {
                         const link = document.createElement('a');
-                        link.href = URL.createObjectURL(workbook2blob(params.value.dom));
-                        link.download = `车次表(${params.value.day})${dayjs().format('YYYY-MM-DD HH-mm-ss')}.xlsx`;
+                        link.href = URL.createObjectURL(
+                            workbook2blob(
+                                params.value.data?.list.map(v => ({
+                                    序号: v[0],
+                                    办客站: v[1],
+                                    车次: v[2],
+                                    区间: v[3],
+                                    到点: v[4],
+                                    开点: v[5],
+                                    线路: v[6],
+                                    状态: v.typeDefinition,
+                                }))
+                            )
+                        );
+                        link.download = `车次表(${params.value.filterOptions?.time})${dayjs().format('YYYY-MM-DD HH-mm-ss')}.xlsx`;
                         document.body.appendChild(link);
                         link.click();
                         link.remove();

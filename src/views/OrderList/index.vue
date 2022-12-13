@@ -116,7 +116,16 @@ export default defineComponent({
                                 type='primary'
                                 onClick={() => {
                                     const link = document.createElement('a');
-                                    link.href = URL.createObjectURL(workbook2blob(document.querySelector('.ant-table-content > table')));
+                                    link.href = URL.createObjectURL(
+                                        workbook2blob(
+                                            filterList.value.list.map(v => ({
+                                                操作日期: dayjs(v.day).format('YYYY年MM月DD日'),
+                                                类型: v.type === '1' ? '恢复' : '停运',
+                                                生效日期: v.time.join(' 至 '),
+                                                车次: v.list.join(','),
+                                            }))
+                                        )
+                                    );
                                     link.download = `调令记录${dayjs().format('YYYY-MM-DD HH-mm-ss')}.xlsx`;
                                     document.body.appendChild(link);
                                     link.click();

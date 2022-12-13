@@ -2,7 +2,7 @@ import * as XLSX from 'xlsx';
 
 export const workbook2blob = data => {
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, XLSX.utils.table_to_sheet(data), '调令记录');
+    XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(data), '调令记录');
     // 生成excel的配置项
     const wopts = {
         // 要生成的文件类型

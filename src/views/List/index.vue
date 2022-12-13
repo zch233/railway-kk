@@ -96,6 +96,7 @@ export default defineComponent({
                 <GlobalTable
                     rowKey='0'
                     rowSelection={{ selectedRowKeys: selectedRowKeys.value, onChange: e => (selectedRowKeys.value = e) }}
+                    onSelectedCancel={() => (selectedRowKeys.value = [])}
                     ref={$globalTable}
                     columns={columns.value.concat({
                         key: 'status',
@@ -120,12 +121,11 @@ export default defineComponent({
                                     }
                                     $modalExport.value.showModal({
                                         data,
-                                        dom: document.querySelector('.ant-table-content > table'),
-                                        day: filterOptions.time,
+                                        filterOptions,
                                     });
                                 }}
                             >
-                                重看当日统计
+                                查看当日统计
                             </GupoButton>
                             <GupoButton
                                 type='primary'
