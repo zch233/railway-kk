@@ -80,13 +80,24 @@ export default defineComponent({
                     defaultFormData={initFormData()}
                     itemConfigs={itemConfigs.value}
                     onSearch={e => {
-                        console.log(e);
                         Object.assign(filterOptions, e);
-                        const list = dataSource.value.list
-                            .filter(v => (e[1] ? v[1] === e[1] : true)) // 筛选办客站
-                            .filter(v => (e[6] ? v[6] === e[6] : true)) // 筛选线路
-                            .filter(v => (e[2] ? v[2].includes(e[2]) : true)) // 筛选车次
-                            .filter(v => (e['status'] ? (e['status'] === '1' ? getStatus(v, filterOptions.time) : !getStatus(v, filterOptions.time)) : true)); // 筛选状态
+                        let list = dataSource.value.list;
+                        if (e[1]) {
+                            // 筛选办客站
+                            list = list.filter(v => v[1] === e[1]);
+                        }
+                        if (e[6]) {
+                            // 筛选线路
+                            list = list.filter(v => v[6] === e[6]);
+                        }
+                        if (e[2]) {
+                            // 筛选车次
+                            list = list.filter(v => v[2].includes(e[2]));
+                        }
+                        if (e['status']) {
+                            // 筛选状态
+                            list = list.filter(v => getStatus(v, e.time) === (e['status'] === '1'));
+                        }
                         filterDataSource.value = {
                             list,
                             total: list.length,
