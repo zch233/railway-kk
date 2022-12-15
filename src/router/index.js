@@ -2,24 +2,6 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 
 const routes = [
     {
-        name: 'Auth',
-        path: '/auth',
-        component: () => import('@src/views/Auth/index.vue'),
-        meta: { whiteList: true },
-    },
-    {
-        name: '404',
-        path: '/404',
-        component: () => import('@src/views/Forbidden/404.vue'),
-        meta: { whiteList: true },
-    },
-    {
-        name: 'Forbidden',
-        path: '/forbidden',
-        component: () => import('@src/views/Forbidden/index.vue'),
-        meta: { whiteList: true },
-    },
-    {
         name: 'Redirect',
         path: '/redirect',
         component: () => import('@src/layout/index.vue'),
