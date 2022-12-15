@@ -82,20 +82,20 @@ export default defineComponent({
                     onSearch={e => {
                         Object.assign(filterOptions, e);
                         let list = dataSource.value.list;
+                        // 筛选办客站
                         if (e[1]) {
-                            // 筛选办客站
                             list = list.filter(v => v[1] === e[1]);
                         }
+                        // 筛选线路
                         if (e[6]) {
-                            // 筛选线路
                             list = list.filter(v => v[6] === e[6]);
                         }
+                        // 筛选车次
                         if (e[2]) {
-                            // 筛选车次
                             list = list.filter(v => v[2].includes(e[2]));
                         }
+                        // 筛选状态
                         if (e['status']) {
-                            // 筛选状态
                             list = list.filter(v => getStatus(v, e.time) === (e['status'] === '1'));
                         }
                         filterDataSource.value = {
