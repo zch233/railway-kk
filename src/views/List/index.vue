@@ -7,12 +7,13 @@ import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 dayjs.extend(isBetween);
 import ModalExport from '@src/views/List/ModalExport.vue';
-import { getStatus } from '@src/views/List/utils';
+import { getStatus, beginCars } from '@src/views/List/utils';
 import GlobalIcon from '@src/components/GlobalIcon';
 
 const initFormData = () => ({
     time: dayjs().add(1, 'day').format('YYYY-MM-DD'),
 });
+
 export default defineComponent({
     name: 'List',
     setup() {
@@ -77,6 +78,18 @@ export default defineComponent({
                     ],
                 },
             },
+            {
+                key: 'custom_begin',
+                type: 'select',
+                props: {
+                    placeholder: '请选择是否始发车',
+                    showSearch: true,
+                    options: [
+                        { value: '1', label: '是' },
+                        { value: '0', label: '否' },
+                    ],
+                },
+            },
         ]);
         const places = useLocalStorage('places', []);
         const platforms = useLocalStorage('platforms', []);
@@ -113,6 +126,12 @@ export default defineComponent({
                         if (e['custom_status']) {
                             list = list.filter(v => getStatus(v, e.time) === (e['custom_status'] === '1'));
                         }
+                        // 筛选始发车
+                        if (e['custom_begin']) {
+                            list = list.filter(v =>
+                                e['custom_begin'] === '1' ? beginCars.includes(v[3].split('-')[0]) : !beginCars.includes(v[3].split('-')[0])
+                            );
+                        }
                         filterDataSource.value = {
                             list,
                             total: list.length,
@@ -137,13 +156,7 @@ export default defineComponent({
                             key: 'custom_begin',
                             title: '始发车',
                             customRender: ({ record }) => {
-                                return '杭州，杭州东，杭州南，杭州西，富阳，富阳西，桐庐，桐庐东，建德，千岛湖'
-                                    .split('，')
-                                    .includes(record[3].split('-')[0]) ? (
-                                    <GlobalIcon style='font-size: 20px;color:#389e0d;' name='begin' />
-                                ) : (
-                                    '-'
-                                );
+                                return beginCars.includes(record[3].split('-')[0]) ? <GlobalIcon style='font-size: 20px;color:#389e0d;' name='begin' /> : '-';
                             },
                         },
                     ])}
