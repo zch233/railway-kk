@@ -35,3 +35,5 @@ export const getStatus = (record, time) => {
     });
     return status;
 };
+
+export const beginCars = '杭州，杭州东，杭州南，杭州西，富阳，富阳西，桐庐，桐庐东，建德，千岛湖'.split('，');
