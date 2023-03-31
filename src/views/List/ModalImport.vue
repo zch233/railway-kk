@@ -41,7 +41,8 @@ export default defineComponent({
                 });
                 context.emit('updateDataSource', { list, total: list.length });
                 context.emit('updatePlaces', [...new Set(list.map(v => v[1]))]);
-                context.emit('updateWays', [...new Set(list.map(v => v[6]))]);
+                context.emit('updatePlatforms', [...new Set(list.map(v => v[6]))]);
+                context.emit('updateWays', [...new Set(list.map(v => v[7]))]);
                 context.emit('success');
                 modal.visible = false;
                 gupoMessage.success('导入成功');

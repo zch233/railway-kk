@@ -50,6 +50,15 @@ export default defineComponent({
                 key: '6',
                 type: 'select',
                 props: {
+                    placeholder: '请选择站台',
+                    showSearch: true,
+                    options: platforms.value.map(value => ({ label: value, value })),
+                },
+            },
+            {
+                key: '7',
+                type: 'select',
+                props: {
                     placeholder: '请选择线路',
                     showSearch: true,
                     options: ways.value.map(value => ({ label: value, value })),
@@ -69,6 +78,7 @@ export default defineComponent({
             },
         ]);
         const places = useLocalStorage('places', []);
+        const platforms = useLocalStorage('platforms', []);
         const ways = useLocalStorage('ways', []);
         const columns = useLocalStorage('columns', []);
         const dataSource = useLocalStorage('dataSource', { list: [], total: 0 });
@@ -87,6 +97,10 @@ export default defineComponent({
                             list = list.filter(v => v[1] === e[1]);
                         }
                         // 筛选线路
+                        if (e[7]) {
+                            list = list.filter(v => v[7] === e[7]);
+                        }
+                        // 筛选站台
                         if (e[6]) {
                             list = list.filter(v => v[6] === e[6]);
                         }
@@ -155,6 +169,7 @@ export default defineComponent({
                     onUpdateColumns={e => (columns.value = e)}
                     onUpdateDataSource={e => (dataSource.value = e)}
                     onUpdatePlaces={e => (places.value = e)}
+                    onUpdatePlatforms={e => (platforms.value = e)}
                     onUpdateWays={e => (ways.value = e)}
                 />
                 <ModalOrder
