@@ -73,9 +73,9 @@ export default defineComponent({
                     title: {
                         top: '2%',
                         left: 'center',
-                        text: `${params.value.filterOptions?.[1] ? `${params.value.filterOptions?.[1]}站` : ''}${
-                            params.value.filterOptions?.[6] ? `${params.value.filterOptions?.[6]}站台` : ''
-                        }${dayjs(params.value.filterOptions?.time).format('YYYY年MM月DD日')}${
+                        text: `${dayjs(params.value.filterOptions?.time).format('YYYY年MM月DD日')}${
+                            params.value.filterOptions?.[1] ? `${params.value.filterOptions?.[1]}站` : ''
+                        }${params.value.filterOptions?.[6] ? `${params.value.filterOptions?.[6]}站台` : ''}${
                             params.value.filterOptions?.[7] ? `${params.value.filterOptions?.[7]}线` : ''
                         }运行图${params.value.filterOptions?.custom_begin === '1' ? '（始发车）' : ''}`,
                     },
