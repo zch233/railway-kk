@@ -8,6 +8,7 @@ import isBetween from 'dayjs/plugin/isBetween';
 dayjs.extend(isBetween);
 import ModalExport from '@src/views/List/ModalExport.vue';
 import { getStatus } from '@src/views/List/utils';
+import GlobalIcon from '@src/components/GlobalIcon';
 
 const initFormData = () => ({
     time: dayjs().add(1, 'day').format('YYYY-MM-DD'),
@@ -65,7 +66,7 @@ export default defineComponent({
                 },
             },
             {
-                key: 'status',
+                key: 'custom_status',
                 type: 'select',
                 props: {
                     placeholder: '请选择状态',
@@ -109,8 +110,8 @@ export default defineComponent({
                             list = list.filter(v => v[2].includes(e[2]));
                         }
                         // 筛选状态
-                        if (e['status']) {
-                            list = list.filter(v => getStatus(v, e.time) === (e['status'] === '1'));
+                        if (e['custom_status']) {
+                            list = list.filter(v => getStatus(v, e.time) === (e['custom_status'] === '1'));
                         }
                         filterDataSource.value = {
                             list,
@@ -124,13 +125,28 @@ export default defineComponent({
                     rowSelection={{ selectedRowKeys: selectedRowKeys.value, onChange: e => (selectedRowKeys.value = e) }}
                     onSelectedCancel={() => (selectedRowKeys.value = [])}
                     ref={$globalTable}
-                    columns={columns.value.concat({
-                        key: 'status',
-                        title: '状态',
-                        customRender: ({ record }) => {
-                            return getStatus(record, filterOptions.time) ? <GupoTag color='green'>正常</GupoTag> : <GupoTag color='red'>停运</GupoTag>;
+                    columns={columns.value.concat([
+                        {
+                            key: 'custom_status',
+                            title: '状态',
+                            customRender: ({ record }) => {
+                                return getStatus(record, filterOptions.time) ? <GupoTag color='green'>正常</GupoTag> : <GupoTag color='red'>停运</GupoTag>;
+                            },
                         },
-                    })}
+                        {
+                            key: 'custom_begin',
+                            title: '始发车',
+                            customRender: ({ record }) => {
+                                return '杭州，杭州东，杭州南，杭州西，富阳，富阳西，桐庐，桐庐东，建德，千岛湖'
+                                    .split('，')
+                                    .includes(record[3].split('-')[0]) ? (
+                                    <GlobalIcon style='font-size: 20px;color:#389e0d;' name='begin' />
+                                ) : (
+                                    '-'
+                                );
+                            },
+                        },
+                    ])}
                     listApi={async () => ({ data: filterDataSource.value || dataSource.value })}
                     operationRender={() => (
                         <>
