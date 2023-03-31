@@ -2,7 +2,7 @@
 import { gupoMessage, GupoModal, GupoButton, GupoAlert, GupoDivider } from '@src/components/UI';
 import GupoCharts from '@src/components/GupoCharts/index.vue';
 import { workbook2blob } from '@src/views/OrderList/utils';
-import { getStatus, timeSlot } from '@src/views/List/utils';
+import { getStatus, timeSlot, beginCars } from '@src/views/List/utils';
 import GlobalFormItem from '@src/components/GlobalForm/Item.vue';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
@@ -44,6 +44,7 @@ export default defineComponent({
                         v.typeDefinition = status ? '正常' : '停运';
                         dataMap.value[status ? 'normal' : 'abnormal'][section.join('-')] += 1;
                     }
+                    v.beginDefinition = beginCars.includes(v[3].split('-')[0]) ? '是' : '否';
                 }
             });
             chartDataOption.value = {
@@ -72,9 +73,11 @@ export default defineComponent({
                     title: {
                         top: '2%',
                         left: 'center',
-                        text: `${params.value.filterOptions?.[1] ? `${params.value.filterOptions?.[1]}站` : ''}${dayjs(params.value.filterOptions?.time).format(
-                            'YYYY年MM月DD日'
-                        )}${params.value.filterOptions?.[6] ? `${params.value.filterOptions?.[6]}线` : ''}运行图`,
+                        text: `${params.value.filterOptions?.[1] ? `${params.value.filterOptions?.[1]}站` : ''}${
+                            params.value.filterOptions?.[6] ? `${params.value.filterOptions?.[6]}站台` : ''
+                        }${dayjs(params.value.filterOptions?.time).format('YYYY年MM月DD日')}${
+                            params.value.filterOptions?.[7] ? `${params.value.filterOptions?.[7]}线` : ''
+                        }运行图${params.value.filterOptions?.custom_begin === '1' ? '（始发车）' : ''}`,
                     },
                     xAxis: {
                         type: 'category',
@@ -185,8 +188,10 @@ export default defineComponent({
                                     区间: v[3],
                                     到点: v[4],
                                     开点: v[5],
-                                    线路: v[6],
+                                    站台: v[6],
+                                    线路: v[7],
                                     状态: v.typeDefinition,
+                                    始发车: v.beginDefinition,
                                 }))
                             )
                         );
